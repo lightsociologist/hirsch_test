@@ -20,9 +20,16 @@ dis_count <- mutate(dis_count, delvar = ifelse(Freq<50, 1, 0))
 
 dis_count <- dis_count %>% rename(name1 = Var1)
 
+
 schous <- left_join(schous, dis_count)
 
 schous <- schous %>% filter(delvar==0)
+
+mh18 <- schous %>% group_by(name1) %>% summarize(m = median(h18))
+
+median(mh18$m)
+
+#Select Physiology based on median scores
 
 schd <- dummy_cols(schous, select_columns = "name1")
 
@@ -42,11 +49,9 @@ screg2 <- screg
 
 screg2$h18 <- log(screg2$h18)
 
-logmodel1 <- lm(h18 ~ .-name1_Paleontology, data=screg2)
+logmodel1 <- lm(h18 ~ .-name1_Physiology, data=screg2)
 
 summary(logmodel1)
-
-ggcoef(tail(broom::tidy(hmodel1, conf.int = TRUE), 20), sort = "ascending")
 
 t <- ggcoef(tail(broom::tidy(logmodel1, conf.int = TRUE), 125), sort = "ascending")
 
@@ -61,9 +66,17 @@ bottomcfs <- cfs %>% top_n(estimate, n=-10)
 topbottom <- bind_rows(topcfs, bottomcfs)  
 
 ggcoef(topbottom, sort = "ascending")  
-  
-  
-  
+
+p <- ggplot(screg, aes(x=name1_Sociology, y=h18, color=name1_Sociology)) + 
+  geom_point()  +
+  geom_point(size=4, alpha=0.7) +
+  stat_summary(fun=mean, geom="point", shape=23, color="black", aes(fill=name1_Sociology), size=4) +         
+  stat_summary(fun.min=function(x)(mean(x)-sd(x)), 
+               fun.max=function(x)(mean(x)+sd(x)),
+               geom="errorbar", width=0.1) +
+  theme_bw()  
+
+  p + theme(legend.position = "none")  + xlab("Sociology = 1") + ylab("Hirsch Index")
   
 #Practice below here
     
