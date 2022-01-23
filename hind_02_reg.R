@@ -1,7 +1,14 @@
+library(readr)
+library(dplyr)
+library(fastDummies)
+library(jtools)
+library(data.table)
+library(GGally)
+
 #This program uses data constructed in hind_01_merge.R to build an analysis of the 
 #Hirsch Index
 
-load("~/Documents/GitHub/hirsch_test/data/hind.df.rdata")
+hind.df <- readRDS("~/Documents/GitHub/hirsch_test/data/hind.df.rdata")
 
 screg <- hind.df %>% select(starts_with("name1_"), age, h18, nps, nc9618, unicount, frac1, proportion_female)
 
@@ -52,6 +59,7 @@ model2 <- lmer(formula = lh18 ~ age + nc9618 + nps + unicount + frac1_scale + pr
                data=scmlm2, REML=FALSE)
 
 summary(model2)
+summary(model0_fit)
 
 
 
