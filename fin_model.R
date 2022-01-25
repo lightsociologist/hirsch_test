@@ -5,7 +5,7 @@ library(brms)
 library(dplyr)
 library(lme4)
 library(ggplot2)
-
+library(stargazer)
 
 hind.df <- readRDS("~/Documents/GitHub/hirsch_test/data/hind.df.rdata")
 
@@ -27,16 +27,10 @@ RandomEffects
 ICC_between <- RandomEffects[1,4]/(RandomEffects[1,4]+RandomEffects[2,4]) 
 ICC_between
 
-#Between group variation contributes to 18.3% of total variation.
+#Between group variation contributes to XXX of total variation.
 
 scmlm$frac1_scale <- scmlm$frac1*100
 scmlm$propfem_scale <- scmlm$proportion_female*100
-
-
-model2 <- lmer(formula = h18 ~ age + nc9618 + nps + unicount + frac1_scale + propfem_scale + (1|name1), 
-               data=scmlm, REML=FALSE)
-
-ranef(model2)
 
 centmlm <- scmlm %>%
 group_by(name1) %>% 
@@ -57,8 +51,12 @@ group_by(name1) %>%
 
 centmlm$nc9618.cwc2 <- centmlm$nc9618.cwc/100
 
-centmlm <- centmlm %>% select(h18, nc9618.cwc2, nps.cwc, unicount.cwc, frac1_scale.cwc,
-                              propfem_scale.cwc, name1)
+centmlm <- centmlm %>%  
+  mutate(propfem.gmc = scale(propfem_scale, center = T, scale = F),
+    nps.gmc = scale(nps, center = T, scale = F))
+
+centmlm <- centmlm %>% select(h18, nc9618.cwc2, age.cwc, nps.cwc, unicount.cwc, frac1_scale.cwc,
+                              propfem_scale.cwc, name1, propfem.gmc, nps.gmc, propfem_scale.cm)
 
 centmlm <- centmlm %>% na.omit()
 
@@ -78,23 +76,18 @@ ICC_between <- RandomEffects[1,4]/(RandomEffects[1,4]+RandomEffects[2,4])
 ICC_between
 
 
-model3 <- lmer(formula = h18 ~ age.cwc + nc9618.cwc2 + nps.cwc + unicount.cwc + frac1_scale.cwc + propfem_scale.cwc + (1|name1), 
+model2 <- lmer(formula = h18 ~ propfem_scale.cwc + nps.cwc + nc9618.cwc2 + unicount.cwc + frac1_scale.cwc  + age.cwc + (1|name1), 
                data=centmlm, REML=FALSE)
 
-
-
-
-summary(model3)
-
 summary(modelnull)
+
+summary(model2)
 
 
 
 #https://biologyforfun.wordpress.com/2017/04/03/interpreting-random-effects-in-linear-mixed-effect-models/
 
-rando1 <- ranef(model3)$name1
-
-rando2 <- ranef(modelnull)$name1
+rando1 <- ranef(model2)$name1
 
 rando1$estmean <- rando1$`(Intercept)`+42.84
 
@@ -108,15 +101,81 @@ nseq <- c(1,2,3,4,5,47,48,49,50,51,91,92,93,94,95)
 
 rando2 <- filter(rando1, rando1$nid%in%nseq)
 
-#Not really satisfactory, but here is a plot
+rando2$clrs <- c("blue", "blue", "blue", "blue", "blue", "green", "green", "green", "green", "green", 
+                 "red", "red", "red", "red", "red")
+          
 
-ggplot(rando2, aes(x= reorder(name, -estmean), y=estmean)) +
+#Lollipops
+
+ggplot(rando2, aes(x= reorder(name, -estmean), y=estmean, group=clrs, color=clrs)) +
   geom_segment( aes(x=reorder(name, -estmean), xend=name, y=0, yend=estmean), color="skyblue") +
-  geom_point( color="blue", size=3, alpha=0.6) +
+  geom_point(size=3, alpha=0.6) +
+  geom_hline(yintercept = 42.84, color="orange") +
   theme_light() +
   coord_flip() +
-  theme(
+  ylab("Estimated Mean Hirsch Index") + xlab("Discipline") +
+  scale_color_discrete(name = "Rank", labels = c("Bottom 5", "Middle 5", "Top 5")) +
+    theme(
     panel.grid.major.y = element_blank(),
     panel.border = element_blank(),
     axis.ticks.y = element_blank()
   )
+
+class(modelnull) <- "lmerMod"
+
+class(model2) <- "lmerMod"
+
+stargazer(modelnull, model2, type="html", out="table2.html",
+          title = "Table 2: A Multilevel Model of the Hirsch Index",
+          covariate.labels = c("Proportion Female Name","# of Sole Author Publications",
+                               "# of Citations (1996-2018)", "University Count (# of Citation Allstars)", 
+                               "Disciplinarity Score", "Age (Years Publishing)"),
+          notes="<small>Data: Ioannidis et al. (2019)</small>",
+          dep.var.labels="Hirsch Index",
+          star.char = c("*", "**", "***"),
+          star.cutoffs = c(.05, .01, .001),
+          model.names = FALSE,
+          column.labels = c("Model 1: Null Model", "Model 2"))
+
+
+
+
+#let's think about group level effects
+
+dis.df <- as.data.frame(table(centmlm$name1))
+
+colnames(dis.df)[1] <- "name1"
+
+mhindex <- centmlm %>% group_by(name1) %>% summarize(mean(h18))
+
+femmean <- centmlm %>% group_by(name1) %>% summarize(mean(propfem_scale.cm))
+
+dis.df <- left_join(dis.df, mhindex)
+
+dis.df <- left_join(dis.df, femmean)
+
+colnames(dis.df)[3] <- "mhindex"
+
+colnames(dis.df)[4] <- "mpropfem"
+
+ggplot(dis.df, aes(x=mpropfem, y=mhindex)) +
+  geom_point(alpha=0.5) +
+  geom_smooth()
+
+
+
+centmlm$nps.gmc2 <- centmlm$nps.gmc/100
+
+
+centmlm$propfem.gmc2 <- centmlm$propfem.gmc/100
+
+
+model3 <- lmer(formula = h18 ~ propfem_scale.cwc + nps.cwc + nc9618.cwc2 + unicount.cwc + frac1_scale.cwc  + age.cwc 
+               + (1 + propfem.gmc2|name1), 
+               data=centmlm, REML=FALSE)
+
+
+class(model3) <- "lmerMod"
+
+
+stargazer(modelnull, model3, type="html", out="tablex.html")
