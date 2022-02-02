@@ -1,3 +1,5 @@
+
+
 climlm <- centmlm %>% filter(sm_field=="Clinical Medicine")
 
 dis_count <- as.data.frame(table(climlm$discipline))
@@ -17,12 +19,8 @@ climlm <- climlm %>% filter(clidelvar==0)
 climodelnull <- lmer(formula = h19 ~ 1 + (1|discipline), 
                   data=climlm, REML=FALSE)
 
-RandomEffects <- as.data.frame(VarCorr(modelnull))
-RandomEffects
-
-ICC_between <- RandomEffects[1,4]/(RandomEffects[1,4]+RandomEffects[2,4]) 
-ICC_between
-
+icc_specs(climodelnull) %>%
+  mutate_if(is.numeric, round, 2)
 
 climodel2 <- lmer(formula = h19 ~ propfem_scale.cwc + prop_sole_scale.cwc + cites_scale.cwc + 
                  unicount.cwc + field_frac_scale.cwc  + age.cwc + (1|discipline), 
@@ -32,31 +30,39 @@ summary(climodelnull)
 
 summary(climodel2)
 
+clidesc <- climlm %>% ungroup() %>% select(h19, propfem_scale, prop_sole_scale, nc9619, unicount, field_frac_scale, age)
+
+clidesc <- as.data.frame(clidesc)
+
+stargazer(clidesc, type = "html", digits=1, summary.stat = c("n", "mean", "sd"), covariate.labels=c("Hirsch Index", "% Female Name", 
+                                                                                                 "% Sole Author Publications", "# of Citations", "University Count", "% Disciplinarity", "Age"), 
+          title="Table 1b: Descriptive Statistics (Clinical Data)", out="table1b.html")
+
 
 
 #https://biologyforfun.wordpress.com/2017/04/03/interpreting-random-effects-in-linear-mixed-effect-models/
 
-rando1 <- ranef(climodel2)$discipline
+clirando1 <- ranef(climodel2)$discipline
 
-rando1$estmean <- rando1$`(Intercept)`+49.3
+clirando1$estmean <- clirando1$`(Intercept)`+49.3
 
-rando1$discipline <- row.names(rando1)
+clirando1$discipline <- row.names(clirando1)
 
-rando1 <- rando1[order(rando1$estmean),]
+clirando1 <- clirando1[order(clirando1$estmean),]
 
-rando1 <- mutate(rando1, nid=row_number())
+clirando1 <- mutate(clirando1, nid=row_number())
 
 nseq <- c(1,2,3,4,5,22,23,24,25,26, 40, 41, 42,43,44)
 
-rando2 <- filter(rando1, rando1$nid%in%nseq)
+clirando2 <- filter(clirando1, clirando1$nid%in%nseq)
 
-rando2$clrs <- c("blue", "blue", "blue", "blue", "blue", "green", "green", "green", "green", "green", 
+clirando2$clrs <- c("blue", "blue", "blue", "blue", "blue", "green", "green", "green", "green", "green", 
                  "red", "red", "red", "red", "red")
 
 
 #Lollipops
 
-ggplot(rando2, aes(x= reorder(discipline, -estmean), y=estmean, group=clrs, color=clrs)) +
+ggplot(clirando2, aes(x= reorder(discipline, -estmean), y=estmean, group=clrs, color=clrs)) +
   geom_segment( aes(x=reorder(discipline, -estmean), xend=discipline, y=0, yend=estmean), color="skyblue") +
   geom_point(size=3, alpha=0.6) +
   geom_hline(yintercept = 49.3, color="orange") +

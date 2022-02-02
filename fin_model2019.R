@@ -4,6 +4,7 @@ library(dplyr)
 library(lme4)
 library(ggplot2)
 library(stargazer)
+library(specr)
 
 hind.df <- readRDS("~/Documents/GitHub/hirsch_test/data/hind19.df.rdata")
 
@@ -87,11 +88,8 @@ centmlm <- centmlm %>% na.omit()
 modelnull <- lmer(formula = h19 ~ 1 + (1|discipline), 
                   data=centmlm, REML=FALSE)
 
-RandomEffects <- as.data.frame(VarCorr(modelnull))
-RandomEffects
-
-ICC_between <- RandomEffects[1,4]/(RandomEffects[1,4]+RandomEffects[2,4]) 
-ICC_between
+icc_specs(modelnull) %>%
+  mutate_if(is.numeric, round, 2)
 
 
 model2 <- lmer(formula = h19 ~ propfem_scale.cwc + prop_sole_scale.cwc + cites_scale.cwc + 
@@ -102,13 +100,21 @@ summary(modelnull)
 
 summary(model2)
 
+desc <- centmlm %>% ungroup() %>% select(h19, propfem_scale, prop_sole_scale, nc9619, unicount, field_frac_scale, age)
 
+desc <- as.data.frame(desc)
+
+stargazer(desc, type = "html", digits=1, summary.stat = c("n", "mean", "sd"), covariate.labels=c("Hirsch Index", "% Female Name", 
+          "% Sole Author Publications", "# of Citations", "University Count", "% Disciplinarity", "Age"), 
+          title="Table 1a: Descriptive Statistics (Full Data)", out="table1a.html")
 
 #https://biologyforfun.wordpress.com/2017/04/03/interpreting-random-effects-in-linear-mixed-effect-models/
 
+
+
 rando1 <- ranef(model2)$discipline
 
-rando1$estmean <- rando1$`(Intercept)`+40.94
+rando1$estmean <- rando1$`(Intercept)`+40.9
 
 rando1$discipline <- row.names(rando1)
 
@@ -129,7 +135,7 @@ rando2$clrs <- c("blue", "blue", "blue", "blue", "blue", "green", "green", "gree
 ggplot(rando2, aes(x= reorder(discipline, -estmean), y=estmean, group=clrs, color=clrs)) +
   geom_segment( aes(x=reorder(discipline, -estmean), xend=discipline, y=0, yend=estmean), color="skyblue") +
   geom_point(size=3, alpha=0.6) +
-  geom_hline(yintercept = 38.62, color="orange") +
+  geom_hline(yintercept = 40.9, color="orange") +
   theme_light() +
   coord_flip() +
   ylab("Estimated Mean Hirsch Index") + xlab("Discipline") +
@@ -150,7 +156,7 @@ class(climodelnull) <- "lmerMod"
 class(climodel2) <- "lmerMod"
 
 
-stargazer(modelnull, model2, climodelnull, climodel2, style="asr", type="html", out="19table2_all.html",
+stargazer(modelnull, model2, climodelnull, climodel2, style="asr", digits=2, type="html", out="19table2_fin.html",
           align=TRUE, title = "Table 2: A Multilevel Model of the Hirsch Index",
           covariate.labels = c("Percentage Female Name","Percentage Sole Author Publications",
                                "# of Citations (1996-2019)", "University Count (# of Citation Allstars)", 
@@ -162,7 +168,8 @@ stargazer(modelnull, model2, climodelnull, climodel2, style="asr", type="html", 
           model.names = FALSE,
           column.labels = c("Null Model (All Disciplines)", "Full Model (All Disciplines)", 
                             "Null Model (Clinical Medicine)",
-                            "Full Model (Clinical Medicine)"))
+                            "Full Model (Clinical Medicine)"),
+          add.lines=list(c('ICC', '.23','', '.16', '')))
 
 
 
