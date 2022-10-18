@@ -5,6 +5,7 @@ library(lme4)
 library(ggplot2)
 library(stargazer)
 library(specr)
+library(lmerTest)
 
 hind.df <- readRDS("~/Documents/GitHub/hirsch_test/data/hind19.df.rdata")
 
@@ -13,28 +14,15 @@ hind.df <- readRDS("~/Documents/GitHub/hirsch_test/data/hind19.df.rdata")
 scmlm <- hind.df %>% select(discipline, age, h19, nps, np6019, nc9619, unicount, sm_field_frac, proportion_female, sm_field)
 
 
-scmlm$field_frac_scale <- scmlm$sm_field_frac*100
-scmlm$propfem_scale <- scmlm$proportion_female*100
-scmlm$cites_scale <- scmlm$nc9619/100
-scmlm$prop_sole_scale <- (scmlm$nps/scmlm$np6019)*100
+scmlm$field_frac_scale <- scale(scmlm$sm_field_frac)
+scmlm$propfem_scale <- scale(scmlm$proportion_female)
+scmlm$prop_sole_scale <- scale(scmlm$nps/scmlm$np6019)
+scmlm$age_scale <- scale(scmlm$age)
+scmlm$unicount_scale <- scale(scmlm$unicount) 
+
+centmlm <- scmlm
 
 #Cluster means centering
-
-centmlm <- scmlm %>%
-group_by(discipline) %>% 
-  mutate(age.cm = mean(age),
-         age.cwc = age-age.cm,
-         cites_scale.cm = mean(cites_scale),
-         cites_scale.cwc = cites_scale-cites_scale.cm,
-         prop_sole_scale.cm = mean(prop_sole_scale),
-         prop_sole_scale.cwc = prop_sole_scale-prop_sole_scale.cm,
-         unicount.cm = mean(unicount),
-         unicount.cwc = unicount-unicount.cm,
-         field_frac_scale.cm = mean(field_frac_scale),
-         field_frac_scale.cwc = field_frac_scale-field_frac_scale.cm,
-         propfem_scale.cm = mean(propfem_scale, na.rm=TRUE),
-         propfem_scale.cwc = propfem_scale-propfem_scale.cm)
-
 
 #For testing level 2 effects
 #centmlm <- centmlm %>%  
@@ -92,14 +80,25 @@ icc_specs(modelnull) %>%
   mutate_if(is.numeric, round, 2)
 
 
-model2 <- lmer(formula = h19 ~ propfem_scale.cwc + prop_sole_scale.cwc +  
-                 unicount.cwc + field_frac_scale.cwc  + age.cwc + (1|discipline), 
+model2 <- lmer(formula = h19 ~ propfem_scale + prop_sole_scale +  
+                 unicount_scale + field_frac_scale  + age_scale + (1|discipline), 
                data=centmlm, REML=FALSE)
 
+#let's think about group level effects
+
+model3 <- lmer(formula = h19 ~ propfem_scale + prop_sole_scale +  
+                 unicount_scale + field_frac_scale  + age_scale + (1 + prop_sole_scale + propfem_scale|discipline), 
+               data=centmlm, REML=FALSE)
 
 summary(modelnull)
 
 summary(model2)
+
+summary(model3)
+
+ranova(model3)
+
+anova(model2, model3)
 
 desc <- centmlm %>% ungroup() %>% select(h19, propfem_scale, prop_sole_scale, unicount, field_frac_scale, age)
 
@@ -112,7 +111,28 @@ stargazer(desc, type = "html", digits=1, summary.stat = c("n", "mean", "sd"), co
 #https://biologyforfun.wordpress.com/2017/04/03/interpreting-random-effects-in-linear-mixed-effect-models/
 
 
-rando1 <- ranef(model2)$discipline
+rando1 <- ranef(model3)$discipline
+
+disc_count <- as.data.frame(table(centmlm$discipline))
+
+disc_count <- disc_count %>% rename(discipline = Var1)
+
+rando1$discipline <- rownames(rando1)
+
+rando2 <- left_join(rando1, disc_count)
+
+colnames(rando2)[1] <- "dhindex"
+
+library(ggrepel)
+
+ggplot(rando2, aes(x=propfem_scale, y=dhindex, label=discipline)) +
+  geom_point(aes(size=Freq)) + 
+  geom_text_repel()
+
+ggplot(rando2, aes(x=prop_sole_scale, y=dhindex, label=discipline)) +
+  geom_point(aes(size=Freq)) + 
+  geom_text_repel()
+
 
 rando1$estmean <- rando1$`(Intercept)`+ mean(centmlm$h19) 
 
@@ -171,45 +191,61 @@ stargazer(modelnull, model2, climodelnull, climodel2, style="asr", digits=2, typ
                             "Full Model (Clinical Medicine)"),
           add.lines=list(c('ICC', '.23','', '.16', '')))
 
-#let's think about group level effects
 
-dis.df <- as.data.frame(table(centmlm$discipline))
+#let's think about group level effects...how do we make this work?
 
-colnames(dis.df)[1] <- "discipline"
-
-mhindex <- centmlm %>% group_by(discipline) %>% summarize(mean(h19))
-
-femmean <- centmlm %>% group_by(discipline) %>% summarize(mean(propfem_scale.cm))
-
-dis.df <- left_join(dis.df, mhindex)
-
-dis.df <- left_join(dis.df, femmean)
-
-colnames(dis.df)[3] <- "mhindex"
-
-colnames(dis.df)[4] <- "mpropfem"
-
-ggplot(dis.df, aes(x=mpropfem, y=mhindex)) +
-  geom_point(alpha=0.5) +
-  geom_smooth()
-
-
-centmlm$nps.gmc2 <- centmlm$nps.gmc/100
-
-centmlm$propfem.gmc2 <- centmlm$propfem.gmc/100
-
-
-model3 <- lmer(formula = h18 ~ propfem_scale.cwc + nps.cwc + nc9618.cwc2 + unicount.cwc + frac1_scale.cwc  + age.cwc 
-               + (1 + propfem.gmc2|name1), 
+model3 <- lmer(formula = h19 ~ propfem_scale + prop_sole_scale +  
+                 unicount_scale + field_frac_scale  + age_scale + (1 + prop_sole_scale + propfem_scale|discipline), 
                data=centmlm, REML=FALSE)
+ranova(model3)
 
 
+model3 <- lmer(formula = h19 ~ propfem_scale.cwc + prop_sole_scale.cwc +  
+                 unicount.cwc + field_frac_scale.cwc  + age.cwc + 
+                 (1 + prop_sole_scale.cwc + propfem_scale.cwc|discipline),
+               data=centmlm, REML=FALSE,  control = lmerControl(optimizer ="Nelder_Mead"))
 
 
+summary(model2)
+
+summary(model3)
+
+anova(model2, model3)
 
 
+model4 <- lmer(formula = h19 ~ propfem_scale.cwc + prop_sole_scale.cwc +  
+                 unicount.cwc + field_frac_scale.cwc  + age.cwc + 
+                 (1 + propfem_scale.cwc + prop_sole_scale.cwc|discipline),
+               data=centmlm, REML=FALSE, control = lmerControl(
+                 optimizer ='optimx', optCtrl=list(method='nlminb'))))
+
+summary(model4)
 
 
+tt <- getME(model4,"theta")
+ll <- getME(model4,"lower")
+min(tt[ll==0])
+
+ss <- getME(model4,c("theta","fixef"))
+
+library(optimx)
+
+model5 <- update(model4,start=ss,control = lmerControl(
+  optimizer ='optimx', optCtrl=list(method='nlminb')))
+
+corr_check <-  centmlm %>% ungroup() %>% select(h19, propfem_scale.cwc, prop_sole_scale.cwc,  
+                                   unicount.cwc, field_frac_scale.cwc, age.cwc)
+
+cor_res <- cor(corr_check)
+
+
+ranova(model3)
+
+source(system.file("utils", "allFit.R", package="lme4"))
+
+library(dfoptim)
+
+fit3.lme.all <- allFit(model4)
 
 
 
