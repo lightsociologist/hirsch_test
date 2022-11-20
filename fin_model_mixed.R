@@ -100,6 +100,8 @@ ranova(model3)
 
 anova(model2, model3)
 
+confint(model3)
+
 desc <- centmlm %>% ungroup() %>% select(h19, propfem_scale, prop_sole_scale, unicount, field_frac_scale, age)
 
 desc <- as.data.frame(desc)
