@@ -112,6 +112,7 @@ stargazer(desc, type = "html", digits=1, summary.stat = c("n", "mean", "sd"), co
 
 #https://biologyforfun.wordpress.com/2017/04/03/interpreting-random-effects-in-linear-mixed-effect-models/
 
+centmlm$psole <- centmlm$nps/centmlm$np6019
 
 rando1 <- coef(model3)$discipline
 
@@ -119,25 +120,46 @@ disc_count <- as.data.frame(table(centmlm$discipline))
 
 disc_count <- disc_count %>% rename(discipline = Var1)
 
+avgfem <- aggregate(centmlm$proportion_female, list(centmlm$discipline), mean)
+
+avgsole <- aggregate(centmlm$psole, list(centmlm$discipline), mean)
+
 rando1$discipline <- rownames(rando1)
 
-rando2 <- left_join(rando1, disc_count)
+colnames(avgfem) <- c("discipline", "avgfem")
 
-colnames(rando2)[1] <- "dhindex"
+avgfem <- left_join(avgfem, rando1)
+
+
+avgfem <- left_join(avgfem, dis_count)
+
+
+colnames(avgfem)[3] <- "dhindex"
 
 library(ggrepel)
 
-ggplot(rando2, aes(x=propfem_scale, y=dhindex, label=discipline)) +
+ggplot(avgfem, aes(x=avgfem, y=dhindex, label=discipline)) +
   geom_point(aes(size=Freq)) + 
   geom_text_repel() +
-  labs(x = "Proportion Female Name", y = "H-Index", size = "Frequency") +
+  labs(x = "Proportion Female Name (Scaled)", y = "H-Index", size = "Frequency") +
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                        panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
-ggplot(rando2, aes(x=prop_sole_scale, y=dhindex, label=discipline)) +
+colnames(avgsole) <- c("discipline", "avgsole")
+
+avgsole <- left_join(avgsole, rando1)
+
+
+avgsole <- left_join(avgsole, dis_count)
+
+
+colnames(avgsole)[3] <- "dhindex"
+
+
+ggplot(avgsole, aes(x=avgsole, y=dhindex, label=discipline)) +
   geom_point(aes(size=Freq)) + 
   geom_text_repel() +
-  labs(x = "Proportion Sole Authored", y = "H-Index", size = "Frequency") +
+  geom_smooth(method="auto", se=TRUE, fullrange=FALSE, level=0.95) +
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                      panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))
 
