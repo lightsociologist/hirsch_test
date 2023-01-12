@@ -1,4 +1,13 @@
+# ignore R stuff
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+.Rapp.history
+
+# ignore mac stuff
+.DS_Store
+
+# ignore MS stuff
+~*.doc*
+~*.xls*
