@@ -11,7 +11,7 @@ hind.df <- readRDS("data/hind19.df.rdata")
 
 #Let's select variables for the mlm model
 
-scmlm <- hind.df %>% select(discipline, age, h19, nps, np6019, nc9619, unicount, sm_field_frac, proportion_female, sm_field)
+scmlm <- hind.df %>% select(authfull, discipline, age, h19, nps, np6019, nc9619, unicount, sm_field_frac, proportion_female, sm_field)
 
 
 scmlm$field_frac_scale <- scale(scmlm$sm_field_frac)
@@ -28,37 +28,6 @@ centmlm <- scmlm
 #centmlm <- centmlm %>%  
 #  mutate(propfem.gmc = scale(propfem_scale, center = T, scale = F),
 #   nps.gmc = scale(nps, center = T, scale = F))
-
-#Remove rare disciplines
-
-#Let's pull out fields or disciplines to remove very rare ones.
-
-dis_count <- as.data.frame(table(centmlm$discipline))
-
-dis_count <- mutate(dis_count, delvar = ifelse(Freq<101, 1, 0))
-
-dis_count <- dis_count %>% rename(discipline = Var1)
-
-
-
-fld_count <- as.data.frame(table(centmlm$sm_field))
-
-fld_count <- mutate(fld_count, delvar2 = ifelse(Freq<401, 1, 0))
-
-fld_count <- fld_count %>% rename(sm_field = Var1)
-
-fld_count <- fld_count %>% rename(Freq2 = Freq)
-
-#We merge back the discipline counts and remove the ones that appear less than
-#50 times.
-
-centmlm <- left_join(centmlm, dis_count)
-
-centmlm <- centmlm %>% filter(delvar==0)
-
-centmlm <- left_join(centmlm, fld_count)
-
-centmlm <- centmlm %>% filter(delvar2==0)
 
 
 #Listwise delete
@@ -87,7 +56,7 @@ model2 <- lmer(formula = h19 ~ propfem_scale + prop_sole_scale +
 #let's think about group level effects
 
 model3 <- lmer(formula = h19 ~ propfem_scale + prop_sole_scale +  
-                 unicount_scale + field_frac_scale  + age_scale + (1 + prop_sole_scale + propfem_scale|discipline), 
+                 unicount_scale + field_frac_scale  + age_scale + (1 + prop_sole_scale + propfem_scale), 
                data=centmlm, REML=FALSE)
 
 summary(modelnull)
