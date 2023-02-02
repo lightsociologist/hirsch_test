@@ -11,3 +11,7 @@
 # ignore MS stuff
 ~*.doc*
 ~*.xls*
+
+# ignore built stuff
+*.html
+*.pdf
