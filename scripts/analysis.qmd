@@ -70,6 +70,8 @@ disciplines <- scholars |>
 ```
 
 ```{r}
+#| label: fig-scatter_percent_female
+#| fig-cap: Scatterplot of mean h-index and percent female across disciplines
 ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
   geom_point(aes(size=n_disc, color=field), alpha=0.7)+
   geom_text_repel(aes(label=discipline), max.overlaps=6)+
@@ -81,6 +83,8 @@ ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
 ```
 
 ```{r}
+#| label: fig-scatter-percent_sole
+#| fig-cap: Scatterplot of mean h-index and percent sole author across disciplines
 ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
   geom_point(aes(size=n_disc, color=field), alpha=0.7)+
   geom_text_repel(aes(label=discipline), max.overlaps=6)+
@@ -102,7 +106,7 @@ models_base <- list(model_base_disc, model_base_field, model_base_both)
 ```
 
 ```{r}
-#| label: tbl_icc_base
+#| label: tbl-icc_base
 #| tbl-cap: Partitioning of variance in h-index to different levels
 
 # get icc across models in a nice tidy table
