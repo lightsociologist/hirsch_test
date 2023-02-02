@@ -40,9 +40,9 @@ scholars <- readRDS(here("data","hind19.df.rdata")) |>
          discipline=factor(discipline),
          sm_field=factor(sm_field),
          cntry=factor(cntry)) |>
-  select(h19, age, proportion_female, prop_sole, discipline, sm_field, cntry) |>
+  select(h19, age, proportion_female, prop_sole, discipline, sm_field, cntry, unicount, age, sm_field_frac) |>
   rename(h_index=h19, prop_female=proportion_female, field=sm_field, 
-         country=cntry)
+         country=cntry, uni_pub_cnt=unicount, career_age=age, specialization = sm_field_frac)
 
 sapply(scholars, function(x) {sum(is.na(x))})
 # missing almost 10K gender cases and a few discipline and field
@@ -55,6 +55,9 @@ disciplines <- scholars |>
   group_by(discipline) |>
   summarize(disc_prop_female=mean(prop_female),
             disc_prop_sole=mean(prop_sole),
+            disc_uni_pub_cnt=mean(uni_pub_cnt),
+            disc_career_age=mean(career_age),
+            disc_specialization=mean(specialization),
             n_disc=n())
 
 fields <- scholars |>
@@ -160,3 +163,26 @@ htmlreg(list(model_base_disc, model_wb_disc),
         caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
         caption.above = TRUE)
 ```
+
+
+```{r}
+# let's remove non social science or socail science fields and repeat
+
+disciplines2 <- disciplines %>% filter(field!="Visual & Performing Arts" , field!="Historical Studies" , field!="Philosophy & Theology")
+
+```
+
+```{r}
+```{r}
+#| label: fig-scatter_percent_female
+#| fig-cap: Scatterplot of mean h-index and percent female across disciplines
+ggplot(disciplines2, aes(x=disc_prop_female, y=disc_h_index))+
+  geom_point(aes(size=n_disc, color=field), alpha=0.7)+
+  geom_text_repel(aes(label=discipline), max.overlaps=6)+
+  scale_x_continuous(labels=scales::percent)+
+  scale_color_viridis_d()+
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x="percent female in discipline", y="mean h-index within discipline")
+```
+
