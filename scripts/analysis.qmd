@@ -1,0 +1,142 @@
+---
+title: "Hirsch Index Analysis"
+format: 
+  html:
+    code-fold: true
+    embed-resources: true
+warning: false
+editor: source
+---
+
+```{r}
+#| label: load_libraries
+#| include: FALSE
+library(here)
+library(tidyverse)
+library(lme4)
+library(texreg)
+library(specr)
+library(kableExtra)
+library(ggrepel)
+options(knitr.kable.NA = "")
+```
+
+```{r}
+#| label: clean_data
+#| output: FALSE
+
+# grab the basic data and variables we want
+scholars <- readRDS(here("data","hind19.df.rdata")) |>
+  mutate(prop_sole=nps/np6019, 
+         discipline=factor(discipline),
+         sm_field=factor(sm_field),
+         cntry=factor(cntry)) |>
+  select(h19, age, proportion_female, prop_sole, discipline, sm_field, cntry) |>
+  rename(h_index=h19, prop_female=proportion_female, field=sm_field, 
+         country=cntry)
+
+sapply(scholars, function(x) {sum(is.na(x))})
+# missing almost 10K gender cases and a few discipline and field
+
+scholars <- scholars %>%
+  filter(!is.na(prop_female) & !is.na(discipline) & !is.na(field))
+
+# now lets add in discipline and field cluster means for prop_female and prop_sole
+disciplines <- scholars |>
+  group_by(discipline) |>
+  summarize(disc_prop_female=mean(prop_female),
+            disc_prop_sole=mean(prop_sole),
+            n_disc=n())
+
+fields <- scholars |>
+  group_by(field) |>
+  summarize(field_prop_female=mean(prop_female),
+            field_prop_sole=mean(prop_sole),
+            n_field=n())
+
+# now merge it back together
+scholars <- scholars |>
+  left_join(disciplines) |>
+  left_join(fields)
+
+# lets also put in mean h_index by discipline and add back in field information
+# for fun visualizations
+disciplines <- scholars |>
+  group_by(discipline) |>
+  summarize(disc_h_index=mean(h_index),
+            field=unique(field)[1]) |>
+  right_join(disciplines) %>%
+  left_join(fields)
+```
+
+```{r}
+ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
+  geom_point(aes(size=n_disc, color=field), alpha=0.7)+
+  geom_text_repel(aes(label=discipline), max.overlaps=6)+
+  scale_x_continuous(labels=scales::percent)+
+  scale_color_viridis_d()+
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x="percent female in discipline", y="mean h-index within discipline")
+```
+
+```{r}
+ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
+  geom_point(aes(size=n_disc, color=field), alpha=0.7)+
+  geom_text_repel(aes(label=discipline), max.overlaps=6)+
+  scale_x_continuous(labels=scales::percent)+
+  scale_color_viridis_d()+
+  theme_bw()+
+  theme(legend.position = "none")+
+  labs(x="percent sole authored in discipline", y="mean h-index within discipline")
+```
+
+```{r}
+#| label: baseline models
+model_base_disc <- lmer(h_index ~ 1+(1 | discipline), data=scholars)
+model_base_field <- lmer(h_index ~ 1+(1 | field), data=scholars)
+model_base_both <- lmer(h_index ~ 1+(1 | discipline)+(1 | discipline:field), 
+                        data=scholars)
+
+models_base <- list(model_base_disc, model_base_field, model_base_both)
+```
+
+```{r}
+#| label: tbl_icc_base
+#| tbl-cap: Partitioning of variance in h-index to different levels
+
+# get icc across models in a nice tidy table
+map(models_base, function(x) {
+              temp <- icc_specs(x) |>
+                select(grp, percent)  |>
+  mutate(grp=ifelse(grp=="discipline:field", "field", grp),
+         grp=factor(grp, levels=c("discipline","field","Residual"),
+                    labels=c("Discipline","Field","Individual")))
+            }) |>
+  reduce(full_join, by="grp") |>
+  arrange(grp) |>
+  kbl(digits=1, col.names = c("Grouping","Model 1","Model 2","Model 3")) |>
+  kable_styling()
+```
+
+
+```{r}
+#| label: model_wb
+#| results: asis
+
+# grand mean centering age, but others are group mean centered
+model_wb_disc <- lmer(h_index ~ I(age-mean(age))+
+                        I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+                        I(100*(prop_sole-disc_prop_sole))+I(100*disc_prop_sole)+
+                        (1|discipline), data=scholars)
+
+htmlreg(list(model_base_disc, model_wb_disc),
+        custom.coef.names = c("Intercept","Age (grand mean centered)",
+                              "Probability [0-1] of female name (discipline mean centered)",
+                              "Discipline mean percent female name",
+                              "Percent sole authored publications (discipline mean centered)",
+                              "Discipline mean percent sole authored publications"),
+        custom.model.names = c("ANOVA Model","W-B Model"),
+        caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
+        caption.above = TRUE)
+```
