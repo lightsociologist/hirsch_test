@@ -18,7 +18,16 @@ library(texreg)
 library(specr)
 library(kableExtra)
 library(ggrepel)
+library(qualpalr)
 options(knitr.kable.NA = "")
+```
+
+```{r}
+#| label: color_palette
+
+# creating color palettes for twenty cases is not eay but lets see if qualpalr
+# can help us
+pal <- qualpal(20, "pretty_dark")
 ```
 
 ```{r}
@@ -74,12 +83,16 @@ disciplines <- scholars |>
 #| fig-cap: Scatterplot of mean h-index and percent female across disciplines
 ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
   geom_point(aes(size=n_disc, color=field), alpha=0.7)+
-  geom_text_repel(aes(label=discipline), max.overlaps=6)+
+  geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
   scale_x_continuous(labels=scales::percent)+
-  scale_color_viridis_d()+
+  scale_color_manual(values=pal$hex)+
   theme_bw()+
-  theme(legend.position = "none")+
-  labs(x="percent female in discipline", y="mean h-index within discipline")
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 6), 
+        legend.text = element_text(size = 4))+
+  labs(x="percent female in discipline", y="mean h-index within discipline",
+       color="Field")+
+  guides(size=FALSE)
 ```
 
 ```{r}
@@ -87,12 +100,15 @@ ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
 #| fig-cap: Scatterplot of mean h-index and percent sole author across disciplines
 ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
   geom_point(aes(size=n_disc, color=field), alpha=0.7)+
-  geom_text_repel(aes(label=discipline), max.overlaps=6)+
+  geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
   scale_x_continuous(labels=scales::percent)+
-  scale_color_viridis_d()+
+  scale_color_manual(values=pal$hex)+
   theme_bw()+
-  theme(legend.position = "none")+
-  labs(x="percent sole authored in discipline", y="mean h-index within discipline")
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 6), 
+        legend.text = element_text(size = 4))+
+  labs(x="percent sole authored in discipline", y="mean h-index within discipline")+
+  guides(size=FALSE)
 ```
 
 ```{r}
