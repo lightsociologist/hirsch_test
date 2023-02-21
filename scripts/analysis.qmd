@@ -4,7 +4,8 @@ format:
   html:
     code-fold: true
     embed-resources: true
-warning: false
+execute:
+  warning: false
 editor: source
 ---
 
@@ -24,8 +25,9 @@ options(knitr.kable.NA = "")
 
 ```{r}
 #| label: color_palette
+#| include: FALSE
 
-# creating color palettes for twenty cases is not eay but lets see if qualpalr
+# creating color palettes for twenty cases is not easy but lets see if qualpalr
 # can help us
 pal <- qualpal(20, "pretty_dark")
 ```
@@ -40,9 +42,10 @@ scholars <- readRDS(here("data","hind19.df.rdata")) |>
          discipline=factor(discipline),
          sm_field=factor(sm_field),
          cntry=factor(cntry)) |>
-  select(h19, age, proportion_female, prop_sole, discipline, sm_field, cntry, unicount, age, sm_field_frac) |>
+  select(h19, age, proportion_female, prop_sole, discipline, sm_field, cntry, 
+         unicount, sm_field_frac) |>
   rename(h_index=h19, prop_female=proportion_female, field=sm_field, 
-         country=cntry, uni_pub_cnt=unicount, career_age=age, specialization = sm_field_frac)
+         country=cntry, uni_pub_cnt=unicount, specialization = sm_field_frac)
 
 sapply(scholars, function(x) {sum(is.na(x))})
 # missing almost 10K gender cases and a few discipline and field
@@ -56,7 +59,7 @@ disciplines <- scholars |>
   summarize(disc_prop_female=mean(prop_female),
             disc_prop_sole=mean(prop_sole),
             disc_uni_pub_cnt=mean(uni_pub_cnt),
-            disc_career_age=mean(career_age),
+            disc_age=mean(age),
             disc_specialization=mean(specialization),
             n_disc=n())
 
@@ -173,8 +176,7 @@ disciplines2 <- disciplines %>% filter(field!="Visual & Performing Arts" , field
 ```
 
 ```{r}
-```{r}
-#| label: fig-scatter_percent_female
+#| label: fig-scatter_percent_female_filtered
 #| fig-cap: Scatterplot of mean h-index and percent female across disciplines
 ggplot(disciplines2, aes(x=disc_prop_female, y=disc_h_index))+
   geom_point(aes(size=n_disc, color=field), alpha=0.7)+
