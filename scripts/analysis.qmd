@@ -84,11 +84,16 @@ disciplines <- scholars |>
   left_join(fields)
 ```
 
+# Between discipline data visualization
+
 ```{r}
 #| label: fig-scatter_percent_female
-#| fig-cap: Scatterplot of mean h-index and percent female across disciplines
+#| fig-cap: Scatterplot of mean h-index and percent female across disciplines. Blue line is best fitting line unweighted by discipline sample size. Red line is the same but with nursing excluded.
 ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
   geom_point(aes(size=n_disc, color=field), alpha=0.7)+
+  geom_smooth(method="lm", se=FALSE)+
+  geom_smooth(data=filter(disciplines, discipline!="Nursing"), color="red",
+              method="lm", se=FALSE)+
   geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
   scale_x_continuous(labels=scales::percent)+
   scale_color_manual(values=pal$hex)+
@@ -101,11 +106,14 @@ ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
   guides(size=FALSE)
 ```
 
+@fig-scatter_percent_female shows a slightly negative relationship across disciplines between feminization of the discipline and mean h-index. The field of nursing is an outlier, but as the two fitted lines show, it is not an influential point.
+
 ```{r}
 #| label: fig-scatter-percent_sole
-#| fig-cap: Scatterplot of mean h-index and percent sole author across disciplines
+#| fig-cap: Scatterplot of mean h-index and percent sole author across disciplines. Blue line shows best-fitting OLS line unweighted by discipline size.
 ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
   geom_point(aes(size=n_disc, color=field), alpha=0.7)+
+  geom_smooth(method="lm", se=FALSE)+
   geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
   scale_x_continuous(labels=scales::percent)+
   scale_color_manual(values=pal$hex)+
@@ -116,6 +124,12 @@ ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
   labs(x="percent sole authored in discipline", y="mean h-index within discipline")+
   guides(size=FALSE)
 ```
+
+@fig-scatter-percent_sole shows the relationship between sole authorship tendencies in a discipline and mean h-index. Disciplines with more sole authorship have a lower mean h-index and the relationship is quite a strong one. It is also somewhat curvilinear.
+
+# Multilevel models
+
+We now turn to multilevel models to examine both within and between discipline and field effects on
 
 ```{r}
 #| label: baseline models
@@ -145,7 +159,6 @@ map(models_base, function(x) {
   kable_styling()
 ```
 
-
 ```{r}
 #| label: model_wb
 #| results: asis
@@ -167,7 +180,6 @@ htmlreg(list(model_base_disc, model_wb_disc),
         caption.above = TRUE)
 ```
 
-
 ```{r}
 # let's remove non social science or socail science fields and repeat
 
@@ -188,3 +200,14 @@ ggplot(disciplines2, aes(x=disc_prop_female, y=disc_h_index))+
   labs(x="percent female in discipline", y="mean h-index within discipline")
 ```
 
+# Discipline and field descriptive statistics
+
+```{r}
+#| label: tbl-discipline-stats
+#| tbl-cap: Discipline specific statistics. Disciplines are sorted from highest h-index to lowest.
+
+
+
+
+
+```
