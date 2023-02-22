@@ -129,7 +129,7 @@ ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
 
 # Multilevel models
 
-We now turn to multilevel models to examine both within and between discipline and field effects on
+We now turn to multilevel models to examine both within and between discipline and field effects on h-index values. In the first set of models, we use random intercept models without covariates to partition the variance in the h-index to the individual, discipline, and field levels. We first fit two separate models that partition by discipline and field, respetively and then we do a final model that uses a three level model (individual, discipline, field) to partition the variance in discipline and field simultaneously.
 
 ```{r}
 #| label: baseline models
@@ -156,11 +156,27 @@ map(models_base, function(x) {
   reduce(full_join, by="grp") |>
   arrange(grp) |>
   kbl(digits=1, col.names = c("Grouping","Model 1","Model 2","Model 3")) |>
-  kable_styling()
+  kable_paper()
 ```
 
+@tbl-icc_base shows the percentage of the overall variation in h-index scores that can be accounted for at each level. About 68% of the variation in h-indices occurs among individuals in the same discipline, with the remaining third of the variance occurring across disciplines and fields. The results clearly show that fields do not add much beyond the variance at the discipline level. When both levels are considered, disciplinary differences account for about 28% of the variance and fields only for about 4%. 
+
+Based on these results we used a two-level model with only disciplines as the higher level unit for our further substantive analysis. For this analysis, we turned to within-between models to understand the role of two variables both within and between disciplines. These two variables are
+
+* gender, measured by the likelihood that a given name indicates a female gender.
+* proportion of publications that are sole-authored.
+
+The basic structure of the within-between models is:
+
+$$y_{ij}=\beta_{0j}+\beta_1(x_{ij}-\bar{x}_j)+\beta_2(\bar{x}_j)+\upsilon_{0j}+\epsilon_{ij}$$
+
+Where $y_{ij}$ is the h-index score of scholar $i$ in discipline $j$. The random intercept $\beta_0j$ is allowed to vary over disciplines. The variable $x$ is the focal variable of interest. It is included at both the individual level (using group mean centering) and at the discipline level, by including its mean at the discipline level. This particular model structure allows us to understand the within discipline effect and between discipline effect of $x$ simultaneously. The $\beta_1$ slope is identical to the slope one would get if they were to instead fit a traditional econometric fixed-effects model (i.e. include dummies for the disciplines), but unlike a traditional fixed-effects model, we can still estimate the between discipline part of the model. The $\beta_2$ slope tells us how much an increase in the mean of the x variable at the disciplinary changes the expected h-index score.
+
+In practice, we include both of our key variables in the model at the same time. We also include a control variable for age which is grand mean centered. The results are shown in the table below.
+
 ```{r}
-#| label: model_wb
+#| label: tlb-model_wb
+#| tbl-cap: test
 #| results: asis
 
 # grand mean centering age, but others are group mean centered
@@ -179,6 +195,15 @@ htmlreg(list(model_base_disc, model_wb_disc),
         caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
         caption.above = TRUE)
 ```
+
+The results of these models are as follows:
+
+* Within the same discipline, women have h-indexes 2.47 points lower than men, on average. 
+* Within the same discipline, a 1% percent increase in sole-authored publication is associated with a 0.47 point reduction in the h-index score.
+* Between disciplines, the female concentration of the discipline had little effect on the mean h-index for the discipline. A 1% increase in the percent female is associated with a 0.08 increase in the mean h-index.
+* Between disciplines, a 1% increase in the mean percent of sole authored publications is associated witha a 0.48 reduction in the mean h-index. 
+
+So, in summary gender inequity exists within disciplines and inequity by sole authoring tendencies exists both within and between disciplines.
 
 ```{r}
 # let's remove non social science or socail science fields and repeat
