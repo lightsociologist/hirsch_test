@@ -205,6 +205,10 @@ The results of these models are as follows:
 
 So, in summary gender inequity exists within disciplines and inequity by sole authoring tendencies exists both within and between disciplines.
 
+# Sensitivity analysis
+
+## Grouping disciplines
+
 ```{r}
 # let's remove non social science or socail science fields and repeat
 
@@ -212,18 +216,6 @@ disciplines2 <- disciplines %>% filter(field!="Visual & Performing Arts" , field
 
 ```
 
-```{r}
-#| label: fig-scatter_percent_female_filtered
-#| fig-cap: Scatterplot of mean h-index and percent female across disciplines
-ggplot(disciplines2, aes(x=disc_prop_female, y=disc_h_index))+
-  geom_point(aes(size=n_disc, color=field), alpha=0.7)+
-  geom_text_repel(aes(label=discipline), max.overlaps=6)+
-  scale_x_continuous(labels=scales::percent)+
-  scale_color_viridis_d()+
-  theme_bw()+
-  theme(legend.position = "none")+
-  labs(x="percent female in discipline", y="mean h-index within discipline")
-```
 
 # Discipline and field descriptive statistics
 
