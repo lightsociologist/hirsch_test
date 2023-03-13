@@ -185,13 +185,18 @@ model_wb_disc <- lmer(h_index ~ I(age-mean(age))+
                         I(100*(prop_sole-disc_prop_sole))+I(100*disc_prop_sole)+
                         (1|discipline), data=scholars)
 
-htmlreg(list(model_base_disc, model_wb_disc),
+# add a model with controls for specialization and unicount
+model_wb_controls <- update(model_wb_disc, .~.+specialization+uni_pub_cnt)
+
+knitreg(list(model_base_disc, model_wb_disc, model_wb_controls),
         custom.coef.names = c("Intercept","Age (grand mean centered)",
                               "Probability [0-1] of female name (discipline mean centered)",
                               "Discipline mean percent female name",
                               "Percent sole authored publications (discipline mean centered)",
-                              "Discipline mean percent sole authored publications"),
-        custom.model.names = c("ANOVA Model","W-B Model"),
+                              "Discipline mean percent sole authored publications",
+                              "Specialization",
+                              "Unicount"),
+        custom.model.names = c("ANOVA Model","W-B Model","w/controls"),
         caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
         caption.above = TRUE)
 ```
