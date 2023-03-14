@@ -179,23 +179,24 @@ In practice, we include both of our key variables in the model at the same time.
 #| tbl-cap: test
 #| results: asis
 
-# grand mean centering age, but others are group mean centered
-model_wb_disc <- lmer(h_index ~ I(age-mean(age))+
+# main effects are group mean centered
+model_wb_disc <- lmer(h_index ~ 
                         I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
                         I(100*(prop_sole-disc_prop_sole))+I(100*disc_prop_sole)+
                         (1|discipline), data=scholars)
 
-# add a model with controls for specialization and unicount
-model_wb_controls <- update(model_wb_disc, .~.+specialization+uni_pub_cnt)
+# add a model with controls for age, specialization and the number of elite scholars per university (all grand mean centered)
+model_wb_controls <- update(model_wb_disc, .~.+I(age-mean(age))+I(specialization-mean(specialization))+I(uni_pub_cnt-mean(uni_pub_cnt)))
 
 knitreg(list(model_base_disc, model_wb_disc, model_wb_controls),
-        custom.coef.names = c("Intercept","Age (grand mean centered)",
+        custom.coef.names = c("Intercept",
                               "Probability [0-1] of female name (discipline mean centered)",
                               "Discipline mean percent female name",
                               "Percent sole authored publications (discipline mean centered)",
                               "Discipline mean percent sole authored publications",
-                              "Specialization",
-                              "Unicount"),
+                              "Age (grand mean centered)",
+                              "Specialization (grand mean centered)",
+                              "Highly productive university count (grand mean centered)"),
         custom.model.names = c("ANOVA Model","W-B Model","w/controls"),
         caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
         caption.above = TRUE)
@@ -250,4 +251,158 @@ fields |>
   arrange(desc(n_field))|>
   kbl(col.names=c("Field","N", "% female", "% sole")) |>
   kable_paper() 
+```
+
+# A Series of Field Tests
+
+# Medical and Public Health Field: Clinical Medicine, Biomedical Research, Public Health & Health Services 
+
+```{r}
+
+#| label: tlb-model_med
+#| tbl-cap: test
+#| results: asis
+
+medical <- scholars %>% filter(field=="Clinical Medicine" | field=="Biomedical Research" | field=="Public Health & Health Services" )
+
+model_base_med <- lmer(h_index ~ 1+(1 | discipline), data=medical)
+
+# main effects are group mean centered
+
+model_med_disc <- lmer(h_index ~ 
+                        I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+                        I(100*(prop_sole-disc_prop_sole))+I(100*disc_prop_sole)+
+                        (1|discipline), data=medical)
+
+# add a model with controls for age, specialization and the number of elite scholars per university (all grand mean centered)
+model_med_controls <- update(model_med_disc, .~.+I(age-mean(age))+I(specialization-mean(specialization))+I(uni_pub_cnt-mean(uni_pub_cnt)))
+
+knitreg(list(model_base_med, model_med_disc, model_med_controls),
+        custom.coef.names = c("Intercept",
+                              "Probability [0-1] of female name (discipline mean centered)",
+                              "Discipline mean percent female name",
+                              "Percent sole authored publications (discipline mean centered)",
+                              "Discipline mean percent sole authored publications",
+                              "Age (grand mean centered)",
+                              "Specialization (grand mean centered)",
+                              "Highly productive university count (grand mean centered)"),
+        custom.model.names = c("ANOVA Model","W-B Model","w/controls"),
+        caption = "Multilevel models predicting H-index score for Medical Field. Clustering at the disciplinary level.",
+        caption.above = TRUE)
+
+```
+
+# Social Science Field: Social Sciences, Psychology & Cognitive Sciences, Economics & Business  
+
+```{r}
+
+#| label: tlb-model_social
+#| tbl-cap: test
+#| results: asis
+
+
+social <- scholars %>% filter(field=="Social Sciences" | field=="Psychology & Cognitive Sciences" | field=="Economics & Business" )
+
+model_base_soc <- lmer(h_index ~ 1+(1 | discipline), data=social)
+
+# main effects are group mean centered
+
+model_soc_disc <- lmer(h_index ~ 
+                        I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+                        I(100*(prop_sole-disc_prop_sole))+I(100*disc_prop_sole)+
+                        (1|discipline), data=social)
+
+# add a model with controls for age, specialization and the number of elite scholars per university (all grand mean centered)
+model_soc_controls <- update(model_soc_disc, .~.+I(age-mean(age))+I(specialization-mean(specialization))+I(uni_pub_cnt-mean(uni_pub_cnt)))
+
+knitreg(list(model_base_soc, model_soc_disc, model_soc_controls),
+        custom.coef.names = c("Intercept",
+                              "Probability [0-1] of female name (discipline mean centered)",
+                              "Discipline mean percent female name",
+                              "Percent sole authored publications (discipline mean centered)",
+                              "Discipline mean percent sole authored publications",
+                              "Age (grand mean centered)",
+                              "Specialization (grand mean centered)",
+                              "Highly productive university count (grand mean centered)"),
+        custom.model.names = c("ANOVA Model","W-B Model","w/controls"),
+        caption = "Multilevel models predicting H-index score for Social Science Field. Clustering at the disciplinary level.",
+        caption.above = TRUE)
+
+```
+
+# Non-Medical STEM Field: Physics & Astronomy, Engineering, Biology, Chemistry, Earth & Environmental Sciences, Mathematics & Statistics, Information & Communication Technologies  
+
+```{r}
+
+#| label: tlb-model_social
+#| tbl-cap: test
+#| results: asis
+
+
+stem <- scholars %>% filter(field=="Physics & Astronomy" | field=="Engineering" | field=="Biology" | field=="Chemistry" | field=="Earth & Environmental Sciences" | field == "Mathematics & Statistics" | field=="Information & Communication Technologies")
+
+model_base_stem <- lmer(h_index ~ 1+(1 | discipline), data=stem)
+
+# main effects are group mean centered
+
+model_stem_disc <- lmer(h_index ~ 
+                        I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+                        I(100*(prop_sole-disc_prop_sole))+I(100*disc_prop_sole)+
+                        (1|discipline), data=stem)
+
+# add a model with controls for age, specialization and the number of elite scholars per university (all grand mean centered)
+model_stem_controls <- update(model_stem_disc, .~.+I(age-mean(age))+I(specialization-mean(specialization))+I(uni_pub_cnt-mean(uni_pub_cnt)))
+
+knitreg(list(model_base_stem, model_stem_disc, model_stem_controls),
+        custom.coef.names = c("Intercept",
+                              "Probability [0-1] of female name (discipline mean centered)",
+                              "Discipline mean percent female name",
+                              "Percent sole authored publications (discipline mean centered)",
+                              "Discipline mean percent sole authored publications",
+                              "Age (grand mean centered)",
+                              "Specialization (grand mean centered)",
+                              "Highly productive university count (grand mean centered)"),
+        custom.model.names = c("ANOVA Model","W-B Model","w/controls"),
+        caption = "Multilevel models predicting H-index score for STEM Field. Clustering at the disciplinary level.",
+        caption.above = TRUE)
+
+```
+
+# Humaanaties Field: Communication & Textual Studies, Historical Studies, Philosophy & Theology, Visual & Performing Arts  
+
+
+```{r}
+
+#| label: tlb-model_social
+#| tbl-cap: test
+#| results: asis
+
+
+human <- scholars %>% filter(field=="Communication & Textual Studies" | field=="Historical Studies" | field=="Philosophy & Theology" | field=="Visual & Performing Arts")
+
+model_base_human <- lmer(h_index ~ 1+(1 | discipline), data=human)
+
+# main effects are group mean centered
+
+model_human_disc <- lmer(h_index ~ 
+                        I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+                        I(100*(prop_sole-disc_prop_sole))+I(100*disc_prop_sole)+
+                        (1|discipline), data=human)
+
+# add a model with controls for age, specialization and the number of elite scholars per university (all grand mean centered)
+model_human_controls <- update(model_human_disc, .~.+I(age-mean(age))+I(specialization-mean(specialization))+I(uni_pub_cnt-mean(uni_pub_cnt)))
+
+knitreg(list(model_base_human, model_human_disc, model_human_controls),
+        custom.coef.names = c("Intercept",
+                              "Probability [0-1] of female name (discipline mean centered)",
+                              "Discipline mean percent female name",
+                              "Percent sole authored publications (discipline mean centered)",
+                              "Discipline mean percent sole authored publications",
+                              "Age (grand mean centered)",
+                              "Specialization (grand mean centered)",
+                              "Highly productive university count (grand mean centered)"),
+        custom.model.names = c("ANOVA Model","W-B Model","w/controls"),
+        caption = "Multilevel models predicting H-index score for humanaties Field. Clustering at the disciplinary level.",
+        caption.above = TRUE)
+
 ```
