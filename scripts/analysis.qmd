@@ -255,10 +255,9 @@ fields |>
 
 # A Series of Field Tests
 
-# Medical and Public Health Field: Clinical Medicine, Biomedical Research, Public Health & Health Services 
+Medical and Public Health Field: Clinical Medicine, Biomedical Research, Public Health & Health Services 
 
 ```{r}
-
 #| label: tlb-model_med
 #| tbl-cap: test
 #| results: asis
@@ -292,10 +291,9 @@ knitreg(list(model_base_med, model_med_disc, model_med_controls),
 
 ```
 
-# Social Science Field: Social Sciences, Psychology & Cognitive Sciences, Economics & Business  
+Social Science Field: Social Sciences, Psychology & Cognitive Sciences, Economics & Business  
 
 ```{r}
-
 #| label: tlb-model_social
 #| tbl-cap: test
 #| results: asis
@@ -330,11 +328,10 @@ knitreg(list(model_base_soc, model_soc_disc, model_soc_controls),
 
 ```
 
-# Non-Medical STEM Field: Physics & Astronomy, Engineering, Biology, Chemistry, Earth & Environmental Sciences, Mathematics & Statistics, Information & Communication Technologies  
+Non-Medical STEM Field: Physics & Astronomy, Engineering, Biology, Chemistry, Earth & Environmental Sciences, Mathematics & Statistics, Information & Communication Technologies  
 
 ```{r}
-
-#| label: tlb-model_social
+#| label: tlb-model_stem
 #| tbl-cap: test
 #| results: asis
 
@@ -368,12 +365,11 @@ knitreg(list(model_base_stem, model_stem_disc, model_stem_controls),
 
 ```
 
-# Humaanaties Field: Communication & Textual Studies, Historical Studies, Philosophy & Theology, Visual & Performing Arts  
+Humanaties Field: Communication & Textual Studies, Historical Studies, Philosophy & Theology, Visual & Performing Arts  
 
 
 ```{r}
-
-#| label: tlb-model_social
+#| label: tlb-model_human
 #| tbl-cap: test
 #| results: asis
 
