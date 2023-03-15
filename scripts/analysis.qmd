@@ -18,6 +18,7 @@ library(lme4)
 library(texreg)
 library(specr)
 library(kableExtra)
+library(gt)
 library(ggrepel)
 library(qualpalr)
 options(knitr.kable.NA = "")
@@ -33,10 +34,8 @@ pal <- qualpal(20, "pretty_dark")
 ```
 
 ```{r}
-#| label: clean_data
-#| output: FALSE
+#| label: read-data
 
-# grab the basic data and variables we want
 scholars <- readRDS(here("data","hind19.df.rdata")) |>
   mutate(prop_sole=nps/np6019, 
          discipline=factor(discipline),
@@ -47,11 +46,40 @@ scholars <- readRDS(here("data","hind19.df.rdata")) |>
   rename(h_index=h19, prop_female=proportion_female, field=sm_field, 
          country=cntry, uni_pub_cnt=unicount, specialization = sm_field_frac)
 
-sapply(scholars, function(x) {sum(is.na(x))})
-# missing almost 10K gender cases and a few discipline and field
+```
 
+Lets check missing values on the original data for the variables we have.
+
+```{r}
+#| label: tbl-check-missing
+#| tbl-cap: Number of missing values on variables in analytical dataseet
+
+sapply(scholars, function(x) {sum(is.na(x))}) %>%
+  enframe(name = "Variable", value = "# of missing") %>%
+  gt() %>%
+  fmt_number(2, decimals=0)
+```
+
+We are missing almost 10K gender cases and a few cases for discipline, field, and specialization.
+
+```{r}
+#| label: tbl-drop-missing
+#| tbl-cap: Sample size before and after missing values dropped
+
+n_before <- nrow(scholars)
 scholars <- scholars %>%
-  filter(!is.na(prop_female) & !is.na(discipline) & !is.na(field))
+  drop_na()
+n_after <- nrow(scholars)
+tibble(Before=n_before, After=n_after) %>%
+  gt()  %>%
+  fmt_number(1:2, decimals=0)
+```
+
+We lose `r n_before-n_after` cases, mostly from the `prop_female` variable.
+
+```{r}
+#| label: clean_data
+#| output: FALSE
 
 # now lets add in discipline and field cluster means for prop_female and prop_sole
 disciplines <- scholars |>
