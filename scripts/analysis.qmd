@@ -250,37 +250,6 @@ disciplines2 <- disciplines %>% filter(field!="Visual & Performing Arts" , field
 
 ```
 
-
-# Discipline and field descriptive statistics
-
-```{r}
-#| label: tbl-discipline-stats
-#| tbl-cap: Discipline specific statistics. Disciplines are sorted from highest h-index to lowest.
-temp <- disciplines |>
-  select(discipline, field, n_disc, disc_h_index, disc_prop_female, 
-         disc_prop_sole) |>
-  mutate(disc_prop_female=100*round(disc_prop_female, 3),
-         disc_prop_sole=100*round(disc_prop_sole, 3)) |>
-  arrange(desc(disc_h_index))
-
-temp |>
-  kbl(col.names=c("Discipline","Field","N","Mean h-index", "% female", 
-                  "% sole")) |>
-  kable_paper() |>
-  column_spec(2, color = "white",
-              background = spec_color(as.numeric(temp$field)))
-```
-
-```{r}
-fields |>
-  select(field, n_field, field_prop_female, field_prop_sole) |>
-  mutate(field_prop_female=100*round(field_prop_female, 3),
-         field_prop_sole=100*round(field_prop_sole, 3)) |>
-  arrange(desc(n_field))|>
-  kbl(col.names=c("Field","N", "% female", "% sole")) |>
-  kable_paper() 
-```
-
 # A Series of Field Tests
 
 Medical and Public Health Field: Clinical Medicine, Biomedical Research, Public Health & Health Services 
@@ -429,4 +398,34 @@ knitreg(list(model_base_human, model_human_disc, model_human_controls),
         caption = "Multilevel models predicting H-index score for humanaties Field. Clustering at the disciplinary level.",
         caption.above = TRUE)
 
+```
+
+# Discipline and field descriptive statistics
+
+```{r}
+#| label: tbl-discipline-stats
+#| tbl-cap: Discipline specific statistics. Disciplines are sorted from highest h-index to lowest.
+temp <- disciplines |>
+  select(discipline, field, n_disc, disc_h_index, disc_prop_female, 
+         disc_prop_sole) |>
+  mutate(disc_prop_female=100*round(disc_prop_female, 3),
+         disc_prop_sole=100*round(disc_prop_sole, 3)) |>
+  arrange(desc(disc_h_index))
+
+temp |>
+  kbl(col.names=c("Discipline","Field","N","Mean h-index", "% female", 
+                  "% sole")) |>
+  kable_paper() |>
+  column_spec(2, color = "white",
+              background = spec_color(as.numeric(temp$field)))
+```
+
+```{r}
+fields |>
+  select(field, n_field, field_prop_female, field_prop_sole) |>
+  mutate(field_prop_female=100*round(field_prop_female, 3),
+         field_prop_sole=100*round(field_prop_sole, 3)) |>
+  arrange(desc(n_field))|>
+  kbl(col.names=c("Field","N", "% female", "% sole")) |>
+  kable_paper() 
 ```
