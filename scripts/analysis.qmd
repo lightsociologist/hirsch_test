@@ -293,20 +293,39 @@ scholars %>%
   tab_spanner(label="Big Fields", columns=2:6)
 ```
 
-There are a few missing fields here and I don't know if I like putting Business in Social Sciences. We could break Economics out of here and put business by itself.
 
+```{r}
+#| label: tbl-icc-big-field
+#| tbl-cap: Partitioning of variance in h-index to different levels based on models done separately by big field
+models_base_big_field <- scholars %>%
+  group_by(big_field) %>%
+  group_split() %>%
+  map(~ lmer(h_index ~ 1+(1 | discipline), data=.x))
+
+map(models_base_big_field, function(x) {
+              temp <- icc_specs(x) |>
+                select(grp, percent)  |>
+  mutate(grp=ifelse(grp=="discipline:field", "field", grp),
+         grp=factor(grp, levels=c("discipline","field","Residual"),
+                    labels=c("Discipline","Field","Individual")))
+            }) |>
+  reduce(full_join, by="grp") |>
+  arrange(grp) |>
+  kbl(digits=1, col.names = c("Grouping", levels(scholars$big_field))) |>
+  kable_paper()
+```
 
 ```{r}
 #| label: tbl-split-full-models
 #| tbl-cap: Multilevel models predicting H-index score, separately by big field.
 #| results: asis
 
-models_big_field <- scholars %>%
+models_full_big_field <- scholars %>%
   group_by(big_field) %>%
   group_split() %>%
   map(~ lmer(formula_controls, data=.x))
 
-knitreg(models_big_field, 
+knitreg(models_full_big_field, 
         custom.coef.names = coef_labels,
         custom.model.names = levels(scholars$big_field),
         caption.above = TRUE)
