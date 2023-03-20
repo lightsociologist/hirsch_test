@@ -209,9 +209,9 @@ In practice, we include both of our key variables in the model at the same time.
 # Set up models here so they will be consistent in sensitivity analysis
 
 # main effects are group mean centered
-formula_disc <- h_index ~ I(prop_female-disc_prop_female)+
+formula_disc <- formula(h_index ~ I(prop_female-disc_prop_female)+
   I(100*disc_prop_female)+I(100*(prop_sole-disc_prop_sole))+
-  I(100*disc_prop_sole)+(1|discipline)
+  I(100*disc_prop_sole)+(1|discipline))
 
 # add a model with controls for age, specialization and the number of elite 
 # scholars per university (all grand mean centered)
@@ -342,6 +342,82 @@ knitreg(models_full_big_field,
 * Specialization had a larger negative effect in the Humanities, Social Sciences, and STEM than Medical and Professional fields.
 
 Overall, our results would not change substantially by focusing on specific big fields. However, it does indicate even greater complexity in trying to understand how to apply h-indexes between large fields of scholarly production.
+
+## Non-linear sole authorship effect
+
+@fig-scatter-percent_sole suggests a non-linear effect of sole authorship. Lets try some non-linearity to see how much this changes our results. First, I will look at some simple transformations on the disciplinary level data.
+
+
+```{r}
+#| label: fig-scatter-sole-nonlinear
+#| fig-cap: Scatterplot of mean h-index and percent sole author across disciplines. Blue line shows best-fitting OLS line unweighted by discipline size. The red line shows the best fitting smoothed line via loess. The orange line shows the best fitting parabolic model (i.e. squared term).
+ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
+  geom_point(aes(size=n_disc, color=field), alpha=0.7)+
+  geom_smooth(method="lm", se=FALSE)+
+  geom_smooth(se=FALSE, color="red")+
+  geom_smooth(method="lm", formula=y~x+I(x^2), se=FALSE, color="orange")+
+  geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
+  scale_color_manual(values=pal$hex)+
+  scale_x_continuous(labels=scales::percent)+
+  theme_bw()+
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 6), 
+        legend.text = element_text(size = 4))+
+  labs(x="percent sole authored in discipline", y="mean h-index within discipline")+
+  guides(size=FALSE, color=FALSE)
+```
+
+The polynomial approach provide a somewhat better fit than the linear model to most of the distribution, but creates a bit too much curve relative to what the LOESS line is suggesting. Let me try putting the x-axis on a logarithmic scale to see if a logarithmic transformation would be preferable.
+
+```{r}
+#| label: fig-scatter-sole-log
+#| fig-cap: Scatterplot of mean h-index and percent sole author across disciplines. Blue line shows best-fitting OLS line unweighted by discipline size. The red line shows the best fitting smoothed line via loess. The x-axis is shown on a logarithmic scale.
+ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
+  geom_point(aes(size=n_disc, color=field), alpha=0.7)+
+  geom_smooth(method="lm", se=FALSE)+
+  geom_smooth(se=FALSE, color="red")+
+  geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
+  scale_x_log10(labels=scales::percent)+
+  scale_color_manual(values=pal$hex)+
+  theme_bw()+
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 6), 
+        legend.text = element_text(size = 4))+
+  labs(x="percent sole authored in discipline", y="mean h-index within discipline")+
+  guides(size=FALSE, color=FALSE)
+```
+
+That results fits the data very well. So, I think we should use a log transformation here. 
+
+```{r}
+#| label: tlb-model-nlinear
+#| tbl-cap: Comparing full model to a model with a log scale on disciplinary mean for proportion sole
+#| results: asis
+
+formula_nlinear <- 
+  formula(h_index ~ 
+            I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+            +I(100*(prop_sole-disc_prop_sole))+log(100*disc_prop_sole)+
+            I(age-mean(age))+I(specialization-mean(specialization))+scale(uni_pub_cnt)+
+            (1|discipline))
+
+model_wb_nlinear <- lmer(formula_nlinear, data=scholars)
+
+knitreg(list(model_wb_controls, model_wb_nlinear), digits=3,
+        custom.coef.names = c(coef_labels, 
+                              "Discipline mean percent sole authored pubs (logged)"),
+        custom.model.names = c("Original Model","Log Transformed"),
+        caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
+        caption.above = TRUE)
+```
+
+There is no doubt that this is a better fit, with a lower BIC score and an improvement in the discipline-level variance explained. However, its not clear to me that its worth the effort to make this the preferred model for the paper, just due to the complexity of explanation.
+
+So what is the effect of sole proprietorship here? Lets look at the marginal with respect to it:
+
+$$dY/dx=-0.57+0.46(x_{ij}-\bar{x}_j)$$
+
+
 
 # Discipline and field descriptive statistics
 
