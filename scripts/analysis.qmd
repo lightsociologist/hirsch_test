@@ -217,7 +217,7 @@ formula_disc <- h_index ~ I(prop_female-disc_prop_female)+
 # scholars per university (all grand mean centered)
 formula_controls <- update(formula_disc, .~.+I(age-mean(age))+
                              I(specialization-mean(specialization))+
-                             I(uni_pub_cnt-mean(uni_pub_cnt)))
+                             scale(uni_pub_cnt))
 
 # creat coef labels for most complex model
 coef_labels <- c("Intercept",
@@ -226,8 +226,8 @@ coef_labels <- c("Intercept",
                  "Percent sole authored publications (discipline mean centered)",
                  "Discipline mean percent sole authored publications",
                  "Age (grand mean centered)",
-                 "Specialization (grand mean centered)",
-                 "Highly productive university count (grand mean centered)")
+                 "Specialization [0-1] (grand mean centered)",
+                 "Highly productive university count (standardized)")
 
 ```
 
