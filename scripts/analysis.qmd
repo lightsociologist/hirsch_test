@@ -247,10 +247,10 @@ knitreg(list(model_base_disc, model_wb_disc, model_wb_controls),
 
 The results of these models are as follows:
 
-* Within the same discipline, women have h-indexes 2.47 points lower than men, on average. 
-* Within the same discipline, a 1% percent increase in sole-authored publication is associated with a 0.47 point reduction in the h-index score.
+* Within the same discipline, women have h-indexes 2.66 points lower than men, on average. 
+* Within the same discipline, a 1% percent increase in sole-authored publication is associated with a 0.46 point reduction in the h-index score.
 * Between disciplines, the female concentration of the discipline had little effect on the mean h-index for the discipline. A 1% increase in the percent female is associated with a 0.08 increase in the mean h-index.
-* Between disciplines, a 1% increase in the mean percent of sole authored publications is associated witha a 0.48 reduction in the mean h-index. 
+* Between disciplines, a 1% increase in the mean percent of sole authored publications is associated witha a 0.49 reduction in the mean h-index. 
 
 So, in summary gender inequity exists within disciplines and inequity by sole authoring tendencies exists both within and between disciplines.
 
@@ -258,7 +258,7 @@ So, in summary gender inequity exists within disciplines and inequity by sole au
 
 ## Differences by "Big" Field
 
-Medical and Public Health Field: Clinical Medicine, Biomedical Research, Public Health & Health Services 
+@tbl-make-big-fields below shows how we are grouping the specific fields into "big" fields. The only case where we split disciplines across fields is for Economics & Business where we put Economics in the Social Sciences big field and Business in the Professional big field.
 
 ```{r}
 #| label: tbl-make-big-fields
@@ -294,6 +294,8 @@ scholars %>%
 ```
 
 
+We then perform baseline variance partition multilevel models separately for each big field. The results of this partition are shown in @tbl-icc-big-field.
+
 ```{r}
 #| label: tbl-icc-big-field
 #| tbl-cap: Partitioning of variance in h-index to different levels based on models done separately by big field
@@ -315,6 +317,8 @@ map(models_base_big_field, function(x) {
   kable_paper()
 ```
 
+@tbl-icc-big-field shows some substantial differences across big fields in the degree of partitioning. Most notably, the medical disciplines have the smallest amount of variance at the disciplinary level (only about 16%), while at the other end of the spectrum the humanities have a whopping 52.4% explained at the disciplinary level.
+
 ```{r}
 #| label: tbl-split-full-models
 #| tbl-cap: Multilevel models predicting H-index score, separately by big field.
@@ -326,10 +330,18 @@ models_full_big_field <- scholars %>%
   map(~ lmer(formula_controls, data=.x))
 
 knitreg(models_full_big_field, 
+        caption=NULL,
         custom.coef.names = coef_labels,
         custom.model.names = levels(scholars$big_field),
         caption.above = TRUE)
 ```
+@tbl-split-full-models shows the fullest models from above but this time conducted separately for each big field. The results indicate some substantial heterogeneity in these effects across big fields, although none of the substantial results reverse direction. Some notes on the findings are below:
+
+* In general, the smallest effects were always in the Humanities, with the exception of specialization which was moderately large.
+* In general, the largest effects were in the Medical big field, with the exception of specialization effects, which were the smallest of any big field. 
+* Specialization had a larger negative effect in the Humanities, Social Sciences, and STEM than Medical and Professional fields.
+
+Overall, our results would not change substantially by focusing on specific big fields. However, it does indicate even greater complexity in trying to understand how to apply h-indexes between large fields of scholarly production.
 
 # Discipline and field descriptive statistics
 
