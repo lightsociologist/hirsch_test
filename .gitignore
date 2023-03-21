@@ -5,6 +5,8 @@
 .Ruserdata
 .Rapp.history
 
+*.RData
+
 # ignore mac stuff
 .DS_Store
 
