@@ -10,19 +10,12 @@ editor: source
 ---
 
 ```{r}
-#| label: load_libraries
-#| include: FALSE
+#| label: setup
+#| include: false
 library(here)
-library(tidyverse)
-library(lme4)
-library(texreg)
-library(specr)
-library(kableExtra)
-library(gt)
-library(janitor)
-library(ggrepel)
-library(qualpalr)
+source(here("check_packages.R"))
 options(knitr.kable.NA = "")
+```
 ```
 
 ```{r}
