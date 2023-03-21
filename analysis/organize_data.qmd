@@ -76,6 +76,7 @@ scholars <- scholars |>
 Next, we use the [gender](https://cran.r-project.org/web/packages/gender/index.html) package to calculate the probability that a given first name is a female name.
  
 ```{r}
+#| label: add-gender-probs
 scholars <- scholars |> 
   mutate(firstname=str_split_fixed(authfull, ",", 2)[,2]) |>
   mutate_at(vars(firstname), function(x){gsub('[^ -~]', '', x)}) |>
