@@ -211,7 +211,7 @@ fields |>
 ```{r}
 #| label: save-analytical-data
 save(scholars, disciplines, fields, 
-     file=here("data","data_constructed","analytical_data"))
+     file=here("data","data_constructed","analytical_data.RData"))
 ```
 
 ```{r}
