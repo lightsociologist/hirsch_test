@@ -1,0 +1,1 @@
+This directory is for raw external data sources. Never put constructed data here.

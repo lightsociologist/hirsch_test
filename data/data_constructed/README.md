@@ -1,0 +1,1 @@
+This directory is for data constructed from the raw data. Never put raw data here.
