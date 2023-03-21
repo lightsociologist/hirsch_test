@@ -10,12 +10,17 @@ editor: source
 ---
 
 ```{r}
+#| label: timestamp-start
+timestamp()
+```
+
+```{r}
 #| label: setup
 #| include: false
 library(here)
 source(here("check_packages.R"))
+load(here("data","data_constructed","analytical_data.RData"))
 options(knitr.kable.NA = "")
-```
 ```
 
 ```{r}
@@ -25,85 +30,6 @@ options(knitr.kable.NA = "")
 # creating color palettes for twenty cases is not easy but lets see if qualpalr
 # can help us
 pal <- qualpal(20, "pretty_dark")
-```
-
-```{r}
-#| label: read-data
-
-scholars <- readRDS(here("data","hind19.df.rdata")) |>
-  mutate(prop_sole=nps/np6019, 
-         discipline=factor(discipline),
-         sm_field=factor(sm_field),
-         cntry=factor(cntry)) |>
-  select(h19, age, proportion_female, prop_sole, discipline, sm_field, cntry, 
-         unicount, sm_field_frac) |>
-  rename(h_index=h19, prop_female=proportion_female, field=sm_field, 
-         country=cntry, uni_pub_cnt=unicount, specialization = sm_field_frac)
-
-```
-
-Lets check missing values on the original data for the variables we have.
-
-```{r}
-#| label: tbl-check-missing
-#| tbl-cap: Number of missing values on variables in analytical dataseet
-
-sapply(scholars, function(x) {sum(is.na(x))}) %>%
-  enframe(name = "Variable", value = "# of missing") %>%
-  gt() %>%
-  fmt_number(2, decimals=0)
-```
-
-We are missing almost 10K gender cases and a few cases for discipline, field, and specialization.
-
-```{r}
-#| label: tbl-drop-missing
-#| tbl-cap: Sample size before and after missing values dropped
-
-n_before <- nrow(scholars)
-scholars <- scholars %>%
-  drop_na()
-n_after <- nrow(scholars)
-tibble(Before=n_before, After=n_after) %>%
-  gt()  %>%
-  fmt_number(1:2, decimals=0)
-```
-
-We lose `r n_before-n_after` cases, mostly from the `prop_female` variable.
-
-```{r}
-#| label: clean_data
-#| output: FALSE
-
-# now lets add in discipline and field cluster means for prop_female and prop_sole
-disciplines <- scholars |>
-  group_by(discipline) |>
-  summarize(disc_prop_female=mean(prop_female),
-            disc_prop_sole=mean(prop_sole),
-            disc_uni_pub_cnt=mean(uni_pub_cnt),
-            disc_age=mean(age),
-            disc_specialization=mean(specialization),
-            n_disc=n())
-
-fields <- scholars |>
-  group_by(field) |>
-  summarize(field_prop_female=mean(prop_female),
-            field_prop_sole=mean(prop_sole),
-            n_field=n())
-
-# now merge it back together
-scholars <- scholars |>
-  left_join(disciplines) |>
-  left_join(fields)
-
-# lets also put in mean h_index by discipline and add back in field information
-# for fun visualizations
-disciplines <- scholars |>
-  group_by(discipline) |>
-  summarize(disc_h_index=mean(h_index),
-            field=unique(field)[1]) |>
-  right_join(disciplines) %>%
-  left_join(fields)
 ```
 
 # Between discipline data visualization
@@ -406,38 +332,7 @@ knitreg(list(model_wb_controls, model_wb_nlinear), digits=3,
 
 There is no doubt that this is a better fit, with a lower BIC score and an improvement in the discipline-level variance explained. However, its not clear to me that its worth the effort to make this the preferred model for the paper, just due to the complexity of explanation.
 
-So what is the effect of sole proprietorship here? Lets look at the marginal with respect to it:
-
-$$dY/dx=-0.57+0.46(x_{ij}-\bar{x}_j)$$
-
-
-
-# Discipline and field descriptive statistics
-
 ```{r}
-#| label: tbl-discipline-stats
-#| tbl-cap: Discipline specific statistics. Disciplines are sorted from highest h-index to lowest.
-temp <- disciplines |>
-  select(discipline, field, n_disc, disc_h_index, disc_prop_female, 
-         disc_prop_sole) |>
-  mutate(disc_prop_female=100*round(disc_prop_female, 3),
-         disc_prop_sole=100*round(disc_prop_sole, 3)) |>
-  arrange(desc(disc_h_index))
-
-temp |>
-  kbl(col.names=c("Discipline","Field","N","Mean h-index", "% female", 
-                  "% sole")) |>
-  kable_paper() |>
-  column_spec(2, color = "white",
-              background = spec_color(as.numeric(temp$field)))
-```
-
-```{r}
-fields |>
-  select(field, n_field, field_prop_female, field_prop_sole) |>
-  mutate(field_prop_female=100*round(field_prop_female, 3),
-         field_prop_sole=100*round(field_prop_sole, 3)) |>
-  arrange(desc(n_field))|>
-  kbl(col.names=c("Field","N", "% female", "% sole")) |>
-  kable_paper() 
+#| label: timestamp-end
+timestamp()
 ```
