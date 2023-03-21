@@ -6,9 +6,9 @@
 
 #add new packages to the chain here
 packages = c("here","readr","haven","tidyverse","ggplot2","lubridate","broom",
-             "knitr","texreg","kableExtra","gt","janitor","lme4",
+             "knitr","texreg","kableExtra","gt", "gtsummary","janitor","lme4",
              "specr","ggrepel","qualpalr","fastDummies","jtools",
-             "data.table","GGally")
+             "data.table","GGally","gender","readxl", "remotes")
 
 package.check <- lapply(packages, FUN = function(x) {
   if (!require(x, character.only = TRUE)) {
@@ -16,3 +16,6 @@ package.check <- lapply(packages, FUN = function(x) {
     library(x, character.only = TRUE)
   }
 })
+
+# install the genderdata package
+remotes::install_github("lmullen/genderdata")
