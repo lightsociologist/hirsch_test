@@ -2,6 +2,7 @@
 title: "Organize Hirsch Index Data for Analysis"
 format: 
   html:
+    toc: true
     code-fold: true
     embed-resources: true
 editor: source
@@ -100,6 +101,20 @@ scholars <- scholars |>
          discipline, field)
 ```
 
+## Summary stats
+
+Now lets do a summary statistics table on our individual level data.
+
+```{r}
+#| label: tbl-summary
+#| tbl-cap: Descriptive statistics for the individual level data
+tbl_summary(scholars, 
+            statistic=list(all_continuous() ~ "{mean} {sd}", 
+                           all_categorical() ~ "{n} ({p}%)"))
+```
+
+## Checking missing values
+
 Lets check missing values on the original data for the variables we have.
 
 ```{r}
@@ -111,7 +126,13 @@ sapply(scholars, function(x) {sum(is.na(x))}) %>%
   fmt_number(2, decimals=0)
 ```
 
-We are missing almost 10K gender cases and a few cases for discipline, field, and specialization.
+We are missing almost 10K gender cases and a few cases for discipline, field, and specialization. The small number of missing cases on discipline, field, and specialization I think can be safely dropped, but dropping the gender cases is a little more questionable. I think we should do imputation on these cases, but its kind of a pain because we then need to calculate all the disciplinary and field statistics separately for each imputation as well as for the real dataset for descriptives. Let me start with a stupid approach where I just impute prop_female once and replace the values in the actual dataset.
+
+
+```{r}
+scholars.imp <- mice(scholars, 1, method=c("", "", "pmm", rep("",5)))
+scholars$prop_female <- complete(scholars.imp)$prop_female
+```
 
 ```{r}
 #| label: tbl-drop-missing
@@ -125,17 +146,9 @@ tibble(Before=n_before, After=n_after) %>%
   fmt_number(1:2, decimals=0)
 ```
 
-We lose `r n_before-n_after` cases, mostly from the `prop_female` variable. 
+We lose `r n_before-n_after` cases, mostly from the `prop_female` variable.
 
-Now lets do a summary statistics table.
 
-```{r}
-#| label: tbl-summary
-#| tbl-cap: Descriptive statistics for the individual level data
-tbl_summary(scholars, 
-            statistic=list(all_continuous() ~ "{mean} {sd}", 
-                           all_categorical() ~ "{n} ({p}%)"))
-```
 
 # Aggregating to Discipline and Field
 
@@ -208,10 +221,9 @@ fields |>
   kable_paper() 
 ```
 
-
 ```{r}
 #| label: save-analytical-data
-save(scholars, disciplines, fields, 
+save(scholars, scholars.imp, disciplines, fields, 
      file=here("data","data_constructed","analytical_data.RData"))
 ```
 
