@@ -129,6 +129,16 @@ In practice, we include both of our key variables in the model at the same time.
 
 # Set up models here so they will be consistent in sensitivity analysis
 
+# let do separate prop female and prop sole models because the gender effect
+# seems to change
+formula_pfemale <- formula(
+  h_index ~ I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+    (1|discipline))
+
+formula_psole <- formula(
+  h_index ~ I(100*(prop_sole-disc_prop_sole))+log(100*disc_prop_sole)+
+    (1|discipline))
+
 # main effects are group mean centered
 formula_disc <- formula(
   h_index ~ 
@@ -144,13 +154,13 @@ formula_controls <- update(formula_disc, .~.+I(age-mean(age))+
 
 # creat coef labels for most complex model
 coef_labels <- c("Intercept",
-                 "Probability [0-1] of female name (discipline mean centered)",
-                 "Discipline mean percent female name",
-                 "Percent sole authored publications (discipline mean centered)",
-                 "Discipline mean percent sole authored publications (logged)",
+                 "Prob. [0-1] of female name (disc. mean ctr.)",
+                 "Disc. mean percent female name",
+                 "Percent sole authored pubs (disc. mean ctr.)",
+                 "Disc. mean percent sole authored pubs (logged)",
                  "Age (grand mean centered)",
-                 "Specialization [0-1] (grand mean centered)",
-                 "Highly productive university count (standardized)")
+                 "Specialization [0-1] (grand mean ctr.)",
+                 "Highly productive university count (stdized)")
 
 ```
 
@@ -158,13 +168,16 @@ coef_labels <- c("Intercept",
 #| label: tlb-model_wb
 #| tbl-cap: test
 #| results: asis
+models_wb_pfemale <- map(scholars_imp, ~lmer(formula_pfemale, data=.x))
+models_wb_psole <- map(scholars_imp, ~lmer(formula_psole, data=.x))
 models_wb_disc <- map(scholars_imp, ~lmer(formula_disc, data=.x))
 models_wb_controls <- map(scholars_imp, ~lmer(formula_controls, data=.x))
 
-knitreg(lapply(list(models_wb_disc, models_wb_controls), pool),
+knitreg(lapply(list(models_wb_pfemale, models_wb_psole, models_wb_disc,
+                    models_wb_controls), pool),
         custom.coef.names = coef_labels,
         digits=2,
-        custom.model.names = c("W-B Model","w/controls"),
+        #custom.model.names = c("Prop female", "Prop sole","Combined","W/controls"),
         caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
         caption.above = TRUE)
 ```
@@ -174,7 +187,8 @@ The results of these models are as follows:
 * Within the same discipline, women have h-indexes 2.64 points lower than men, on average. 
 * Within the same discipline, a 1% percent increase in sole-authored publication is associated with a 0.47 point reduction in the h-index score.
 * Between disciplines, the female concentration of the discipline had little effect on the mean h-index for the discipline. A 1% increase in the percent female is associated with a 0.08 increase in the mean h-index.
-* Between disciplines, a 1% increase in the mean percent of sole authored publications is associated witha a 0.47 reduction in the mean h-index. 
+* Between disciplines, a 1% increase (not percentage point, but percent) in the mean percent of sole authored publications is associated witha a 0.135 point reduction in the mean h-index. 
+* Controlling for sole authored changes the relationship of the disciplinary feminization (percent female) to the h-index. In the bivariate model, this relationship is negative, but this reverses direction one disciplinary rates of sole authorship are accounted for. This is because heavily feminized disciplines are more likely to be heavily sole-authored disciplines as well (r=`r round(cor(disciplines$disc_prop_female, disciplines$disc_prop_sole), 3)`)
 
 So, in summary gender inequity exists within disciplines and inequity by sole authoring tendencies exists both within and between disciplines.
 
