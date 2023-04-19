@@ -77,7 +77,7 @@ ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
 
 # Multilevel models
 
-We now turn to multilevel models to examine both within and between discipline and field effects on h-index values. In the first set of models, we use random intercept models without covariates to partition the variance in the h-index to the individual, discipline, and field levels. We first fit two separate models that partition by discipline and field, respectively and then we do a final model that uses a three level model (individual, discipline, field) to partition the variance in discipline and field simultaneously. Because these models do not depend on covariates, we can just use the first of the imputed datasets we created and do not need to pool results.
+We now turn to multilevel models to examine both within and between discipline and field effects on h-index values. In the first set of models, we use random intercept models without covariates to partition the variance in the h-index to the individual, discipline, and field levels. We first fit two separate models that partition by discipline and field, respectively and then we do a final model that uses a three level model (individual, discipline, field) to partition the variance in discipline and field simultaneously. Because these models do not depend on covariates, we can just use the first of the imputed datasets we created and do not need to pool results as the models will be identical across imputations.
 
 ```{r}
 #| label: baseline models
@@ -187,36 +187,42 @@ So, in summary gender inequity exists within disciplines and inequity by sole au
 ```{r}
 #| label: tbl-make-big-fields
 #| tbl-cap: Check on big field coding
-scholars <- scholars %>% 
-  mutate(
-    big_field = factor(case_when(
-      field=="Clinical Medicine" | field=="Biomedical Research" | 
-        field=="Public Health & Health Services" ~ "Medical",
-      field=="Social Sciences" | field=="Psychology & Cognitive Sciences" | 
-        discipline=="Economics" | discipline=="Econometrics" | 
-        discipline=="Economic Theory" |
-        discipline=="Agricultural Economics & Policy" |
-        discipline=="History of Social Sciences" ~ "Social Sciences",
-      field=="Physics & Astronomy" | field=="Engineering" | field=="Biology" | 
-        field=="Chemistry" | field=="Earth & Environmental Sciences" | 
-        field == "Mathematics & Statistics" | 
-        field=="Information & Communication Technologies" |
-        field== "Agriculture, Fisheries & Forestry" |
-        field=="Enabling & Strategic Technologies" ~ "STEM",
-      field=="Communication & Textual Studies" | field=="Historical Studies" | 
-        field=="Philosophy & Theology" | 
-        field=="Visual & Performing Arts" ~ "Humanities",
-      field=="Built Environment & Design" | 
-        field=="Economics & Business" ~ "Professional"))
-  )
-
-scholars %>%
-  tabyl(field, big_field) %>%
-  gt() %>%
-  cols_label(field="Field") %>%
-  tab_spanner(label="Big Fields", columns=2:6)
+scholars_imp <- scholars_imp |>
+  map(function(x) {
+    x <- x |>
+      mutate(
+        big_field = factor(case_when(
+          field=="Clinical Medicine" | field=="Biomedical Research" | 
+            field=="Public Health & Health Services" ~ "Medical",
+          field=="Social Sciences" | field=="Psychology & Cognitive Sciences" | 
+            discipline=="Economics" | discipline=="Econometrics" | 
+            discipline=="Economic Theory" |
+            discipline=="Agricultural Economics & Policy" |
+            discipline=="History of Social Sciences" ~ "Social Sciences",
+          field=="Physics & Astronomy" | field=="Engineering" | field=="Biology" | 
+            field=="Chemistry" | field=="Earth & Environmental Sciences" | 
+            field == "Mathematics & Statistics" | 
+            field=="Information & Communication Technologies" |
+            field== "Agriculture, Fisheries & Forestry" |
+            field=="Enabling & Strategic Technologies" ~ "STEM",
+          field=="Communication & Textual Studies" | field=="Historical Studies" | 
+            field=="Philosophy & Theology" | 
+            field=="Visual & Performing Arts" ~ "Humanities",
+          field=="Built Environment & Design" | 
+            field=="Economics & Business" ~ "Professional"))
+      )
+  })
+    
+scholars_imp[[1]] |>
+  tabyl(field, big_field) |>
+  gt(rowname_col = "field") |>
+  cols_label(field="Field") |>
+  tab_spanner(label="Big Fields", columns=2:6) |>
+  grand_summary_rows(columns = c(Humanities, Medical, Professional, 
+                                 "Social Sciences", STEM), 
+                     fns=list(N = ~sum(.)),
+                     formatter = fmt_integer)
 ```
-
 
 We then perform baseline variance partition multilevel models separately for each big field. The results of this partition are shown in @tbl-icc-big-field.
 
@@ -237,7 +243,7 @@ map(models_base_big_field, function(x) {
             }) |>
   reduce(full_join, by="grp") |>
   arrange(grp) |>
-  kbl(digits=1, col.names = c("Grouping", levels(scholars$big_field))) |>
+  kbl(digits=1, col.names = c("Grouping", levels(scholars_imp[[1]]$big_field))) |>
   kable_paper()
 ```
 
@@ -248,17 +254,25 @@ map(models_base_big_field, function(x) {
 #| tbl-cap: Multilevel models predicting H-index score, separately by big field.
 #| results: asis
 
-models_full_big_field <- scholars %>%
-  group_by(big_field) %>%
-  group_split() %>%
-  map(~ lmer(formula_controls, data=.x))
+# this is a bit complex but we need to do it this way to get the lists nested
+# in the right way
+big_fields <- levels(scholars_imp[[1]]$big_field)
+models_full_big_field <- map(big_fields, function(x) {
+  models <- map(scholars_imp, function(df) {
+    df <- df |>
+      filter(big_field==x)
+    return(lmer(formula_controls, data=df))
+  })
+  return(pool(models))
+})
 
 knitreg(models_full_big_field, 
         caption=NULL,
         custom.coef.names = coef_labels,
-        custom.model.names = levels(scholars$big_field),
+        custom.model.names = big_fields,
         caption.above = TRUE)
 ```
+
 @tbl-split-full-models shows the fullest models from above but this time conducted separately for each big field. The results indicate some substantial heterogeneity in these effects across big fields, although none of the substantial results reverse direction. Some notes on the findings are below:
 
 * In general, the smallest effects were always in the Humanities, with the exception of specialization which was moderately large.
@@ -328,6 +342,10 @@ formula_nlinear <-
 models_wb_nlinear <- map(scholars_imp, function(x) {
   lmer(formula_nlinear, data=x)
 })
+
+mean(sapply(models_wb_nlinear, BIC))
+mean(sapply(models_wb_controls, BIC))
+
 
 knitreg(lapply(list(models_wb_controls, models_wb_nlinear), pool), digits=3,
         custom.coef.names = c(coef_labels, 
