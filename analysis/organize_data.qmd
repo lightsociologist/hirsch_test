@@ -130,8 +130,9 @@ We are missing almost 10K gender cases and a few cases for discipline, field, an
 
 
 ```{r}
-scholars.imp <- mice(scholars, 1, method=c("", "", "pmm", rep("",5)))
-scholars$prop_female <- complete(scholars.imp)$prop_female
+#| label: multiple-imputation
+#| include: false
+scholars.imp <- mice(scholars, 5, method=c("", "", "pmm", rep("",5)))
 ```
 
 ```{r}
@@ -147,8 +148,6 @@ tibble(Before=n_before, After=n_after) %>%
 ```
 
 We lose `r n_before-n_after` cases, mostly from the `prop_female` variable.
-
-
 
 # Aggregating to Discipline and Field
 
@@ -189,6 +188,48 @@ disciplines <- scholars |>
   left_join(fields)
 ```
 
+Now we need to run parallel operations on all of our imputed datasets and we will go ahead and stick them in a list so we can run our own custom pooling function on them.
+
+```{r}
+#| label: organize-imputed-data
+
+# first lets put the imputations in a list
+
+scholars_imp <- vector("list",scholars.imp$m)
+for(i in 1:scholars.imp$m) {
+  scholars_imp[[i]] <- tibble(complete(scholars.imp, i))
+}
+
+# now we can use lapply to organize them
+scholars_imp <- scholars_imp |>
+  map(function(x) {
+    disciplines_imp <- x |>
+      group_by(discipline) |>
+      summarize(disc_prop_female=mean(prop_female),
+                disc_prop_sole=mean(prop_sole),
+                disc_uni_pub_cnt=mean(uni_pub_cnt),
+                disc_age=mean(age),
+                disc_specialization=mean(specialization),
+                n_disc=n())
+    
+    fields_imp <- x |>
+      group_by(field) |>
+      summarize(field_prop_female=mean(prop_female),
+                field_prop_sole=mean(prop_sole),
+                n_field=n())
+    
+    # now merge it back together and drop missing cases
+    x <- x |>
+      left_join(disciplines_imp) |>
+      left_join(fields_imp) |>
+      drop_na()
+    
+    return(x)
+  })
+
+
+```
+
 We provide some disciplinary and field descriptive statistics.
 
 ```{r}
@@ -223,7 +264,7 @@ fields |>
 
 ```{r}
 #| label: save-analytical-data
-save(scholars, scholars.imp, disciplines, fields, 
+save(scholars, scholars_imp, disciplines, fields, 
      file=here("data","data_constructed","analytical_data.RData"))
 ```
 
