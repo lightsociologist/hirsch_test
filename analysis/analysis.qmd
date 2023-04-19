@@ -154,12 +154,8 @@ coef_labels <- c("Intercept",
 #| label: tlb-model_wb
 #| tbl-cap: test
 #| results: asis
-models_wb_disc <- map(scholars_imp, function(x) {
-  lmer(formula_disc, data=x)
-})
-models_wb_controls <- map(scholars_imp, function(x) {
-  lmer(formula_controls, data=x)
-})
+models_wb_disc <- map(scholars_imp, ~lmer(formula_disc, data=.x))
+models_wb_controls <- map(scholars_imp, ~lmer(formula_controls, data=.x))
 
 knitreg(lapply(list(models_wb_disc, models_wb_controls), pool),
         custom.coef.names = coef_labels,
