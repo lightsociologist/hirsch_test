@@ -154,14 +154,14 @@ coef_labels <- c("Intercept",
 #| label: tlb-model_wb
 #| tbl-cap: test
 #| results: asis
-models_wb_disc_imp <- map(scholars_imp, function(x) {
+models_wb_disc <- map(scholars_imp, function(x) {
   lmer(formula_disc, data=x)
 })
-models_wb_controls_imp <- map(scholars_imp, function(x) {
+models_wb_controls <- map(scholars_imp, function(x) {
   lmer(formula_controls, data=x)
 })
 
-knitreg(lapply(list(models_wb_disc_imp, models_wb_controls_imp), pool),
+knitreg(lapply(list(models_wb_disc, models_wb_controls), pool),
         custom.coef.names = coef_labels,
         digits=2,
         custom.model.names = c("W-B Model","w/controls"),
@@ -215,10 +215,6 @@ scholars %>%
   gt() %>%
   cols_label(field="Field") %>%
   tab_spanner(label="Big Fields", columns=2:6)
-
-# now lets do the same in the imputed data
-
-
 ```
 
 
@@ -329,9 +325,11 @@ formula_nlinear <-
             I(age-mean(age))+I(specialization-mean(specialization))+scale(uni_pub_cnt)+
             (1|discipline))
 
-model_wb_nlinear <- lmer(formula_nlinear, data=scholars)
+models_wb_nlinear <- map(scholars_imp, function(x) {
+  lmer(formula_nlinear, data=x)
+})
 
-knitreg(list(model_wb_controls, model_wb_nlinear), digits=3,
+knitreg(lapply(list(models_wb_controls, models_wb_nlinear), pool), digits=3,
         custom.coef.names = c(coef_labels, 
                               "Discipline mean percent sole authored pubs (logged)"),
         custom.model.names = c("Original Model","Log Transformed"),
