@@ -77,14 +77,14 @@ ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
 
 # Multilevel models
 
-We now turn to multilevel models to examine both within and between discipline and field effects on h-index values. In the first set of models, we use random intercept models without covariates to partition the variance in the h-index to the individual, discipline, and field levels. We first fit two separate models that partition by discipline and field, respetively and then we do a final model that uses a three level model (individual, discipline, field) to partition the variance in discipline and field simultaneously.
+We now turn to multilevel models to examine both within and between discipline and field effects on h-index values. In the first set of models, we use random intercept models without covariates to partition the variance in the h-index to the individual, discipline, and field levels. We first fit two separate models that partition by discipline and field, respectively and then we do a final model that uses a three level model (individual, discipline, field) to partition the variance in discipline and field simultaneously. Because these models do not depend on covariates, we can just use the first of the imputed datasets we created and do not need to pool results.
 
 ```{r}
 #| label: baseline models
-model_base_disc <- lmer(h_index ~ 1+(1 | discipline), data=scholars)
-model_base_field <- lmer(h_index ~ 1+(1 | field), data=scholars)
+model_base_disc <- lmer(h_index ~ 1+(1 | discipline), data=scholars_imp[[1]])
+model_base_field <- lmer(h_index ~ 1+(1 | field), data=scholars_imp[[1]])
 model_base_both <- lmer(h_index ~ 1+(1 | discipline)+(1 | discipline:field), 
-                        data=scholars)
+                        data=scholars_imp[[1]])
 
 models_base <- list(model_base_disc, model_base_field, model_base_both)
 ```
@@ -154,22 +154,27 @@ coef_labels <- c("Intercept",
 #| label: tlb-model_wb
 #| tbl-cap: test
 #| results: asis
-model_wb_disc <- lmer(formula_disc, data=scholars)
-model_wb_controls <- lmer(formula_controls, data=scholars)
+models_wb_disc_imp <- map(scholars_imp, function(x) {
+  lmer(formula_disc, data=x)
+})
+models_wb_controls_imp <- map(scholars_imp, function(x) {
+  lmer(formula_controls, data=x)
+})
 
-knitreg(list(model_base_disc, model_wb_disc, model_wb_controls),
+knitreg(lapply(list(models_wb_disc_imp, models_wb_controls_imp), pool),
         custom.coef.names = coef_labels,
-        custom.model.names = c("ANOVA Model","W-B Model","w/controls"),
+        digits=2,
+        custom.model.names = c("W-B Model","w/controls"),
         caption = "Multilevel models predicting H-index score. Clustering at the disciplinary level.",
         caption.above = TRUE)
 ```
 
 The results of these models are as follows:
 
-* Within the same discipline, women have h-indexes 2.66 points lower than men, on average. 
-* Within the same discipline, a 1% percent increase in sole-authored publication is associated with a 0.46 point reduction in the h-index score.
+* Within the same discipline, women have h-indexes 2.64 points lower than men, on average. 
+* Within the same discipline, a 1% percent increase in sole-authored publication is associated with a 0.47 point reduction in the h-index score.
 * Between disciplines, the female concentration of the discipline had little effect on the mean h-index for the discipline. A 1% increase in the percent female is associated with a 0.08 increase in the mean h-index.
-* Between disciplines, a 1% increase in the mean percent of sole authored publications is associated witha a 0.49 reduction in the mean h-index. 
+* Between disciplines, a 1% increase in the mean percent of sole authored publications is associated witha a 0.47 reduction in the mean h-index. 
 
 So, in summary gender inequity exists within disciplines and inequity by sole authoring tendencies exists both within and between disciplines.
 
@@ -210,6 +215,10 @@ scholars %>%
   gt() %>%
   cols_label(field="Field") %>%
   tab_spanner(label="Big Fields", columns=2:6)
+
+# now lets do the same in the imputed data
+
+
 ```
 
 
@@ -218,7 +227,7 @@ We then perform baseline variance partition multilevel models separately for eac
 ```{r}
 #| label: tbl-icc-big-field
 #| tbl-cap: Partitioning of variance in h-index to different levels based on models done separately by big field
-models_base_big_field <- scholars %>%
+models_base_big_field <- scholars_imp[[1]] %>%
   group_by(big_field) %>%
   group_split() %>%
   map(~ lmer(h_index ~ 1+(1 | discipline), data=.x))
