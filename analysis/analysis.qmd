@@ -292,6 +292,7 @@ knitreg(models_full_big_field,
 * In general, the smallest effects were always in the Humanities, with the exception of specialization which was moderately large.
 * In general, the largest effects were in the Medical big field, with the exception of specialization effects, which were the smallest of any big field. 
 * Specialization had a larger negative effect in the Humanities, Social Sciences, and STEM than Medical and Professional fields.
+* The disciplinary feminization variable has no effect in these models which means its effect in the full model was driven by big field differences, like the tendency for the humanitis to have a higher proportion female.
 
 Overall, our results would not change substantially by focusing on specific big fields. However, it does indicate even greater complexity in trying to understand how to apply h-indexes between large fields of scholarly production.
 
