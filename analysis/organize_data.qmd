@@ -39,8 +39,17 @@ The full dataset contains `r format(nrow(scholars), big.mark=",")` entries. We w
 
 ```{r}
 #| label: filter-data
+# total sample size
+nrow(scholars)
+# count US scholars
+sum(scholars$cntry=="usa", na.rm=TRUE)
+
+# restrictions
 scholars <- scholars |>
   filter(cntry=="usa" & lastyr>2016 & firstyr>1959)
+
+# final sample size
+nrow(scholars)
 ```
 
 After these reductions, we have `r format(nrow(scholars), big.mark=",")` entries.

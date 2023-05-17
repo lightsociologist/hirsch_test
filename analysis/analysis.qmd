@@ -158,7 +158,7 @@ coef_labels <- c("Intercept",
                  "Disc. mean percent female name",
                  "Percent sole authored pubs (disc. mean ctr.)",
                  "Disc. mean percent sole authored pubs (logged)",
-                 "Age (grand mean centered)",
+                 "Career length (grand mean centered)",
                  "Specialization [0-1] (grand mean ctr.)",
                  "Highly productive university count (stdized)")
 
