@@ -196,48 +196,6 @@ So, in summary gender inequity exists within disciplines and inequity by sole au
 
 ## Differences by "Big" Field
 
-@tbl-make-big-fields below shows how we are grouping the specific fields into "big" fields. The only case where we split disciplines across fields is for Economics & Business where we put Economics in the Social Sciences big field and Business in the Professional big field.
-
-```{r}
-#| label: tbl-make-big-fields
-#| tbl-cap: Check on big field coding
-scholars_imp <- scholars_imp |>
-  map(function(x) {
-    x <- x |>
-      mutate(
-        big_field = factor(case_when(
-          field=="Clinical Medicine" | field=="Biomedical Research" | 
-            field=="Public Health & Health Services" ~ "Medical",
-          field=="Social Sciences" | field=="Psychology & Cognitive Sciences" | 
-            discipline=="Economics" | discipline=="Econometrics" | 
-            discipline=="Economic Theory" |
-            discipline=="Agricultural Economics & Policy" |
-            discipline=="History of Social Sciences" ~ "Social Sciences",
-          field=="Physics & Astronomy" | field=="Engineering" | field=="Biology" | 
-            field=="Chemistry" | field=="Earth & Environmental Sciences" | 
-            field == "Mathematics & Statistics" | 
-            field=="Information & Communication Technologies" |
-            field== "Agriculture, Fisheries & Forestry" |
-            field=="Enabling & Strategic Technologies" ~ "STEM",
-          field=="Communication & Textual Studies" | field=="Historical Studies" | 
-            field=="Philosophy & Theology" | 
-            field=="Visual & Performing Arts" ~ "Humanities",
-          field=="Built Environment & Design" | 
-            field=="Economics & Business" ~ "Professional"))
-      )
-  })
-    
-scholars_imp[[1]] |>
-  tabyl(field, big_field) |>
-  gt(rowname_col = "field") |>
-  cols_label(field="Field") |>
-  tab_spanner(label="Big Fields", columns=2:6) |>
-  grand_summary_rows(columns = c(Humanities, Medical, Professional, 
-                                 "Social Sciences", STEM), 
-                     fns=list(N = ~sum(.)),
-                     formatter = fmt_integer)
-```
-
 We then perform baseline variance partition multilevel models separately for each big field. The results of this partition are shown in @tbl-icc-big-field.
 
 ```{r}
