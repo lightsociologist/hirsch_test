@@ -1,0 +1,8 @@
+- source: analysis.qmd
+  quarto-pub:
+    - id: 9bc67169-cc46-43e0-8aee-24a7902151c2
+      url: 'https://aarongullickson.quarto.pub/hirsch-index-analysis'
+- source: organize_data.qmd
+  quarto-pub:
+    - id: 39990190-7ce4-44bd-a518-83ce59753bd6
+      url: 'https://aarongullickson.quarto.pub/organize-hirsch-index-data-for-analysis'

@@ -2,6 +2,7 @@
 title: "Organize Hirsch Index Data for Analysis"
 format: 
   html:
+    toc: true
     code-fold: true
     embed-resources: true
 editor: source
@@ -38,8 +39,17 @@ The full dataset contains `r format(nrow(scholars), big.mark=",")` entries. We w
 
 ```{r}
 #| label: filter-data
+# total sample size
+nrow(scholars)
+# count US scholars
+sum(scholars$cntry=="usa", na.rm=TRUE)
+
+# restrictions
 scholars <- scholars |>
   filter(cntry=="usa" & lastyr>2016 & firstyr>1959)
+
+# final sample size
+nrow(scholars)
 ```
 
 After these reductions, we have `r format(nrow(scholars), big.mark=",")` entries.
@@ -100,6 +110,20 @@ scholars <- scholars |>
          discipline, field)
 ```
 
+## Summary stats
+
+Now lets do a summary statistics table on our individual level data.
+
+```{r}
+#| label: tbl-summary
+#| tbl-cap: Descriptive statistics for the individual level data
+tbl_summary(scholars, 
+            statistic=list(all_continuous() ~ "{mean} {sd}", 
+                           all_categorical() ~ "{n} ({p}%)"))
+```
+
+## Checking missing values
+
 Lets check missing values on the original data for the variables we have.
 
 ```{r}
@@ -111,35 +135,22 @@ sapply(scholars, function(x) {sum(is.na(x))}) %>%
   fmt_number(2, decimals=0)
 ```
 
-We are missing almost 10K gender cases and a few cases for discipline, field, and specialization.
+We are missing almost 10K gender cases and a few cases for discipline, field, and specialization. The small number of missing cases on discipline, field, and specialization I think can be safely dropped, but dropping the gender cases is a little more questionable. I think we should do imputation on these cases, which will make the dataset a little more complicated to work with, but is do-able. We will use the `mice` package to do multiple imputation via predictive mean matching only on the `prop_female` variable.
 
 ```{r}
-#| label: tbl-drop-missing
-#| tbl-cap: Sample size before and after missing values dropped
-n_before <- nrow(scholars)
-scholars <- scholars %>%
-  drop_na()
-n_after <- nrow(scholars)
-tibble(Before=n_before, After=n_after) %>%
-  gt()  %>%
-  fmt_number(1:2, decimals=0)
+#| label: multiple-imputation
+#| output: false
+# the method argument depends on hard coded placements which is annoyting. Lets
+# make sure we can alway correctly id the prop_female variable
+mice_method <- ifelse(colnames(scholars)=="prop_female", "pmm", "")
+scholars.imp <- mice(scholars, 5, method=mice_method)
 ```
 
-We lose `r n_before-n_after` cases, mostly from the `prop_female` variable. 
-
-Now lets do a summary statistics table.
-
-```{r}
-#| label: tbl-summary
-#| tbl-cap: Descriptive statistics for the individual level data
-tbl_summary(scholars, 
-            statistic=list(all_continuous() ~ "{mean} {sd}", 
-                           all_categorical() ~ "{n} ({p}%)"))
-```
-
-# Aggregating to Discipline and Field
+# Aggregating to discipline and field
 
 Now we aggregate mean values of our variables up to the disciplinary and field level. We will merge these values to individual cases for the multilevel models. We also keep disciplinary and field datasets by themselves for some useful data visualizations.
+
+We will create disciplinary and field data from the original data with missing data present.
 
 ```{r}
 #| label: aggregate-disc-field
@@ -148,7 +159,7 @@ Now we aggregate mean values of our variables up to the disciplinary and field l
 # now lets add in discipline and field cluster means for prop_female and prop_sole
 disciplines <- scholars |>
   group_by(discipline) |>
-  summarize(disc_prop_female=mean(prop_female),
+  summarize(disc_prop_female=mean(prop_female, na.rm=TRUE),
             disc_prop_sole=mean(prop_sole),
             disc_uni_pub_cnt=mean(uni_pub_cnt),
             disc_age=mean(age),
@@ -157,14 +168,9 @@ disciplines <- scholars |>
 
 fields <- scholars |>
   group_by(field) |>
-  summarize(field_prop_female=mean(prop_female),
+  summarize(field_prop_female=mean(prop_female, na.rm=TRUE),
             field_prop_sole=mean(prop_sole),
             n_field=n())
-
-# now merge it back together
-scholars <- scholars |>
-  left_join(disciplines) |>
-  left_join(fields)
 
 # lets also put in mean h_index by discipline and add back in field information
 # for fun visualizations
@@ -176,7 +182,51 @@ disciplines <- scholars |>
   left_join(fields)
 ```
 
-We provide some disciplinary and field descriptive statistics.
+Now we need to do this same thing for each of our imputed datasets so that we can add the discipline and field level variables to each dataset for the analysis. At the same time, I am going to convert the `mids` object which is a pain to work with into simple a simple list of `tibbles`. I will also drop the few remaining missing values in the datasets from other variables.
+
+```{r}
+#| label: organize-imputed-data
+
+# first lets put the imputations in a list
+
+scholars_imp <- vector("list",scholars.imp$m)
+for(i in 1:scholars.imp$m) {
+  scholars_imp[[i]] <- tibble(complete(scholars.imp, i))
+}
+
+# now we can use lapply to organize them
+scholars_imp <- scholars_imp |>
+  map(function(x) {
+    disciplines_imp <- x |>
+      group_by(discipline) |>
+      summarize(disc_prop_female=mean(prop_female),
+                disc_prop_sole=mean(prop_sole),
+                disc_uni_pub_cnt=mean(uni_pub_cnt),
+                disc_age=mean(age),
+                disc_specialization=mean(specialization),
+                n_disc=n())
+    
+    fields_imp <- x |>
+      group_by(field) |>
+      summarize(field_prop_female=mean(prop_female),
+                field_prop_sole=mean(prop_sole),
+                n_field=n())
+    
+    # now merge it back together and drop missing cases
+    x <- x |>
+      left_join(disciplines_imp) |>
+      left_join(fields_imp) |>
+      drop_na()
+    
+    return(x)
+  })
+```
+
+The final sample size of the imputed dataset is `r format(nrow(scholars_imp[[1]]), big.mark=",")`. We dropped `r nrow(scholars)-nrow(scholars_imp[[1]])` cases altogether.
+
+## Disciplinary and field summary stats
+
+We provide some disciplinary and field descriptive statistics for the non-imputed data.
 
 ```{r}
 #| label: tbl-discipline-stats
@@ -208,10 +258,11 @@ fields |>
   kable_paper() 
 ```
 
+# Save the final data
 
 ```{r}
 #| label: save-analytical-data
-save(scholars, disciplines, fields, 
+save(scholars_imp, disciplines, fields, 
      file=here("data","data_constructed","analytical_data.RData"))
 ```
 
