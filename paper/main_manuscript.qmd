@@ -2,7 +2,7 @@
 title: "Inequality in measuring scholarly success: Variation in the h-index within and between disciplines"
 shorttitle: "Variation in the h-index"
 abstract: Scholars and university administrators have a vested interest in building equitable valuation systems of academic work for both practical (e.g., resource distribution) and more lofty purposes (e.g., what constitutes “good” research). Well-established inequalities in science pose a difficult challenge to those interested in constructing a parsimonious and fair method for valuation as stratification occurs within academic disciplines, but also between them. The h-index, a popular research metric, has been formally used as one such method of valuation. In this article, we use the case of the h-index to examine how the distribution of research metrics reveal within and between discipline inequalities. Using data from over 50,000 high performing scientists across 174 disciplines, we construct random effects within-between models predicting the h-index. Results suggest significant within-discipline variation in several forms, specifically sole-authorship and female penalties, as well as significant between discipline variation in terms of sole authorship. Conclusions include continued caution when using the h-index or similar metrics for valuation purposes.
-keywords: [Metrics, h-index, Gender Inequality, Team Science, Higher Education d]
+keywords: [Metrics, h-index, Gender Inequality, Team Science, Higher Education]
 thanks: Thanks to everyone for checking this out.
 reference-section-title: References
 #bibliography: ../bibliography/project.bib
@@ -21,6 +21,14 @@ format:
 #         \usepackage{dcolumn}
   #submittable-docx: default
 ---
+
+```{r}
+#| label: setup
+#| include: false
+library(here)
+source(here("utils","check_packages.R"))
+load(here("data","data_constructed","analytical_data.RData"))
+```
 
 # Introduction
 
@@ -94,7 +102,53 @@ Estimating gender is problematic for numerous reasons including the typical reli
 
 The percentage of sole authored publications is the percent of a scholar’s total publications that are sole-authored. The university count is the number of scholars from each author’s university in the complete dataset. The disciplinarity score is the percent of an author’s articles that are situated in their most frequent field. We also consider how the patterns we observe may differ within large fields among disciplines. To explore this issue, we divide our total 174 disciplines into five large fields of the humanities, medical, professional, social sciences, and STEM. These fields differ from the fields provided in the original data but more closely correspond to the division of disciplines within the American academy. The supplementary materials show which disciplines were assigned to each field. We then run our full analysis separately for each of these fields to explore differences in patterns across fields. 
 
-Table 1 presents the descriptive statistics for the variables used in both the full (1a) and clinical medicine (1b) analyses. Note several differences between the two datasets with scholars in the clinical medicine set having a higher h-index, higher number of citations, and lower percentage of sole author publications consistent with a more strictly natural or life science set, but a similar mean percent female name. 
+@tbl-desc presents the descriptive statistics for the variables used in the analyses for the total sample and across the five different fields. Differences across fields in both the h-index and independent variables are notable. For example, scholars in the humanities have the highest average probability of a female name at 31.1%, while scholars in the STEM field have the lowest average probability at 13.5%. Scholars in the Humanities also have the highest percentage of sole authored work at 57.8% while scholars in the medical fields have the lowest with only 8.1%. The much lower mean h-index among scholars in the humanities (19.1) relative to other disciplines is consistent with the expectation of gender differences and a penalty for sole-authored work. However, to more accurately gauge these relationships we turn to a modeling strategy that can estimate associations both within and between disciplines.
+
+```{r}
+#| label: tbl-desc
+#| tbl-cap: Mean and standard deviation on key variables for the whole sample and by field, based on first complete dataset
+
+# It is not fun to format this kind of descriptive stat table and get it to fit, 
+# but here we go, with extensive use of glue and format
+
+fmt_num <- function(value, decimals=1) {
+  format(round(value, decimals), nsmall=decimals, big.mark=",")
+}
+
+tbl_desc <- scholars_imp[[1]] |>
+  group_by(big_field) |>
+  summarize(`h-index`=glue("{fmt_num(mean(h_index))} ({fmt_num(sd(h_index))})"),
+            `% female`=glue("{fmt_num(100*mean(prop_female))} ({fmt_num(100*sd(prop_female))})"),
+            `% sole author`=glue("{fmt_num(100*mean(prop_sole))} ({fmt_num(100*sd(prop_sole))})"),
+            `career length`=glue("{fmt_num(mean(age))} ({fmt_num(sd(age))})"),
+            `specialization`=glue("{fmt_num(mean(specialization), 2)} ({fmt_num(sd(specialization), 2)})"),
+            `uni pub. count`=glue("{fmt_num(mean(uni_pub_cnt), 0)} ({fmt_num(sd(uni_pub_cnt), 0)})"),
+            N=fmt_num(n(), 0))
+
+tbl_desc <- scholars_imp[[1]] |>
+  summarize(`h-index`=glue("{fmt_num(mean(h_index))} ({fmt_num(sd(h_index))})"),
+            `% female`=glue("{fmt_num(100*mean(prop_female))} ({fmt_num(100*sd(prop_female))})"),
+            `% sole author`=glue("{fmt_num(100*mean(prop_sole))} ({fmt_num(100*sd(prop_sole))})"),
+            `career length`=glue("{fmt_num(mean(age))} ({fmt_num(sd(age))})"),
+            `specialization`=glue("{fmt_num(mean(specialization), 2)} ({fmt_num(sd(specialization), 2)})"),
+            `uni pub. count`=glue("{fmt_num(mean(uni_pub_cnt), 0)} ({fmt_num(sd(uni_pub_cnt), 0)})"),
+            N=fmt_num(n(), 0)) |>
+  mutate(big_field="All") |>
+   relocate(big_field) |>
+   bind_rows(tbl_desc)
+
+# everything needs to get flipped around if we want it to fit
+tbl_desc <-  as_tibble(cbind(Variable = names(tbl_desc)[-1], t(tbl_desc)[-1,])) |>
+  rename(Total=V2, Humanities=V3, Medical=V4, Professional=V5,
+         `Soc. Sciences`=V6, STEM=V7)
+
+tbl_desc |> gt() |>
+  tab_spanner(label="Fields", 
+              columns = c(Humanities, Medical, Professional, `Soc. Sciences`,
+                          STEM)) |>
+  tab_source_note(source_note = "Note: standard deviations shown in parenthesis")
+
+```
 
 # Analytic Strategy
 
