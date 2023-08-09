@@ -1,20 +1,21 @@
-# ignore R stuff
+# files added by usethis::git_vaccinate
+.httr-oauth
 .Rproj.user
 .Rhistory
-.RData
-.Ruserdata
-.Rapp.history
-
-*.RData
-
-# ignore mac stuff
+.Rdata
 .DS_Store
-
-# ignore MS stuff
-~*.doc*
-~*.xls*
-
-# ignore built stuff
-*.html
-*.pdf
+# Other junk files
+desktop.ini
+# Ignore all the junk created by LaTeX
+*.aux
+*.out
+*.bbl
+*.ent
+*.log
+# quarto
 /.quarto/
+_products
+_freeze
+# ignore anything in the constructed data directory
+data/data_constructed/*
+
