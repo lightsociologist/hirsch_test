@@ -1,0 +1,8 @@
+format:
+  html:
+    code-fold: true
+    embed-resources: true
+    toc: true
+    theme: flatly
+execute: 
+  message: false

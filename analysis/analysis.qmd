@@ -1,12 +1,5 @@
 ---
 title: "Hirsch Index Analysis"
-format: 
-  html:
-    toc: true
-    code-fold: true
-    embed-resources: true
-execute:
-  warning: false
 editor: source
 ---
 
@@ -19,7 +12,7 @@ timestamp()
 #| label: setup
 #| include: false
 library(here)
-source(here("check_packages.R"))
+source(here("utils","check_packages.R"))
 load(here("data","data_constructed","analytical_data.RData"))
 options(knitr.kable.NA = "")
 ```

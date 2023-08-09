@@ -1,10 +1,5 @@
 ---
 title: "Organize Hirsch Index Data for Analysis"
-format: 
-  html:
-    toc: true
-    code-fold: true
-    embed-resources: true
 editor: source
 ---
 
@@ -17,7 +12,7 @@ timestamp()
 #| label: setup
 #| include: false
 library(here)
-source(here("check_packages.R"))
+source(here("utils","check_packages.R"))
 ```
 
 This program incorporates [data](https://elsevier.digitalcommonsdata.com/datasets/btchxktzyw/2) from [Ioannidis et al.](https://www.nature.com/articles/d41586-019-02479-7) to build an analysis of factors related to variation in individual academics' Hirsch scores.

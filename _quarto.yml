@@ -1,0 +1,65 @@
+project:
+  title: "Inequality in measuring scholarly success: Variation in the h-index within and between disciplines"
+  output-dir: _products
+  execute-dir: project
+  pre-render: 
+    - utils/check_packages.R      # install required packages
+    - utils/remove_artifacts.ts   # remove previously constructed files
+  render:
+    # if analysis is split into multiple docs, add them here
+    - analysis/organize_data.qmd
+    - analysis/analysis.qmd
+    - paper/
+    - "!bibliography/"
+
+author:
+  - name: Ryan Light
+    #orcid: 0000-0001-7237-8131
+    #email: aarong@uoregon.edu
+    #url: https://aarongullickson.netlify.app/
+    attributes:
+      corresponding: true
+    affiliations:
+      - id: uo
+        name: University of Oregon
+        department: Sociology
+        address: 727 PLC
+        city: Eugene
+        region: OR
+        country: USA
+        postal-code: 97405
+  - name: Aaron Gullickson
+    orcid: 0000-0001-7237-8131
+    email: aarong@uoregon.edu
+    url: https://aarongullickson.netlify.app/
+    attributes:
+      corresponding: true
+    affiliations:
+      - id: uo
+        name: University of Oregon
+        department: Sociology
+        address: 727 PLC
+        city: Eugene
+        region: OR
+        country: USA
+        postal-code: 97405
+  - name: Jill Harrison
+    #orcid: 0000-0001-7237-8131
+    #email: aarong@uoregon.edu
+    #url: https://aarongullickson.netlify.app/
+    attributes:
+      corresponding: true
+    affiliations:
+      - id: uo
+        name: University of Oregon
+        department: Sociology
+        address: 727 PLC
+        city: Eugene
+        region: OR
+        country: USA
+        postal-code: 97405
+  
+execute: 
+  freeze: false
+  
+editor: source
