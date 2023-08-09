@@ -11,6 +11,7 @@ timestamp()
 ```{r}
 #| label: setup
 #| include: false
+set.seed(23)
 library(here)
 source(here("utils","check_packages.R"))
 ```
