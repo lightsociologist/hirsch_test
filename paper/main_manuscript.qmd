@@ -139,7 +139,7 @@ tbl_desc <- scholars_imp[[1]] |>
 
 # everything needs to get flipped around if we want it to fit
 tbl_desc <-  as_tibble(cbind(Variable = names(tbl_desc)[-1], t(tbl_desc)[-1,])) |>
-  rename(Total=V2, Humanities=V3, Medical=V4, Professional=V5,
+  rename(All=V2, Humanities=V3, Medical=V4, Professional=V5,
          `Soc. Sciences`=V6, STEM=V7)
 
 tbl_desc |> gt() |>
@@ -158,13 +158,50 @@ $$y_{ij}=\beta_{0j}+\beta_1(x_{ij}-\bar{x}_{.j})+\beta_2(\bar{x}_{.j})+\upsilon_
 
 Where $y_{ij}$ is the outcome for the $i$th unit in the $j$th cluster and $x_{ij}$ is the predictor variable for the $i$th unit in the $j$th cluster. $\upsilon_{0j}$ and $\epsilon_{ij}$ are cluster-level and individual-level random errors, respectively. Because the mean of the $x$ for cluster $j$ ($\bar{x}_{.j}$) is included in the model and the $x_{ij}$ values are mean centered by cluster, the $\beta_1$ parameter is identical to that of a fixed-effects model in which all between variance is absorbed by cluster-level dummies. However, the REWB model also includes an estimate of the between cluster effect of $x$ estimated in $\beta_2$, which is impossible in a fixed-effects model. This $\beta_2$ term is equivalent to the estimate obtained by aggregating data to the higher level and examining the relationship between the means of $x$ and $y$. Thus, this model combines the advantage of absorbing all cluster level differences when estimating individual level effects, while at the same time allowing for an analysis of the “contextual” effects of disciplines themselves.
 
-We use this feature to estimate both within and between effects of gender and sole authorship on a scholar’s h-index. We use 0-1 coding of the probability of a female name at the individual level to mimic the interpretation typical of a dummy variable on gender. We use the mean probability of a female name in percentage terms (0-100) at the disciplinary level to provide an estimate of the feminization of a given discipline. For sole authorship, we use the percent of a scholar’s articles that are sole-authored at the individual level. At the disciplinary level, we use a natural log transformation of the mean percent sole-authorship variable because exploratory analysis indicated a negative diminishing returns relationship between sole-authorship and the h-index at the disciplinary level. Both of the individual level variables are mean centered by discipline so that the interpretation of their effect is purely among scholars within the same discipline. All control variables are at the individual level and are grand mean centered.
+We use this feature to estimate both within and between effects of gender and sole authorship on a scholar’s h-index. We use 0-1 coding of the probability of a female name at the individual level to mimic the interpretation typical of a dummy variable on gender. We use the mean probability of a female name in percentage terms (0-100) at the disciplinary level to provide an estimate of the feminization of a given discipline. For sole authorship, we use the percent of a scholar’s articles that are sole-authored at the individual level. At the disciplinary level, we use a natural log transformation of the mean percent sole-authorship variable because exploratory analysis indicated a negative diminishing returns relationship between sole-authorship and the h-index at the disciplinary level. Both of the individual level variables are mean centered by discipline so that the interpretation of their effect is purely among scholars within the same discipline. The control variables of career length, specialization, and university publication count are only included as grand mean centered individual level variables. We also standardize university publication count to have a mean of zero and a standard deviation of one for ease of interpretation.
 
-We also explore whether our results vary within larger fields which consist of clusters of disciplines. The original data contain 20 such fields, but we further collapsed these fields into five big fields that represent the divisions often used at the university level. These fields are Humanities, Medical, Professional, Social Sciences, and STEM. To explore variation in our results across these fields, we estimate additional models separately for each field. 
+<!-- TODO: This paragraph is somewhat repetitive as we discuss this field distinction above. It needs to get edited. --> We also explore whether our results vary within larger fields which consist of clusters of disciplines. The original data contain 20 such fields, but we further collapsed these fields into five big fields that represent the divisions often used at the university level. These fields are Humanities, Medical, Professional, Social Sciences, and STEM. To explore variation in our results across these fields, we estimate additional models separately for each field. 
 
 # Results
 
-We begin by analyzing a partition of the variance in the h-index within and between disciplines in a null multilevel model. The percentage of the total variation in the h-index that occurs between disciplines is given by the intraclass correlation coefficient (ICC) of this model. Table X (TODO: make this) shows the ICC for the model across all disciplines as well as by field. Across all disciplines, roughly a third of the variation in the h-index occurs between disciplines. This substantial heterogeneity across disciplines indicates that comparing the h-index across disciplines is problematic because of overall differences in culture, productivity, and citation patterns across disciplines. 
+We begin by analyzing a partition of the variance in the h-index within and between disciplines in a null multilevel model. The percentage of the total variation in the h-index that occurs between disciplines is given by the intraclass correlation coefficient (ICC) of this model. @tbl-partition shows the ICC for the model across all observations as well as separately by field. In total, roughly a third of the variation in the h-index occurs between disciplines. This substantial heterogeneity across disciplines indicates that comparing the h-index across disciplines is problematic because of overall differences in culture, productivity, and citation patterns across disciplines. 
+
+
+```{r}
+#| label: tbl-partition
+#| tbl-cap: Parition of variance in h-index scores between and within disciplines
+
+model_base_disc <- lmer(h_index ~ 1+(1 | discipline), data=scholars_imp[[1]])
+
+models_base_big_field <- scholars_imp[[1]] %>%
+  group_by(big_field) %>%
+  group_split() %>%
+  map(~ lmer(h_index ~ 1+(1 | discipline), data=.x))
+
+models_partition <- c(model_base_disc, models_base_big_field)
+
+tbl_partition <- map(models_partition, function(x) {
+              temp <- icc_specs(x) |>
+                select(grp, percent)  |>
+  mutate(grp=ifelse(grp=="discipline:field", "field", grp),
+         grp=factor(grp, levels=c("discipline","field","Residual"),
+                    labels=c("Between discipline","Field","Within discipline")))
+            }) |>
+  reduce(full_join, by="grp") |>
+  arrange(grp)
+
+colnames(tbl_partition) <- c("Grouping","All", 
+                             levels(scholars_imp[[1]]$big_field))
+
+tbl_partition |> 
+  gt() |>
+  fmt_percent(columns = c(All, Humanities, Medical, Professional, 
+                          "Social Sciences", STEM),
+              decimals=1, scale=FALSE) |>
+  tab_spanner("Field", columns = levels(scholars_imp[[1]]$big_field)) |>
+  cols_label(`Social Sciences`="Soc. Sciences") |>
+  cols_align(align="left", columns = Grouping)
+```
 
 The ICC is substantial across all fields as well, but also varies substantially. Slightly more than half the variation in the h-index among scholars in the humanities is between disciplines, while only one-sixth of the variation in the h-index is between disciplines among scholars in the medical and professional fields. Some fields, like the medical and professional fields, seem to have more shared culture and practices in terms of publishing productivity, while in other fields, we observe substantial disciplinary heterogeneity. Scholars in fields with greater commonality may misperceive the comparability of the h-index across disciplines more broadly.
 
