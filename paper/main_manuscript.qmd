@@ -10,9 +10,9 @@ reference-section-title: References
 format:
   aog-article-pdf:
     keep-tex: false
-#    include-in-header: 
-#      text: |
-#        \usepackage{dcolumn}
+    include-in-header: 
+      text: |
+        \usepackage{dcolumn}
 #  submittable-pdf:
 #     keep-tex: false
 #     fig-pos: "!t"
@@ -184,12 +184,12 @@ tbl_desc <- scholars_imp[[1]] |>
 
 # everything needs to get flipped around if we want it to fit
 tbl_desc <-  as_tibble(cbind(Variable = names(tbl_desc)[-1], t(tbl_desc)[-1,])) |>
-  rename(All=V2, Humanities=V3, Medical=V4, Professional=V5,
-         `Soc. Sciences`=V6, STEM=V7)
+  rename(All=V2, Humanities=V3, Medical=V4, "Prof."=V5,
+         `Soc. Sci.`=V6, STEM=V7)
 
 tbl_desc |> gt() |>
   tab_spanner(label="Fields", 
-              columns = c(Humanities, Medical, Professional, `Soc. Sciences`,
+              columns = c(Humanities, Medical, `Prof.`, `Soc. Sci.`,
                           STEM)) |>
   tab_source_note(source_note = "Note: standard deviations shown in parenthesis")
 
@@ -244,7 +244,7 @@ tbl_partition |>
                           "Social Sciences", STEM),
               decimals=1, scale=FALSE) |>
   tab_spanner("Field", columns = levels(scholars_imp[[1]]$big_field)) |>
-  cols_label(`Social Sciences`="Soc. Sciences") |>
+  cols_label(`Social Sciences`="Soc. Sci", Professional="Prof.") |>
   cols_align(align="left", columns = Grouping)
 ```
 
@@ -280,13 +280,13 @@ formula_controls <- update(formula_disc, .~.+I(age-mean(age))+
 
 # creat coef labels for most complex model
 coef_labels <- c("Intercept",
-                 "Prob. [0-1] of female name (disc. mean ctr.)",
+                 "Prob. [0-1] of female name$\\dagger$",
                  "Disc. mean percent female name",
-                 "Percent sole authored pubs (disc. mean ctr.)",
-                 "Disc. mean percent sole authored pubs (logged)",
-                 "Career length (grand mean centered)",
-                 "Specialization [0-1] (grand mean ctr.)",
-                 "Highly productive university count (stdized)")
+                 "Percent sole authored pubs$\\dagger$",
+                 "Disc. mean percent sole authored (log)",
+                 "Career length*",
+                 "Specialization [0-1]*",
+                 "Highly productive uni. count (stdized)*")
 
 models_wb_pfemale <- map(scholars_imp, ~lmer(formula_pfemale, data=.x))
 models_wb_psole <- map(scholars_imp, ~lmer(formula_psole, data=.x))
@@ -299,8 +299,9 @@ results <- lapply(list(models_wb_pfemale, models_wb_psole, models_wb_disc,
 texreg(lapply(results, convert_model),
        custom.coef.names = coef_labels,
        digits=2,
+       stars=c(0.05),
        caption.above = TRUE,
-       custom.note="%stars. Standard errors shown in parenthesis.")
+       custom.note="%stars. Standard errors shown in parenthesis. $\\dagger$=discipline mean centered; *=grand mean centered.")
 ```
 
 Consistent with the productivity puzzle, female scholars have an h-index approximately 2.7 points lower than male scholars in the same discipline, on average. More frequent sole-authorship is also associated with a lower h-index. Within the same discipline, a one percentage point increase in the percent of sole-authored publications for a given scholar is associated with a 0.47 lower h-index score, on average.
@@ -309,7 +310,30 @@ Additionally, we find substantial differences between disciplines in h-index sco
 
 The feminization of a discipline as indicated by the mean percent female name within the discipline has a more complex relationship to h-index scores. Model 1 indicated a slightly negative relationship between percent female and mean h-index scores across disciplines. However, once the sole-authored variables were added to the model, this relationship reverses direction to a slightly positive relationship. In the final model, we estimate that a one percent increase in the percent female name within a discipline is associated with a 0.11 increase in the mean h-index score for a discipline. The underlying issue is that highly feminized disciplines also tend to be more focused on sole-authorship (r=0.30). After accounting for this disadvantage, feminized disciplines actually have a slight advantage, although within disciplines, women are still disadvantaged relative to men.
 
-Table X presents models equivalent to Model 4 in Table X, but separated by field. The most notable change in these sets of models is that there is no observable effect of disciplinary feminization within these fields, whereas we observed a moderate positive effect of disciplinary feminization across all disciplines. This finding implies that the slight positive effect of disciplinary feminization was driven by compositional issues between fields and differences in overall field productivity. The remaining variables are consistent in direction, but vary substantially in magnitude across fields. The within-discipline differences by gender and sole-authorship were smallest in the humanities and largest in the medical field. The between-discipline effect of sole-authorship is similar in magnitude across most fields, except for the professional field, where the association is cut in half. Overall, the heterogeneity of these effects across fields indicates another problem of comparability when attempting to compare scholars across disciplines and fields.
+@tbl-models-field presents models equivalent to Model 4 in @tbl-models-full, but separated by field. The most notable change in these sets of models is that there is no observable effect of disciplinary feminization within these fields, whereas we observed a moderate positive effect of disciplinary feminization across all disciplines. This finding implies that the slight positive effect of disciplinary feminization was driven by compositional issues between fields and differences in overall field productivity. The remaining variables are consistent in direction, but vary substantially in magnitude across fields. The within-discipline differences by gender and sole-authorship were smallest in the humanities and largest in the medical field. The between-discipline effect of sole-authorship is similar in magnitude across most fields, except for the professional field, where the association is cut in half. Overall, the heterogeneity of these effects across fields indicates another problem of comparability when attempting to compare scholars across disciplines and fields.
+
+```{r}
+#| label: tbl-models-field
+#| tbl-cap: Multilevel models predicting H-index score within each field. Clustering at the disciplinary level.
+#| results: asis
+
+big_fields <- levels(scholars_imp[[1]]$big_field)
+models_full_big_field <- map(big_fields, function(x) {
+  models <- map(scholars_imp, function(df) {
+    df <- df |>
+      filter(big_field==x)
+    return(lmer(formula_controls, data=df))
+  })
+  return(pool_models(models))
+})
+
+texreg(lapply(models_full_big_field, convert_model), 
+       custom.coef.names = coef_labels,
+       custom.model.names = c("Humanities","Medical","Prof.", "Soc. Sci.","STEM"),
+       stars=c(0.05),
+       caption.above = TRUE,
+       custom.note="%stars. Standard errors shown in parenthesis. $\\dagger$=discipline mean centered; *=grand mean centered.")  
+```
 
 # Conclusion
 
