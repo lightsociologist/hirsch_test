@@ -10,9 +10,9 @@ reference-section-title: References
 format:
   aog-article-pdf:
     keep-tex: false
-  #  include-in-header: 
-  #    text: |
-  #      \usepackage{dcolumn}
+#    include-in-header: 
+#      text: |
+#        \usepackage{dcolumn}
 #  submittable-pdf:
 #     keep-tex: false
 #     fig-pos: "!t"
@@ -28,6 +28,51 @@ format:
 library(here)
 source(here("utils","check_packages.R"))
 load(here("data","data_constructed","analytical_data.RData"))
+```
+
+
+```{r}
+#| label: functions
+
+# a function to pool the models and collect important stats
+pool_models <- function(models) {
+  
+  # first use mice::pool
+  pooled <- mice::pool(models)
+  
+  # get the within and between residual standard deviation - a pain with lme4
+  vars <- apply(sapply(models, function(x) {as.data.frame(VarCorr(x))$sdcor}), 
+               1, mean)
+  
+  return(list(coef=summary(pooled),
+              BIC=mean(pooled$glanced$BIC),
+              nobs=mean(pooled$glanced$nobs),
+              ngrps=as.numeric(ngrps(models[[1]])),
+              sd_between=vars[1],
+              sd_within=vars[2]))
+}
+
+# a function to convert model results into something texreg knows what to do
+# with
+convert_model <- function(model) {
+  
+  tr <- createTexreg(
+    coef.names = as.character(model$coef$term), 
+    coef = model$coef$estimate, 
+    se = model$coef$std.error, 
+    pvalues = model$coef$p.value,
+    gof.names = c("Residual SD between discipline", 
+                  "Residual SD within discipline",
+                  "N (discipline)",
+                  "N (individual)"),
+    gof = c(model$sd_between, 
+            model$sd_within, 
+            model$ngrps, 
+            model$nobs),
+    gof.decimal = c(TRUE,TRUE, FALSE, FALSE)
+  )
+}
+
 ```
 
 # Introduction
@@ -203,9 +248,60 @@ tbl_partition |>
   cols_align(align="left", columns = Grouping)
 ```
 
-The ICC is substantial across all fields as well, but also varies substantially. Slightly more than half the variation in the h-index among scholars in the humanities is between disciplines, while only one-sixth of the variation in the h-index is between disciplines among scholars in the medical and professional fields. Some fields, like the medical and professional fields, seem to have more shared culture and practices in terms of publishing productivity, while in other fields, we observe substantial disciplinary heterogeneity. Scholars in fields with greater commonality may misperceive the comparability of the h-index across disciplines more broadly.
+The ICC is substantial across all fields as well, but also varies substantially. Slightly more than half the variation in the h-index among scholars in the humanities is between disciplines, while only one-sixth of the variation in the h-index is between disciplines among scholars in the medical and professional fields. Some fields, like the medical and professional fields, seem to have more shared culture and practices in terms of publishing productivity, while in other fields, we observe substantial disciplinary heterogeneity. Scholars in fields with greater commonality may mispercieve the comparability of the h-index across disciplines more broadly.
 
-Table X presents the multilevel models predicting the h-index across all disciplines. Model 1 predicts h-index scores by the individual and disciplinary variables for gender. Model 2 predicts h-index scores by the individual and disciplinary variables for sole authorship. Model 3 includes both sets of predictor variables from Models 1 and 2 together. Finally, Model 4 includes additional control variables for career length, specialization, and highly productive universities. The estimates for the key predictor variables of gender and sole-authorship are robust to these additional controls, although gender differences do decline in size somewhat. We use the results from Model 4 to describe overall patterns below, except where noted otherwise.
+@tbl-models-full presents the multilevel models predicting the h-index across all disciplines. Model 1 predicts h-index scores by the individual and disciplinary variables for gender. Model 2 predicts h-index scores by the individual and disciplinary variables for sole authorship. Model 3 includes both sets of predictor variables from Models 1 and 2 together. Finally, Model 4 includes additional control variables for career length, specialization, and highly productive universities. The estimates for the key predictor variables of gender and sole-authorship are robust to these additional controls, although gender differences do decline in size somewhat. We use the results from Model 4 to describe overall patterns below, except where noted otherwise.
+
+```{r}
+#| label: tbl-models-full
+#| tbl-cap: Multilevel models predicting h-index score across all disciplines with clustering at the disciplinary level.
+#| results: asis
+
+formula_pfemale <- formula(
+  h_index ~ I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+    (1|discipline))
+
+formula_psole <- formula(
+  h_index ~ I(100*(prop_sole-disc_prop_sole))+log(100*disc_prop_sole)+
+    (1|discipline))
+
+# main effects are group mean centered
+formula_disc <- formula(
+  h_index ~ 
+    I(prop_female-disc_prop_female)+I(100*disc_prop_female)+
+    +I(100*(prop_sole-disc_prop_sole))+log(100*disc_prop_sole)+
+    (1|discipline))
+
+# add a model with controls for age, specialization and the number of elite 
+# scholars per university (all grand mean centered)
+formula_controls <- update(formula_disc, .~.+I(age-mean(age))+
+                             I(specialization-mean(specialization))+
+                             scale(uni_pub_cnt))
+
+# creat coef labels for most complex model
+coef_labels <- c("Intercept",
+                 "Prob. [0-1] of female name (disc. mean ctr.)",
+                 "Disc. mean percent female name",
+                 "Percent sole authored pubs (disc. mean ctr.)",
+                 "Disc. mean percent sole authored pubs (logged)",
+                 "Career length (grand mean centered)",
+                 "Specialization [0-1] (grand mean ctr.)",
+                 "Highly productive university count (stdized)")
+
+models_wb_pfemale <- map(scholars_imp, ~lmer(formula_pfemale, data=.x))
+models_wb_psole <- map(scholars_imp, ~lmer(formula_psole, data=.x))
+models_wb_disc <- map(scholars_imp, ~lmer(formula_disc, data=.x))
+models_wb_controls <- map(scholars_imp, ~lmer(formula_controls, data=.x))
+
+results <- lapply(list(models_wb_pfemale, models_wb_psole, models_wb_disc, 
+                       models_wb_controls), pool_models)
+
+texreg(lapply(results, convert_model),
+       custom.coef.names = coef_labels,
+       digits=2,
+       caption.above = TRUE,
+       custom.note="%stars. Standard errors shown in parenthesis.")
+```
 
 Consistent with the productivity puzzle, female scholars have an h-index approximately 2.7 points lower than male scholars in the same discipline, on average. More frequent sole-authorship is also associated with a lower h-index. Within the same discipline, a one percentage point increase in the percent of sole-authored publications for a given scholar is associated with a 0.47 lower h-index score, on average.
 
