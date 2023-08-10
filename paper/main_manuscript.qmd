@@ -141,7 +141,7 @@ To evaluate these hypotheses, we analyze data on high performing scholars accord
 
 We reduce the data along several dimensions to address some of the limitations of the Scopus database and for analytic purposes. First, we limit the analysis only to the 68,016 scholars in the United States to account for geographic variation in the Scopus database and geographic variation in how universities are structured. We then further restrict the analytical data to those who first published in 1960 or after and those who last published in 2017 or later to identify active scholars and reduce the impact of historical, rather than contemporary, patterns. These reductions, along with a small number of missing values on the variables below, leave us a final analytical sample size of 54,825 scholars nested in 174 disciplines.
 
-The dependent variable for the analysis is the h-index. Independent variables include the probability of female name, percentage of sole publications, university count of citation “all-stars” measured by the total number of scholars from each university in the dataset, a specialization or disciplinarity score measured as the fraction of total articles appearing in the main discipline for each author, and career length, estimated by the years between first and last publication. 
+The dependent variable for the analysis is the h-index. The key independent variables are the probability of female name and the percentage of sole authored publications. We also include additional control variables of the count of scholars from the same university in the same dataset to measure highly productive university environments, a specialization score measured as the proportion of total articles appearing in the main discipline for each author, and career length, measured by the years between first and last publication. 
 
 Estimating gender is problematic for numerous reasons including the typical reliance on government-provided data that often assumes and contributes to the gender binary (see Mihaljević et al., 2019)<!-- TODO: citations -->, and these methods should be used with caution and only when necessary. In this case, names are our only means of estimating gender. Here, we  draw on first names data from the 1940-1990 US Social Security Administration to assign a probability of female name using the gender package in R (Blevins & Mullen, 2015)<!-- TODO: citations -->. We use this probability directly in our models, rather than assigning an arbitrary cutoff for a binary gender assignment. A substantial number of cases (18%) are missing on this variable, usually because they were identified by initials rather than a full first name. Rather than lose this many cases, we use multiple imputation to assign values to the probability of female name based on the respondent’s other variables, including discipline. We impute five complete datasets and pool analyses across these datasets for all of the models presented here.  
 
@@ -167,7 +167,7 @@ tbl_desc <- scholars_imp[[1]] |>
             `% sole author`=glue("{fmt_num(100*mean(prop_sole))} ({fmt_num(100*sd(prop_sole))})"),
             `career length`=glue("{fmt_num(mean(age))} ({fmt_num(sd(age))})"),
             `specialization`=glue("{fmt_num(mean(specialization), 2)} ({fmt_num(sd(specialization), 2)})"),
-            `uni pub. count`=glue("{fmt_num(mean(uni_pub_cnt), 0)} ({fmt_num(sd(uni_pub_cnt), 0)})"),
+            `uni. count`=glue("{fmt_num(mean(uni_pub_cnt), 0)} ({fmt_num(sd(uni_pub_cnt), 0)})"),
             N=fmt_num(n(), 0))
 
 tbl_desc <- scholars_imp[[1]] |>
@@ -176,7 +176,7 @@ tbl_desc <- scholars_imp[[1]] |>
             `% sole author`=glue("{fmt_num(100*mean(prop_sole))} ({fmt_num(100*sd(prop_sole))})"),
             `career length`=glue("{fmt_num(mean(age))} ({fmt_num(sd(age))})"),
             `specialization`=glue("{fmt_num(mean(specialization), 2)} ({fmt_num(sd(specialization), 2)})"),
-            `uni pub. count`=glue("{fmt_num(mean(uni_pub_cnt), 0)} ({fmt_num(sd(uni_pub_cnt), 0)})"),
+            `uni. count`=glue("{fmt_num(mean(uni_pub_cnt), 0)} ({fmt_num(sd(uni_pub_cnt), 0)})"),
             N=fmt_num(n(), 0)) |>
   mutate(big_field="All") |>
    relocate(big_field) |>
