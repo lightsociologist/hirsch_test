@@ -14,16 +14,16 @@ project:
 
 author:
   - name: Ryan Light
-    #orcid: 0000-0001-7237-8131
-    #email: aarong@uoregon.edu
-    #url: https://aarongullickson.netlify.app/
+    orcid: 0000-0002-1508-154X
+    email: light@uoregon.edu
+    url: https://ryanlight.netlify.app/
     attributes:
       corresponding: true
     affiliations:
       - id: uo
         name: University of Oregon
         department: Sociology
-        address: 727 PLC
+        address: 632 PLC
         city: Eugene
         region: OR
         country: USA
@@ -33,7 +33,7 @@ author:
     email: aarong@uoregon.edu
     url: https://aarongullickson.netlify.app/
     attributes:
-      corresponding: true
+      corresponding: false
     affiliations:
       - id: uo
         name: University of Oregon
@@ -43,17 +43,17 @@ author:
         region: OR
         country: USA
         postal-code: 97405
-  - name: Jill Harrison
-    #orcid: 0000-0001-7237-8131
-    #email: aarong@uoregon.edu
-    #url: https://aarongullickson.netlify.app/
+  - name: Jill Ann Harrison
+    orcid: 0000-0002-1425-0102
+    email: jah@uoregon.edu
+    #url: 
     attributes:
-      corresponding: true
+      corresponding: false
     affiliations:
       - id: uo
         name: University of Oregon
         department: Sociology
-        address: 727 PLC
+        address: 604 PLC
         city: Eugene
         region: OR
         country: USA
