@@ -55,7 +55,7 @@ scholars_imp[[1]] |>
              prop_sole="% sole auth,",
              career_length="career len.",
              specialization="spec.",
-             uni_count="uni. pub. #") |>
+             uni_count="uni. count") |>
   cols_align(align="left", columns=c(discipline)) |>
   fmt_percent(columns=prop_sole, decimals=1) |>
   fmt_number(columns=c(career_length, uni_count), decimals=1) |>
