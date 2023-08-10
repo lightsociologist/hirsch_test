@@ -166,7 +166,7 @@ models_wb_psole <- map(scholars_imp, ~lmer(formula_psole, data=.x))
 models_wb_disc <- map(scholars_imp, ~lmer(formula_disc, data=.x))
 models_wb_controls <- map(scholars_imp, ~lmer(formula_controls, data=.x))
 
-knitreg(lapply(list(models_wb_pfemale, models_wb_psole, models_wb_disc,
+htmlreg(lapply(list(models_wb_pfemale, models_wb_psole, models_wb_disc,
                     models_wb_controls), pool),
         custom.coef.names = coef_labels,
         digits=2,
@@ -231,7 +231,7 @@ models_full_big_field <- map(big_fields, function(x) {
   return(pool(models))
 })
 
-knitreg(models_full_big_field, 
+htmlreg(models_full_big_field, 
         caption=NULL,
         custom.coef.names = coef_labels,
         custom.model.names = big_fields,
