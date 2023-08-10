@@ -1,0 +1,64 @@
+---
+title: "Supplementary Materials"
+format:
+  pdf:
+    keep-tex: false
+    fig-pos: "!t"
+    include-in-header: 
+      text: |
+        \usepackage{dcolumn}
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(here)
+source(here("utils","check_packages.R"))
+load(here("data","data_constructed","analytical_data.RData"))
+```
+ 
+
+```{r}
+#| label: tbl-discipline-1
+#| tbl-cap: Discipline statistics and mean values on variables, part 1
+
+scholars_imp[[1]] |>
+  group_by(discipline) |>
+  summarize(big_field=first(big_field),
+            n=n(),
+            h_index=mean(h_index),
+            prop_female=mean(prop_female)) |>
+  gt() |>
+  cols_label(discipline="discipline",
+             big_field="field",
+             n="n",
+             h_index="h-index",
+             prop_female="% female",
+) |>
+  cols_align(align="left", columns=c(discipline, big_field)) |>
+  fmt_percent(columns=prop_female, decimals=1) |>
+  fmt_number(columns=h_index, decimals=1)
+```
+
+```{r}
+#| label: tbl-discipline-2
+#| tbl-cap: Discipline statistics and mean values on variables, part 2
+
+scholars_imp[[1]] |>
+  group_by(discipline) |>
+  summarize(prop_sole=mean(prop_sole),
+            career_length=mean(age),
+            specialization=mean(specialization),
+            uni_count=mean(uni_pub_cnt)) |>
+  gt() |>
+  cols_label(discipline="discipline",
+             prop_sole="% sole auth,",
+             career_length="career len.",
+             specialization="spec.",
+             uni_count="uni. pub. #") |>
+  cols_align(align="left", columns=c(discipline)) |>
+  fmt_percent(columns=prop_sole, decimals=1) |>
+  fmt_number(columns=c(career_length, uni_count), decimals=1) |>
+  fmt_number(columns=specialization, decimals=3)
+```
+
