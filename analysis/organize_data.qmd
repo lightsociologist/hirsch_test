@@ -256,6 +256,38 @@ fields |>
 
 # Create big fields
 
+We want to use the existing fields in the dataset to group disciplines into five "big" fields of Humanities, Medical, Professional, Social Science, and STEM. There are a few cases we have identified where we want to split some disciplines in the same field into different big fields, but for the most part we want to rely upon field.
+
+The problem, however, is that discipline is not perfectly nested within field among actual respondents given the nature of the data collection. But we can identify the modal field of each discipline.
+
+```{r}
+#| label: tbl-modal-cat
+#| tbl-cap: Modal field for each discipline
+modal_cat <- scholars |>
+  filter(!is.na(discipline) & !is.na(field)) |>
+  group_by(discipline, field) |>
+  summarize(n=n()) |>
+  ungroup() |>
+  group_split(discipline) |>
+  map(function(x) {
+    x$prop <- x$n/sum(x$n)
+    x[which(x$prop==max(x$prop)),]
+  }) |> bind_rows() |>
+  arrange(desc(prop))
+
+# assure no duplicates from ties
+sum(duplicated(modal_cat$discipline))
+
+modal_cat |>
+  gt() |>
+  cols_label(field="Modal field", prop="Proportion in field")
+
+```
+
+@tbl-modal-cat shows that for most disciplines there is a strong modal category, although for a few disciplines the modal category only accounts for about half of cases.
+
+We will assign everyone a modal field category from these results and then use that modal field category to construct big fields.
+
 @tbl-make-big-fields below shows how we are grouping the specific fields into "big" fields. The only case where we split disciplines across fields is for Economics & Business where we put Economics in the Social Sciences big field and Business in the Professional big field.
 
 ```{r}
@@ -263,34 +295,49 @@ fields |>
 #| tbl-cap: Check on big field coding
 scholars_imp <- scholars_imp |>
   map(function(x) {
+    
+    # first get modal field
+    x <- modal_cat |>
+      rename(modal_field=field) |>
+      select(discipline, modal_field) |>
+      right_join(x)
+    
+    # now use modal field and actual discipline to assign big fields
     x <- x |>
       mutate(
         big_field = factor(case_when(
-          field=="Clinical Medicine" | field=="Biomedical Research" | 
-            field=="Public Health & Health Services" ~ "Medical",
-          field=="Social Sciences" | field=="Psychology & Cognitive Sciences" | 
-            discipline=="Economics" | discipline=="Econometrics" | 
+          modal_field=="Clinical Medicine" | 
+            modal_field=="Biomedical Research" | 
+            modal_field=="Public Health & Health Services" ~ "Medical",
+          modal_field=="Social Sciences" | 
+            modal_field=="Psychology & Cognitive Sciences" | 
+            discipline=="Economics" | 
+            discipline=="Econometrics" | 
             discipline=="Economic Theory" |
             discipline=="Agricultural Economics & Policy" |
             discipline=="History of Social Sciences" ~ "Social Sciences",
-          field=="Physics & Astronomy" | field=="Engineering" | field=="Biology" | 
-            field=="Chemistry" | field=="Earth & Environmental Sciences" | 
-            field == "Mathematics & Statistics" | 
-            field=="Information & Communication Technologies" |
-            field== "Agriculture, Fisheries & Forestry" |
-            field=="Enabling & Strategic Technologies" ~ "STEM",
-          field=="Communication & Textual Studies" | field=="Historical Studies" | 
-            field=="Philosophy & Theology" | 
-            field=="Visual & Performing Arts" ~ "Humanities",
-          field=="Built Environment & Design" | 
-            field=="Economics & Business" ~ "Professional"))
+          modal_field=="Physics & Astronomy" | 
+            modal_field=="Engineering" |
+            modal_field=="Biology" | 
+            modal_field=="Chemistry" | 
+            modal_field=="Earth & Environmental Sciences" | 
+            modal_field == "Mathematics & Statistics" | 
+            modal_field=="Information & Communication Technologies" |
+            modal_field== "Agriculture, Fisheries & Forestry" |
+            modal_field=="Enabling & Strategic Technologies" ~ "STEM",
+          modal_field=="Communication & Textual Studies" | 
+            modal_field=="Historical Studies" | 
+            modal_field=="Philosophy & Theology" | 
+            modal_field=="Visual & Performing Arts" ~ "Humanities",
+          modal_field=="Built Environment & Design" | 
+            modal_field=="Economics & Business" ~ "Professional"))
       )
   })
     
 scholars_imp[[1]] |>
-  tabyl(field, big_field) |>
+  tabyl(modal_field, big_field) |>
   gt(rowname_col = "field") |>
-  cols_label(field="Field") |>
+  cols_label(modal_field="Field") |>
   tab_spanner(label="Big Fields", columns=2:6) |>
   grand_summary_rows(columns = c(Humanities, Medical, Professional, 
                                  "Social Sciences", STEM), 
