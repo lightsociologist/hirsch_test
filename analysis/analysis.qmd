@@ -158,7 +158,7 @@ coef_labels <- c("Intercept",
 ```
 
 ```{r}
-#| label: tlb-model_wb
+#| label: tlb-model-wb
 #| tbl-cap: test
 #| results: asis
 models_wb_pfemale <- map(scholars_imp, ~lmer(formula_pfemale, data=.x))
@@ -212,7 +212,7 @@ map(models_base_big_field, function(x) {
   kable_paper()
 ```
 
-@tbl-icc-big-field shows some substantial differences across big fields in the degree of partitioning. Most notably, the medical disciplines have the smallest amount of variance at the disciplinary level (only about 16%), while at the other end of the spectrum the humanities have a whopping 52.4% explained at the disciplinary level.
+@tbl-icc-big-field shows some substantial differences across big fields in the degree of partitioning. Most notably, the medical, professional, and STEM disciplines have the smallest amount of variance at the disciplinary level at 16-20%, while at the other end of the spectrum the humanities have a whopping 53.6% explained at the disciplinary level. Social sciences are somewhere in-between.
 
 ```{r}
 #| label: tbl-split-full-models
@@ -240,10 +240,10 @@ htmlreg(models_full_big_field,
 
 @tbl-split-full-models shows the fullest models from above but this time conducted separately for each big field. The results indicate some substantial heterogeneity in these effects across big fields, although none of the substantial results reverse direction. Some notes on the findings are below:
 
-* In general, the smallest effects were always in the Humanities, with the exception of specialization which was moderately large.
-* In general, the largest effects were in the Medical big field, with the exception of specialization effects, which were the smallest of any big field. 
+* In general, the smallest individual-level effects were always in the Humanities, with the exception of specialization which was moderately large.
+* In general, the largest effects were in the Medical big field, with the exception of specialization effects, which were basically zero. 
 * Specialization had a larger negative effect in the Humanities, Social Sciences, and STEM than Medical and Professional fields.
-* The disciplinary feminization variable has no effect in these models which means its effect in the full model was driven by big field differences, like the tendency for the humanitis to have a higher proportion female.
+* The disciplinary feminization variable has no effect in these models except for the social sciences which means its effect in the full model was largely driven by big field differences, like the tendency for the humanities to have a higher proportion female.
 
 Overall, our results would not change substantially by focusing on specific big fields. However, it does indicate even greater complexity in trying to understand how to apply h-indexes between large fields of scholarly production.
 
