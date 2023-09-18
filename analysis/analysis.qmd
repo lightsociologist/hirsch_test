@@ -23,7 +23,10 @@ options(knitr.kable.NA = "")
 
 # creating color palettes for twenty cases is not easy but lets see if qualpalr
 # can help us
-pal <- qualpal(20, "pretty_dark")
+pal <- c("#73308F","#3D9834","#4D341B","#1F585C","#211B4C","#525D1F",
+         "#989433","#963462","#378E90","#8F4234","#3A6390","#333C2D",
+         "#846130","#2D6C48","#4D1F47","#5E5271","#1C3752","#333993",
+         "#541C23","#62494C")
 ```
 
 # Between discipline data visualization

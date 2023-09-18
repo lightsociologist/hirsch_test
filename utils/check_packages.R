@@ -7,7 +7,7 @@
 #add new packages to the chain here
 packages = c("here","readr","haven","tidyverse","ggplot2","lubridate","broom",
              "knitr","texreg","kableExtra","gt", "gtsummary","janitor","lme4",
-             "specr","ggrepel","qualpalr","fastDummies","jtools",
+             "specr","ggrepel","fastDummies","jtools",
              "data.table","GGally","gender","readxl", "remotes",
              "mice","broom.mixed","glue")
 
