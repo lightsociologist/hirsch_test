@@ -41,7 +41,7 @@ ggplot(disciplines, aes(x=disc_prop_female, y=disc_h_index))+
               method="lm", se=FALSE)+
   geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
   scale_x_continuous(labels=scales::percent)+
-  scale_color_manual(values=pal$hex)+
+  scale_color_manual(values=pal)+
   theme_bw()+
   theme(legend.position = "bottom",
         legend.title = element_text(size = 6), 
@@ -62,7 +62,7 @@ ggplot(disciplines, aes(x=disc_prop_sole, y=disc_h_index))+
   geom_smooth(method="lm", se=FALSE, formula = y ~ log(x), color="red")+
   geom_text_repel(aes(label=discipline), max.overlaps=6, size=2)+
   scale_x_continuous(labels=scales::percent)+
-  scale_color_manual(values=pal$hex)+
+  scale_color_manual(values=pal)+
   theme_bw()+
   theme(legend.position = "bottom",
         legend.title = element_text(size = 6), 
