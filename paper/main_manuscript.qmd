@@ -367,3 +367,25 @@ The *h*-index, or Hirsch Index, is a widely used metric used for performance eva
 Data limitations suggest several avenues for future research. First, the data select on high-performing scholars, and, therefore do not generalize to the broader population of academics. While we believe that this limitation likely results in a conservative estimate of within and between discipline inequality, <!-- removed the explanatory clause here because I think its a bit speculative --> more data on academia writ large are required to verify this claim. Second, the estimation of gender suffers from well-known limitations. Data linking self-reported gender beyond the gender binary to citation data would be a welcome resource. Gender estimation also required reducing the dataset by country. Third, and along similar lines, most scholarship on publication and inequality focuses on gender as it is possible, despite these weaknesses to infer gender from names and other aspects of inequality, like race and class, remain under-studied. Future research would benefit from data linking self-reported race and class to large bibliometric data to better understand the broad effects of inequality in academic work.
 
 In conclusion, this analysis provides further evidence that metrics in performance evaluation in academia should be used with caution, if at all. Metrics are subject to within and between discipline biases that severely hinder their value in making both intradisciplinary and interdisciplinary comparisons. Of course, these comparisons are exactly what the quantification of scholarly work proposes to facilitate. Like other forms of quantification, academic metrics simplify complex processes at a cost. This cost can reinforce existing inequalities and even generate new "automated inequalities" [@eubanks_automating_2018]. Those using metrics for evaluation, as @koopman_galton_2023 [p. 16] writes about data usage generally, "need to be fervently attentive to the ways in which inequalities may be designed into their data." In this vein, this analysis provided evidence of within and between discipline differences in the *h*-index with a focus on gender, but there is reason to believe that the bias embedded in scholarly metrics extends to other dimensions of power, including race, class, and sexual orientation.
+
+
+
+# Acknowledgements
+
+# References
+
+::: {#refs}
+:::
+
+# Supplementary Information
+
+::: {.supp}
+
+## SI TYPE {#id}
+
+First paragraph is a title sentence that will be bold. (required)
+
+Optionnaly, add descriptive text after the title of theitem. No third paragraph is allowed
+
+:::
+
