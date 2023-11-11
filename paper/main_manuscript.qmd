@@ -8,11 +8,18 @@ reference-section-title: References
 bibliography: ../bibliography/project.bib
 csl: ../bibliography/chicago-parenthetical.csl
 format:
-  aog-article-pdf:
-    keep-tex: false
+  plos-pdf:
+    journal:
+      id: plosone
+    keep-tex: true
     include-in-header: 
       text: |
         \usepackage{dcolumn}
+#  aog-article-pdf:
+#    keep-tex: false
+#    include-in-header: 
+#      text: |
+#        \usepackage{dcolumn}
 #  submittable-pdf:
 #     keep-tex: false
 #     fig-pos: "!t"
@@ -120,7 +127,7 @@ Critics have raised concerns about how metrics transform scholarship into a capi
 
 ## The Case of the h-index
 
-One key metric used for evaluation purposes is the *h*-index or Hirsch Index. Physicist Jorge Hirsch proposed the *h*-index as a "useful index to characterize the scientific output of a researcher" in a 2005 article in the Proceedings of the National Academy of Sciences [@hirsch_index_2005]. While acknowledging the "potentially distasteful" use of metrics for evaluation, he presents quantification as an economical means of evaluating impact. In this highly cited article, Hirsch defines the *h*-index as follows: "A scientist has index *h* if *h* of his or her Np papers have at least *h* citations each and the other (Np -- h) papers have ≤*h* citations each" (p. 16569). In other words, a scholar with 10 of their 100 publications with a citation count of 10 or higher will have an *h*-index of 10. He goes on to specify - again with some acknowledgement that metrics offer a "rough approximation" of a research portfolio - how and when the index could be put to use: "Based on typical h and m values found, I suggest (with large error bars) that for faculty at major research universities, h ≈ 12 might be a typical value for advancement to tenure (associate professor) and that h ≈ 18 might be a typical value for advancement to full professor" (p. 16571). In sum, this publication announced a simple means of evaluating research impact and permission to use the metric for evaluation purposes.
+One key metric used for evaluation purposes is the *h*-index or Hirsch Index. Physicist Jorge Hirsch proposed the *h*-index as a "useful index to characterize the scientific output of a researcher" in a 2005 article in the Proceedings of the National Academy of Sciences [@hirsch_index_2005]. While acknowledging the "potentially distasteful" use of metrics for evaluation, he presents quantification as an economical means of evaluating impact. In this highly cited article, Hirsch defines the *h*-index as follows: "A scientist has index $h$ if $h$ of his or her $N_p$ papers have at least $h$ citations each and the other $(N_p-h)$ papers have $\le h$ citations each" (p. 16569). In other words, a scholar with 10 of their 100 publications with a citation count of 10 or higher will have an *h*-index of 10. He goes on to specify - again with some acknowledgement that metrics offer a "rough approximation" of a research portfolio - how and when the index could be put to use: "Based on typical h and m values found, I suggest (with large error bars) that for faculty at major research universities, h  12 might be a typical value for advancement to tenure (associate professor) and that $h \approx 18$ might be a typical value for advancement to full professor" (p. 16571). In sum, this publication announced a simple means of evaluating research impact and permission to use the metric for evaluation purposes.
 
 The immediate response to the *h*-index was largely positive with features in top scientific journals; however, some criticism of the index also quickly appeared [@barnes_hindex_2017]. Critics identified a range of issues from the relationship between the *h*-index and career length as well as the effect of self-citation [see @kelly_index_2006; @purvis_index_2006 among others]. However, the *h*-index and variants have proven enormously popular both in the bibliometrics and science of science communities and among university administrators seeking quick and cheap ways to evaluate scholars, including universities and science funding agencies [@barnes_hindex_2017]. The *h*-index is included as a key quantitative metric for annual review and/or tenure and promotion in faculty handbooks in a range of departments and schools in the United States (c.f., handbooks from the Boston University School of Public Health [@bostonuniversity_boston_2018], the Ohio State University Department of Surgery [@ohiostateuniversity_department_2014] or Oregon State University's College of Business [@oregonstateuniversity_oregon_2020]. Survey research in Germany on whether and how scholars understand the importance of the *h*-index indicate that natural scientists widely understand the importance of the *h*-index to their careers, but scholars in the humanities and social sciences do not [@kamrani_researchers_2021]. This variation is unfortunate as quantitative metrics are widely applied in German universities as elsewhere. In sum, despite some criticism, the *h*-index has been widely adopted although perhaps not widely understood. This analysis contributes to the broader literature on metrics and science by examining the factors contributing to within and between discipline variation in the *h*-index.
 
