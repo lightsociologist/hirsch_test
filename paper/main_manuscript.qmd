@@ -91,7 +91,7 @@ A large body of research describes the factors that contribute to inequality in 
 2.  What within and between discipline factors contribute to this variation?
 3.  How do within and between discipline factors vary across fields (e.g., social sciences, medical sciences, natural sciences)?
 
-While prior work examines the *h*-index by field, discipline, or gender, less is known about the factors, like gender and coauthorship, contributing to *both* within *and* between discipline differences in *h*-index scores [@bihari_review_2023]. This study extends prior work on metrics in science generally and the *h*-index specifically by conceptualizing the inequality process as occuring via intra-disciplinary and inter-disciplinary dynamics. Variation in the *h*-index may result from "apples-to-oranges" comparisons across disiplines and fields due to specific factors, like gender and coauthorship, but also occur within disciplines, as scholars experience differing publishing trajectories dependent on gender and coauthorship.
+While prior work examines the *h*-index by field, discipline, or gender, less is known about the factors, like gender and coauthorship, contributing to *both* within *and* between discipline differences in *h*-index scores [@bihari_review_2023]. This study extends prior work on metrics in science generally and the *h*-index specifically by conceptualizing the inequality process as occurring via intra-disciplinary and inter-disciplinary dynamics. Variation in the *h*-index may result from "apples-to-oranges" comparisons across disciplines and fields due to specific factors, like gender and coauthorship, but also occur within disciplines, as scholars experience differing publishing trajectories dependent on gender and coauthorship.
 
 ## Inequality in Science
 
@@ -229,7 +229,7 @@ We begin by analyzing a partition of the variance in the *h*-index within and be
 
 ```{r}
 #| label: tbl-partition
-#| tbl-cap: Parition of variance in *h*-indexscores between and within disciplines
+#| tbl-cap: Partition of variance in *h*-indexscores between and within disciplines
 
 model_base_disc <- lmer(h_index ~ 1+(1 | discipline), data=scholars_imp[[1]])
 
@@ -293,7 +293,7 @@ formula_controls <- update(formula_disc, .~.+I(age-mean(age))+
                              I(specialization-mean(specialization))+
                              scale(uni_pub_cnt))
 
-# creat coef labels for most complex model
+# create coef labels for most complex model
 coef_labels <- c("Intercept",
                  "Prob. [0-1] of female name$\\dagger$",
                  "Disc. mean percent female name",
