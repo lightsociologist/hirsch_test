@@ -219,7 +219,7 @@ $$y_{ij}=\beta_{0j}+\beta_1(x_{ij}-\bar{x}_{.j})+\beta_2(\bar{x}_{.j})+\upsilon_
 
 Where $y_{ij}$ is the outcome for the $i$th unit in the $j$th cluster and $x_{ij}$ is the predictor variable for the $i$th unit in the $j$th cluster. $\upsilon_{0j}$ and $\epsilon_{ij}$ are cluster-level and individual-level random errors, respectively. Because the mean of the $x$ for cluster $j$ ($\bar{x}_{.j}$) is included in the model and the $x_{ij}$ values are mean centered by cluster, the $\beta_1$ parameter is identical to that of a fixed-effects model in which all between variance is absorbed by cluster-level dummies. However, the REWB model also includes an estimate of the between cluster effect of $x$ estimated in $\beta_2$, which is impossible in a fixed-effects model. This $\beta_2$ term is equivalent to the estimate obtained by aggregating data to the higher level and examining the relationship between the means of $x$ and $y$. Thus, this model combines the advantage of absorbing all cluster level differences when estimating individual level effects, while at the same time allowing for an analysis of the "contextual" effects of disciplines themselves.
 
-We use this feature to estimate both within and between effects of gender and sole authorship on a scholar's *h*-index. For the between discipline effects, we calculate the mean probability of a female name and the mean sole authorship of each discipline. For probability of a female name, we use a 0 to 100 percentage scale at the disciplinary level for ease of interpretation of coefficients as the expected change in the h-index for a one percentage point increase in the mean probability of a female name. For sole authorship, we use a natural log transformation of the mean percent sole-authorship variable at the disciplinary level because exploratory analysis indicated a negative diminishing returns relationship between sole-authorship and the *h*-index at this level. 
+We use this feature to estimate both within and between effects of gender and sole authorship on a scholar's *h*-index. Both the probability of a female name variable and the sole authorship variable are mean centered by discipline at the individual level so that the interpretation of their effect is solely among scholars within the same discipline. For the between discipline effects, we calculate the mean probability of a female name and the mean sole authorship of each discipline. For probability of a female name, we use a 0 to 100 percentage scale at the disciplinary level for ease of interpretation of coefficients as the expected change in the h-index for a one percentage point increase in the mean probability of a female name. For sole authorship, we use a natural log transformation of the mean percent sole-authorship variable at the disciplinary level because exploratory analysis indicated a negative diminishing returns relationship between sole-authorship and the *h*-index at this level. 
 
 The control variables of career length, specialization, and university publication count are only included as grand mean centered individual level variables. We also standardize university publication count to have a mean of zero and a standard deviation of one for ease of interpretation.
 
@@ -231,7 +231,7 @@ We begin by analyzing a partition of the variance in the *h*-index within and be
 
 ```{r}
 #| label: tbl-partition
-#| tbl-cap: Partition of variance in *h*-indexscores between and within disciplines
+#| tbl-cap: Partition of variance in *h*-index scores between and within disciplines
 
 model_base_disc <- lmer(h_index ~ 1+(1 | discipline), data=scholars_imp[[1]])
 
@@ -257,11 +257,13 @@ colnames(tbl_partition) <- c("Grouping","All",
 
 tbl_partition |> 
   gt() |>
-  fmt_percent(columns = c(All, Humanities, Medical, Professional, 
+  fmt_number(columns = c(All, Humanities, Medical, Professional, 
                           "Social Sciences", STEM),
-              decimals=1, scale=FALSE) |>
+              decimals=1, scale_by = 1) |>
   tab_spanner("Field", columns = levels(scholars_imp[[1]]$big_field)) |>
-  cols_label(`Social Sciences`="Soc. Sci", Professional="Prof.") |>
+  cols_label(All = "All (%)", Humanities = "Humanities (%)", 
+             Medical = "Medical (%)", `Social Sciences`="Soc. Sci. (%)",
+             Professional="Prof. (%)", STEM="STEM (%)") |>
   cols_align(align="left", columns = Grouping)
 ```
 
