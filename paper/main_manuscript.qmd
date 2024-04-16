@@ -209,7 +209,8 @@ tbl_desc |> gt() |>
   tab_spanner(label="Fields", 
               columns = c(Humanities, Medical, `Prof.`, `Soc. Sci.`,
                           STEM)) |>
-  tab_source_note(source_note = "Note: standard deviations shown in parenthesis")
+  tab_source_note(source_note = "Note: standard deviations shown in parenthesis") |>
+  tab_options(table.font.size = 12)
 
 ```
 
@@ -266,7 +267,8 @@ tbl_partition |>
   cols_label(All = "All (%)", Humanities = "Humanities (%)", 
              Medical = "Medical (%)", `Social Sciences`="Soc. Sci. (%)",
              Professional="Prof. (%)", STEM="STEM (%)") |>
-  cols_align(align="left", columns = Grouping)
+  cols_align(align="left", columns = Grouping) |>
+  tab_options(table.font.size = 12)
 ```
 
 The ICC is substantial across all fields as well, but also varies substantially. Slightly more than half the variation in the *h*-index among scholars in the humanities is between disciplines, while only one-fifth or less of the variation in the *h*-index is between disciplines among scholars in the medical, STEM, and professional fields. 
@@ -336,7 +338,7 @@ The feminization of a discipline, as indicated by the mean percent female name w
 
 ```{r}
 #| label: tbl-models-field
-#| tbl-cap: Multilevel models predicting *h*-indexscore within each field. Clustering at the disciplinary level.
+#| tbl-cap: Multilevel models predicting *h*-index score within each field. Clustering at the disciplinary level.
 #| results: asis
 
 big_fields <- levels(scholars_imp[[1]]$big_field)
