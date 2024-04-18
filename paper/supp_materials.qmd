@@ -39,7 +39,8 @@ scholars_imp[[1]] |>
              prop_sole="sole auth.") |>
   cols_align(align="left", columns=c(discipline, big_field)) |>
   fmt_percent(columns=c(prop_female, prop_sole), decimals=1) |>
-  fmt_number(columns=h_index, decimals=1)
+  fmt_number(columns=h_index, decimals=1) |>
+  tab_options(latex.use.longtable = TRUE, table.font.size=12)
 ```
 
 ```{r}
@@ -55,11 +56,13 @@ scholars_imp[[1]] |>
   arrange(big_field, discipline) |>
   gt() |>
   cols_label(discipline="discipline",
+             big_field="field",
              career_length="career len.",
              specialization="spec.",
              uni_count="uni. count") |>
   cols_align(align="left", columns=c(discipline)) |>
   fmt_number(columns=c(career_length, uni_count), decimals=1) |>
-  fmt_number(columns=specialization, decimals=3)
+  fmt_number(columns=specialization, decimals=3) |>
+  tab_options(latex.use.longtable = TRUE, table.font.size=12)
 ```
 
