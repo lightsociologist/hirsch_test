@@ -1,7 +1,7 @@
 % Options for packages loaded elsewhere
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL ../hirsch_plosone_initial_submit.tex   Fri Apr  5 09:31:36 2024
-%DIF ADD hirsch_plosone_randr1.tex              Thu Apr 18 11:31:25 2024
+%DIF ADD hirsch_plosone_randr1.tex              Thu Apr 18 16:23:51 2024
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %
@@ -376,14 +376,17 @@ Oregon, Sociology, 604 PLC, Eugene, 97405, OR, USA,
 %DIF <  Please keep the abstract below 300 words
 \DIFdelbegin %DIFDELCMD < 
 
+%DIFDELCMD < \begin{flushleft}
 %DIFDELCMD < %%%
-\DIFdelend \begin{flushleft}
-{\Large
+\DIFdelend {\Large
 \textbf\newline{Inequality in measuring scholarly success: Variation in
-the \emph{h}-index within and between disciplines}
+the \emph{h}-index within and between
+disciplines} %DIF >  Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
 }
-\newline
-\end{flushleft}
+\DIFdelbegin %DIFDELCMD < \newline
+%DIFDELCMD < \end{flushleft}
+%DIFDELCMD < %%%
+\DIFdelend 
 
 \section*{Abstract}
 Scholars and university administrators have a vested interest in
@@ -404,11 +407,11 @@ significant within-discipline variation in several forms, specifically
 sole-authorship and female penalties\DIFdelbegin \DIFdel{, as well as
 significant between discipline variation in terms of sole
 authorship }\DIFdelend \DIFaddbegin \DIFadd{. Results also show that a sole
-authorship penalty plays a signficant role in well-known
+authorship penalty plays a significant role in well-known
 between-discipline variation}\DIFaddend . Field-specific models emphasize the
 ``apples-to-oranges\DIFdelbegin \DIFdel{'' }\DIFdelend \DIFaddbegin \DIFadd{,'' or incommensurable, }\DIFaddend property of cross-discipline
 comparison \DIFaddbegin \DIFadd{with significant heterogeneity in sole-authorship and female
-penalities within fields}\DIFaddend . Conclusions include continued caution when
+penalties within fields}\DIFaddend . Conclusions include continued caution when
 using the \emph{h}-index or similar metrics for valuation purposes.
 
 
@@ -532,46 +535,45 @@ gender, less is known about how \DIFdelbegin \DIFdel{within and }\DIFdelend \DIF
 \mbox{%DIFAUXCMD
 \citep{bihari_review_2023}}\hskip0pt%DIFAUXCMD
 . To understand factors that contribute to
-differences in scholar's }\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
-\citep{bihari_review_2023}}\hskip0pt%DIFAUXCMD
-. This study extends
-prior work on metrics in science generally and the }\DIFaddend \emph{h}-index
-\DIFdelbegin \DIFdel{, or Hirsch index, we use data on over 50,000 high-performing scientists across 174 disciplines in the
+differences in scholar's }\emph{\DIFdel{h}}%DIFAUXCMD
+\DIFdel{-index, or Hirsch index, we use data on over 50,000 high-performing scientists across 174 disciplines in the
 United States. This analysis draws from Ioannidis et al.'s dataset
 identifying the top scientists in the Scopus database
 \mbox{%DIFAUXCMD
 \citep{ioannidis_standardized_2019}}\hskip0pt%DIFAUXCMD
 . To understand within and between
 discipline differences, we use random effects within-between (REWB)
-models predicting }\DIFdelend \DIFaddbegin \DIFadd{specifically by conceptualizing the inequality process as occurring via
-intra-disciplinary and inter-disciplinary dynamics. Variation in }\DIFaddend the
-\emph{h}-index \DIFdelbegin \DIFdel{with a range of factors including
+models predicting }\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\citep{bihari_review_2023}}\hskip0pt%DIFAUXCMD
+. This study extends
+prior work on metrics in science generally and }\DIFaddend the \emph{h}-index
+\DIFdelbegin \DIFdel{with a range of factors including
 disciplinary age, the number of sole publications, a female name index,
 and a measure of university productivity. The REWB model accounts for
-distinct within and between disciplinary effects on }\emph{\DIFdel{h}}%DIFAUXCMD
-\DIFdel{-index
-scores, consistent with calls to develop multilevel analyses of gender
+distinct within and between disciplinary effects on }\DIFdelend \DIFaddbegin \DIFadd{specifically by conceptualizing the inequality process as occurring via
+intra-disciplinary and inter-disciplinary dynamics. Variation in the
+}\DIFaddend \emph{h}-index \DIFdelbegin \DIFdel{scores, consistent with calls to develop multilevel analyses of gender
 disparities in science \mbox{%DIFAUXCMD
 \citep{fox_gender_2020}}\hskip0pt%DIFAUXCMD
 . Results indicate that
 substantial within discipline differences exist, including both female
-and sole authorship penalties. Results further show substantial between
+}\DIFdelend \DIFaddbegin \DIFadd{may result from ``apples-to-oranges'' comparisons across
+disciplines and fields due to specific factors, like gender }\DIFaddend and sole
+authorship\DIFdelbegin \DIFdel{penalties. Results further show substantial between
 discipline differences related to sole authorship. Moreover, roughly a
-third of the
-variation in }\emph{\DIFdel{h}}%DIFAUXCMD
-\DIFdel{-index is between rather than within
-disciplines, suggesting an important }\DIFdelend \DIFaddbegin \DIFadd{may result from ``}\DIFaddend apples-to-oranges\DIFdelbegin \DIFdel{problem when
+third of the variation in }\emph{\DIFdel{h}}%DIFAUXCMD
+\DIFdel{-index is between rather than }\DIFdelend \DIFaddbegin \DIFadd{, but also occur }\DIFaddend within disciplines, \DIFdelbegin \DIFdel{suggesting an important apples-to-oranges problem when
 comparing the }\emph{\DIFdel{h}}%DIFAUXCMD
-\DIFdel{-index across
-disciplines . This apples-to-oranges
-problem results in significant differences across fields as well, especially in terms of sole authorship. Conclusions highlight how the
+\DIFdel{-index across disciplines. This apples-to-oranges
+problem results in significant differences across fields as well,
+especially in terms of }\DIFdelend \DIFaddbegin \DIFadd{as scholars experience
+differing publishing trajectories dependent on gender and }\DIFaddend sole
+authorship.
+\DIFdelbegin \DIFdel{Conclusions highlight how the
 continued use of the }\emph{\DIFdel{h}}%DIFAUXCMD
 \DIFdel{-index or similar metrics for valuation
-perpetuates inequality in science both within and
-between disciplines}\DIFdelend \DIFaddbegin \DIFadd{'' comparisons across
-disciplines and fields due to specific factors, like gender and
-coauthorship, but also occur within disciplines, as scholars experience
-differing publishing trajectories dependent on gender and coauthorship}\DIFaddend .
+perpetuates inequality in science both within and between disciplines.
+}\DIFdelend 
 
 \DIFdelbegin %DIFDELCMD < \hypertarget{inequality-in-science}{%
 %DIFDELCMD < \section{Inequality in science}\label{inequality-in-science}}
@@ -952,8 +954,8 @@ therefore, evaluate the following hypothesis:
 \begin{quote}
 \emph{Field Variation Hypothesis (H4):} Significant field differences
 will exist in \DIFdelbegin \DIFdel{terms of within and between disciplinary differences in
-}\DIFdelend \DIFaddbegin \DIFadd{the relationship of }\DIFaddend the \emph{h}-index \DIFaddbegin \DIFadd{to gender and
-coauthorship at both the individual and disciplinary level}\DIFaddend .
+}\DIFdelend \DIFaddbegin \DIFadd{the relationship of }\DIFaddend the \emph{h}-index \DIFaddbegin \DIFadd{to gender and sole
+authorship at both the individual and disciplinary level}\DIFaddend .
 \end{quote}
 
 \DIFdelbegin %DIFDELCMD < \hypertarget{materials-and-methods}{%
@@ -1259,17 +1261,13 @@ patterns across disciplines.
 \DIFdelbegin %DIFDELCMD < \hypertarget{tbl-partition}{}
 %DIFDELCMD < \begin{longtable}{lrrrrrr}
 %DIFDELCMD < %%%
-%DIFDELCMD < \caption{%
-{%DIFAUXCMD
-%DIFDELCMD < \label{tbl-partition}%%%
-\DIFdel{Parition of variance in }\emph{\DIFdel{h}}%DIFAUXCMD
-\DIFdel{-indexscores between and within
-disciplines }}%DIFAUXCMD
-%DIFDELCMD < \tabularnewline
-%DIFDELCMD < %%%
 \DIFdelend \DIFaddbegin \begin{table}
 \begin{adjustwidth}{-1.5in}{0in} %DIF >  Comment out/remove adjustwidth environment if table fits in text column.
-\DIFaddendFL 
+\DIFaddendFL \caption{\label{tbl-partition}\DIFdelbeginFL \DIFdelFL{Parition }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Partition }\DIFaddendFL of variance in \emph{h}\DIFdelbeginFL \DIFdelFL{-indexscores }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{-index
+scores }\DIFaddendFL between and within disciplines}
+\DIFdelbeginFL %DIFDELCMD < \tabularnewline
+%DIFDELCMD < %%%
+\DIFdelendFL 
 
 \DIFdelbeginFL %DIFDELCMD < \toprule
 %DIFDELCMD <  &  & \multicolumn{5}{c}{Field} \\ 
@@ -1304,11 +1302,7 @@ disciplines }}%DIFAUXCMD
 %DIFDELCMD < \bottomrule
 %DIFDELCMD < \end{longtable}
 %DIFDELCMD < %%%
-\DIFdelendFL \DIFaddbeginFL \caption{\label{tbl-partition}\DIFaddFL{Partition of variance in }\emph{\DIFaddFL{h}}\DIFaddFL{-index
-scores between and within disciplines}}
-\DIFaddendFL 
-
-\DIFaddbeginFL \centering{
+\DIFdelendFL \DIFaddbeginFL \centering{
 
 \fontsize{9.0pt}{10.8pt}\selectfont
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr}
@@ -1325,8 +1319,9 @@ Within discipline & 68.0 & 46.4 & 79.6 & 83.8 & 68.7 & 79.9 \\
 }
 \end{adjustwidth}
 \end{table}%DIF > 
+\DIFaddend 
 
-\DIFaddend The ICC is substantial across all fields as well, but also varies
+The ICC is substantial across all fields as well, but also varies
 substantially. Slightly more than half the variation in the
 \emph{h}-index among scholars in the humanities is between disciplines,
 while only one-fifth or less of the variation in the \emph{h}-index is
@@ -1471,6 +1466,7 @@ disciplinary level.}
 \DIFdelendFL \DIFaddbeginFL 
 
 \centering{
+\begin{center}
 \begin{tabular}{l c c c c}
 \hline
  & Model 1 & Model 2 & Model 3 & Model 4 \\
@@ -1500,6 +1496,7 @@ N (individual)                          & $54825$     & $54825$      & $54825$  
 \multicolumn{5}{l}{\scriptsize{$^{*}p<0.05$. Standard errors shown in parenthesis. $\dagger$=discipline mean centered; *=grand mean centered.}}
 \end{tabular}
 \label{table:coefficients}
+\end{center}
 
 }
 
@@ -1507,7 +1504,7 @@ N (individual)                          & $54825$     & $54825$      & $54825$  
 
 Consistent with the productivity puzzle, female scholars have an
 \emph{h}-index approximately \DIFdelbegin \DIFdel{2.6 }\DIFdelend \DIFaddbegin \DIFadd{2.63 }\DIFaddend points lower than male scholars in the
-same discipline, on average. More frequent sole-authorship is also
+same discipline, on average. More frequent \DIFdelbegin \DIFdel{sole-authorship }\DIFdelend \DIFaddbegin \DIFadd{sole authorship }\DIFaddend is also
 associated with a lower \emph{h}-index. Within the same discipline, a
 one percentage point increase in the percent of sole-authored
 publications for a given scholar is associated with a 0.47 lower
@@ -1531,7 +1528,7 @@ disciplines. However, \DIFdelbegin \DIFdel{once the sole-authored variables were
 the
 model, this relationship reverses direction and }\DIFdelend \DIFaddbegin \DIFadd{this slightly negative association is a spurious
 byproduct of the underlying tendency for more feminized disciplines to
-also be more focused on sole-authorship (\(r=0.30\)). Model 3 shows
+also be more focused on sole authorship (\(r=0.30\)). Model 3 shows
 that, once we hold constant the disciplinary tendency for
 sole-authorship, the association between feminization and }\emph{\DIFadd{h}}\DIFadd{-index
 scores }\DIFaddend becomes slightly positive. In the final model, we estimate that a
@@ -1729,6 +1726,7 @@ level.}
 \DIFdelendFL \DIFaddbeginFL 
 
 \centering{
+\begin{center}
 \begin{tabular}{l c c c c c}
 \hline
  & Humanities & Medical & Prof. & Soc. Sci. & STEM \\
@@ -1758,6 +1756,7 @@ N (individual)                          & $856$        & $25581$      & $1228$  
 \multicolumn{6}{l}{\scriptsize{$^{*}p<0.05$. Standard errors shown in parenthesis. $\dagger$=discipline mean centered; *=grand mean centered.}}
 \end{tabular}
 \label{table:coefficients}
+\end{center}
 
 }
 \DIFaddendFL \end{adjustwidth}
@@ -1802,20 +1801,22 @@ substantial inequalities in }\emph{\DIFadd{h}}\DIFadd{-index scores.
 \DIFaddend We find evidence of between discipline differences as well. \DIFdelbegin \DIFdel{Results provide support for the disciplinary
 differences hypothesis (H3a), although the extent of disciplinary
 differences varies by field. Significant differences also exist between
-disciplines in terms of sole authorship, supporting the }\DIFdelend \DIFaddbegin \DIFadd{Disciplines
-with more overall sole-authorship have substantially lower mean
-}\emph{\DIFadd{h}}\DIFadd{-index scores overall, consistent with the }\DIFaddend teamwork variation
+disciplines in terms of sole authorship , supporting }\DIFdelend \DIFaddbegin \DIFadd{Disciplines
+with more overall sole authorship have substantially lower mean
+}\emph{\DIFadd{h}}\DIFadd{-index scores overall, consistent with }\DIFaddend the teamwork variation
 hypothesis (\DIFdelbegin \DIFdel{H3c}\DIFdelend \DIFaddbegin \DIFadd{H3b}\DIFaddend ). Support for the feminized discipline hypothesis (\DIFdelbegin \DIFdel{H3b)
 is mixed. Results indicate that a small negative feminized discipline effect
-reverses when including sole authorship and that }\DIFdelend \DIFaddbegin \DIFadd{H3a)
+reverses when including sole
+authorshipand
+that }\DIFdelend \DIFaddbegin \DIFadd{H3a)
 is more mixed. In the full models, results vary by whether disciplinary
 sole-authorship practice is included in the model because feminized
 disciplines are more likely to be high sole-authorship disciplines as
 well. In field specific models, we find a negative feminization effect
 on }\emph{\DIFadd{h}}\DIFadd{-index scores only for the Social Sciences, and on effect for
-the remaining disciplines, even when controlling for disciplinary
-sole-authorship.Thus, to the extent, that the feminization effect
-exists, it appears limited to certain fields.
+the remaining disciplines, even when controlling for disciplinary sole
+authorship. Thus, to the extent, that the feminization effect exists, it
+appears limited to certain fields.
 }
 
 \DIFadd{We also observe that both the within discipline and }\DIFaddend between discipline
@@ -2283,7 +2284,6 @@ Koopman C.
 \newblock Theory, Culture \& Society. 2023; p. 02632764231162251.
 
 \end{thebibliography}
-
 
 \DIFdelbegin %DIFDELCMD < \hypertarget{supporting-information}{%
 %DIFDELCMD < \section{Supporting information}\label{supporting-information}}
