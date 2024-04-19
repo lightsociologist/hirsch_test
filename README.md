@@ -1,3 +1,12 @@
-# hirsch_test
+# Inequality in measuring scholarly success: Variation in the h-index within and between disciplines
 
-This project works through factors associated with variation in the h-index.
+This is the replication package for the manuscript "Inequality in measuring scholarly success: Variation in the h-index within and between disciplines by [Ryan Light](https://ryanlight.netlify.app/), [Aaron Gullickson](https://aarongullickson.netlify.app), and [Jill Ann Harrison](https://cas.uoregon.edu/directory/sociology/all/jah). From the abstract of the paper:
+
+Scholars and university administrators have a vested interest in building equitable valuation systems of academic work for both practical (e.g., resource distribution) and
+more lofty purposes (e.g., what constitutes “good” research). Well-established inequalities in science pose a difficult challenge to those interested in constructing a
+parsimonious and fair method for valuation as stratification occurs within academic disciplines, but also between them. The h-index, a popular research metric, has been formally used as one such method of valuation. In this article, we use the case of the h-index to examine how the distribution of research metrics reveal within and between
+discipline inequalities. Using bibliometric data from 1960-2019 on over 50,000 high performing scientists - the top 2% most frequently cited authors - across 174 disciplines,
+we construct random effects within-between models predicting the h-index. Results suggest significant within-discipline variation in several forms, specifically sole-authorship and female penalties. Results also show that a sole authorship penalty plays a significant role in well-known between-discipline variation. Field-specific models emphasize the “apples-to-oranges,” or incommensurable, property of cross-discipline comparison with significant heterogeneity in sole-authorship and female penalties within fields. Conclusions include continued
+caution when using the h-index or similar metrics for valuation purposes.
+
+The analysis is done exclusively in R. All code and data to reproduce the analysis is available in the `analysis` subdirectory as well as a README that describes the analysis in more detail. The `products` directory contains a `paper` directory that was used to write the actual paper as well as a `data` directory where the data are stored. 
