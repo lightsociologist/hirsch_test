@@ -1,7 +1,7 @@
 % Options for packages loaded elsewhere
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL ../randr2/hirsch_plosone_randr2.tex   Wed Aug 21 11:48:37 2024
-%DIF ADD hirsch_plosone_randr3.tex             Thu Oct 17 12:04:49 2024
+%DIF ADD hirsch_plosone_randr3.tex             Thu Oct 17 12:33:09 2024
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %
@@ -727,9 +727,14 @@ administrators avoid potential pitfalls in evaluation.
 Critics have raised concerns about how metrics transform scholarship
 into a capitalist-like market at the core of neoliberalization resulting
 in ``perverse incentives'' for researchers to publish shoddy or
-fraudulent work \citep{edwards_academic_2017}, while simultaneously
-resulting in mental health trauma for academic workers experiencing
-hypercompetitive markets and suspicious management
+fraudulent work \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\citep{edwards_academic_2017}}\hskip0pt%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{and efforts to ``game'' the system at either the journal
+or individual-level \mbox{%DIFAUXCMD
+\citep{edwards_academic_2017, siler_who_2022}}\hskip0pt%DIFAUXCMD
+}\DIFaddend , while
+simultaneously resulting in mental health trauma for academic workers
+experiencing hypercompetitive markets and suspicious management
 \citep{forrester_mental_2021}. From this perspective, administrators'
 continued reliance upon metrics serves as a modern form of academic
 Taylorism, a production principle developed in the late nineteenth and
@@ -955,9 +960,7 @@ Note: standard deviations shown in parenthesis\\
 \end{minipage}
 
 }
-\DIFaddbeginFL 
-
-\DIFaddendFL \end{adjustwidth}
+\end{adjustwidth}
 \end{table}%
 
 \subsection{Analytic Strategy}\label{analytic-strategy}
@@ -1028,22 +1031,11 @@ roughly a third of the variation in the \emph{h}-index occurs between
 disciplines.
 
 \begin{table}
-\DIFaddbeginFL 
+\begin{adjustwidth}{-1.5in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
+\caption{\label{tbl-partition}Partition of variance in \emph{h}-index
+scores between and within disciplines}
 
-\caption{\label{tbl-partition}\DIFaddFL{Partition of variance in }\emph{\DIFaddFL{h}}\DIFaddFL{-index
-scores between and within disciplines}}
-\DIFaddendFL \begin{adjustwidth}{-1.5in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
-\DIFdelbeginFL %DIFDELCMD < \caption{%
-{%DIFAUXCMD
-%DIFDELCMD < \label{tbl-partition}%%%
-\DIFdelFL{Partition of variance in }\emph{\DIFdelFL{h}}%DIFAUXCMD
-\DIFdelFL{-index
-scores between and within disciplines}}
-%DIFAUXCMD
-%DIFDELCMD < 
-
-%DIFDELCMD < %%%
-\DIFdelendFL \centering{
+\centering{
 
 \fontsize{9.0pt}{10.8pt}\selectfont
 \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrr}
@@ -1058,9 +1050,7 @@ Within discipline & 68.0 & 46.4 & 79.6 & 83.8 & 68.7 & 79.9 \\
 \end{tabular*}
 
 }
-\DIFaddbeginFL 
-
-\DIFaddendFL \end{adjustwidth}
+\end{adjustwidth}
 \end{table}%
 
 The ICC is substantial across all fields as well, but also varies
@@ -1123,7 +1113,6 @@ disciplinary level.}
 %DIFDELCMD < }
 %DIFDELCMD < %%%
 \DIFdelendFL \DIFaddbeginFL \centering{
-
 \begin{tabular}{l c c c c}
 \hline
  & Model 1 & Model 2 & Model 3 & Model 4 \\
@@ -1251,7 +1240,6 @@ level.}
 %DIFDELCMD < }
 %DIFDELCMD < %%%
 \DIFdelendFL \DIFaddbeginFL \centering{
-
 \begin{tabular}{l c c c c c}
 \hline
  & Humanities & Medical & Prof. & Soc. Sci. & STEM \\
@@ -1379,7 +1367,9 @@ previous drafts of this article.
 \section{References}\label{references}
 
 \renewcommand{\bibsection}{}
-\begin{thebibliography}{10}
+\DIFaddbegin 
+
+\DIFaddend \begin{thebibliography}{10}
 
 \bibitem{hofstra_diversity_2020}
 Hofstra B, Kulkarni VV, {Munoz-Najar Galvez} S, He B, Jurafsky D, McFarland DA.
@@ -1724,14 +1714,21 @@ McKiernan EC, Schimanski LA, Nieves CM, Matthias L, Niles MT, Alperin JP.
 Niles MT, Schimanski LA, McKiernan EC, Alperin JP.
 \newblock Why We Publish Where We Do: {{Faculty}} Publishing Values and Their Relationship to Review, Promotion and Tenure Expectations.
 \newblock PLOS ONE. 2020;15(3):e0228914.
-\newblock doi:{10.1371/journal.pone.0228914\DIFaddbegin }\DIFadd{.
-}
+\newblock doi:{10.1371/journal.pone.0228914}.
+\DIFaddbegin 
 
 \bibitem{edwards_academic_2017}
 \DIFadd{Edwards MA, Roy S.
 }\newblock \DIFadd{Academic }{{\DIFadd{Research}}} \DIFadd{in the 21st }{{\DIFadd{Century}}}\DIFadd{: }{{\DIFadd{Maintaining Scientific Integrity}}} \DIFadd{in a }{{\DIFadd{Climate}}} \DIFadd{of }{{\DIFadd{Perverse Incentives}}} \DIFadd{and }{{\DIFadd{Hypercompetition}}}\DIFadd{.
 }\newblock \DIFadd{Environmental Engineering Science. 2017;34(1):51--61.
-}\newblock \DIFadd{doi:}{\DIFadd{10.1089/ees.2016.0223}\DIFaddend }.
+}\newblock \DIFadd{doi:}{\DIFadd{10.1089/ees.2016.0223}}\DIFadd{.
+}
+
+\bibitem{siler_who_2022}
+\DIFadd{Siler K, Larivi}{\DIFadd{\`e}}\DIFadd{re V.
+}\newblock \DIFadd{Who Games Metrics and Rankings? }{{\DIFadd{Institutional}}} \DIFadd{Niches and Journal Impact Factor Inflation.
+}\newblock \DIFadd{Research Policy. 2022;51(10):104608.
+}\DIFaddend 
 
 \bibitem{forrester_mental_2021}
 Forrester N.
@@ -1829,6 +1826,7 @@ Koopman C.
 \newblock Theory, Culture \& Society. 2023; p. 02632764231162251.
 
 \end{thebibliography}
+
 
 \section{Supporting Information}\label{supporting-information}
 
