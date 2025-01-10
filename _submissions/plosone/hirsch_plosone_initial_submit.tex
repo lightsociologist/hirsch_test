@@ -1,0 +1,1529 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+
+
+\PassOptionsToPackage{table}{xcolor}
+
+\documentclass[
+  10pt,
+  letterpaper,
+]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+
+% marvosym package for additional characters
+\usepackage{marvosym}
+
+% cite package, to clean up citations in the main text. Do not remove.
+% Using natbib instead
+% \usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% create "+" rule type for thick vertical lines
+\newcolumntype{+}{!{\vrule width 2pt}}
+
+% create \thickcline for thick horizontal lines of variable length
+\newlength\savedwidth
+\newcommand\thickcline[1]{%
+  \noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+  \cline{#1}%
+  \noalign{\vskip\arrayrulewidth}%
+  \noalign{\global\arrayrulewidth\savedwidth}%
+}
+
+% \thickhline command for thick horizontal lines that span the table
+\newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+\hline
+\noalign{\global\arrayrulewidth\savedwidth}}
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+\renewcommand{\figurename}{Fig}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Header and Footer with logo
+\usepackage{lastpage,fancyhdr}
+\usepackage{epstopdf}
+%\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+%\setlength{\headheight}{27.023pt}
+%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\today}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{dcolumn}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[numbers,square,comma]{natbib}
+\bibliographystyle{plos2015}
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Inequality in measuring scholarly success: Variation in the h-index within and between disciplines},
+  pdfauthor={Ryan Light; Aaron Gullickson; Jill Ann Harrison},
+  pdfkeywords={Metrics, h-index, Gender Inequality, Team Science, Higher
+Education},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+
+
+\begin{document}
+\vspace*{0.2in}
+
+% Title must be 250 characters or less.
+\begin{flushleft}
+{\Large
+\textbf\newline{Inequality in measuring scholarly success: Variation in
+the \emph{h}-index within and between
+disciplines} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
+}
+\newline
+\\
+% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
+Ryan Light\textsuperscript{1*}, Aaron
+Gullickson\textsuperscript{2}, Jill Ann Harrison\textsuperscript{3}
+\\
+\bigskip
+\textbf{1} University of Oregon, Sociology, 632
+PLC, Eugene, 97405, OR, USA, \\ \textbf{2} University of
+Oregon, Sociology, 727
+PLC, Eugene, 97405, OR, USA, \\ \textbf{3} University of
+Oregon, Sociology, 604 PLC, Eugene, 97405, OR, USA, 
+\bigskip
+
+% Insert additional author notes using the symbols described below. Insert symbol callouts after author names as necessary.
+% 
+% Remove or comment out the author notes below if they aren't used.
+%
+% Primary Equal Contribution Note
+%\Yinyang These authors contributed equally to this work.
+
+% Additional Equal Contribution Note
+% Also use this double-dagger symbol for special authorship notes, such as senior authorship.
+%\ddag These authors also contributed equally to this work.
+
+% Current address notes
+%\textcurrency Current Address: Dept/Program/Center, Institution Name, City, State, Country % change symbol to "\textcurrency a" if more than one current address note
+% \textcurrency b Insert second current address 
+% \textcurrency c Insert third current address
+
+% Deceased author note
+%\dag Deceased
+
+% Group/Consortium Author Note
+%\textpilcrow Membership list can be found in the Acknowledgments section.
+
+% Use the asterisk to denote corresponding authorship and provide email address in note below.
+* light@uoregon.edu
+
+\end{flushleft}
+
+\newpage
+
+% Please keep the abstract below 300 words
+
+\begin{flushleft}
+{\Large
+\textbf\newline{Inequality in measuring scholarly success: Variation in
+the \emph{h}-index within and between disciplines}
+}
+\newline
+\end{flushleft}
+
+\section*{Abstract}
+Scholars and university administrators have a vested interest in
+building equitable valuation systems of academic work for both practical
+(e.g., resource distribution) and more lofty purposes (e.g., what
+constitutes ``good'' research). Well-established inequalities in science
+pose a difficult challenge to those interested in constructing a
+parsimonious and fair method for valuation as stratification occurs
+within academic disciplines, but also between them. The \emph{h}-index,
+a popular research metric, has been formally used as one such method of
+valuation. In this article, we use the case of the \emph{h}-index to
+examine how the distribution of research metrics reveal within and
+between discipline inequalities. Using data from over 50,000 high
+performing scientists across 174 disciplines, we construct random
+effects within-between models predicting the \emph{h}-index. Results
+suggest significant within-discipline variation in several forms,
+specifically sole-authorship and female penalties, as well as
+significant between discipline variation in terms of sole authorship.
+Field-specific models emphasize the ``apples-to-oranges'' property of
+cross-discipline comparison. Conclusions include continued caution when
+using the \emph{h}-index or similar metrics for valuation purposes.
+
+
+\linenumbers\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+From teaching to research, systematic evaluation of academic work
+presents a unique set of challenges as the academic disciplines that
+broadly organize scholarly labor differ upon several relevant factors.
+Differences in demographic characteristics, like race and gender,
+capture processes of racism and sexism that limit the opportunities for
+some scholars and not others across disciplines
+\citep{hofstra_diversity_2020, lariviere_bibliometrics_2013, xie_sex_1998}.
+Cultural and economic differences between disciplines, like the
+prevalence of team science or even the definition of success, can affect
+the quality and quantity of publication
+\citep{fortunato_science_2018, gardner_conceptualizing_2009, stephan_how_2012}.
+Scholars have invented dozens of metrics that are formally or informally
+used in the evaluation of scholarly research, despite warnings about
+apples-to-oranges comparisons given within discipline and between
+discipline differences
+\citep{hicks_bibliometrics_2015, ioannidis_standardized_2019}. The most
+widely used metric of this type is the \emph{h}-index, a simple score
+where a scholar with 10 published articles with at least 10 citations
+receives a \emph{h}-index of 10. The limitations of the
+\emph{h}-index are well understood, but less is known about how
+processes of inequality are embedded both within and between
+disciplines. Here, we ask three related questions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What is the variation within and between disciplines in the
+  \emph{h}-index?
+\item
+  What within and between discipline factors contribute to this
+  variation?
+\item
+  How do within and between discipline factors vary across fields (e.g.,
+  social sciences, medical sciences, natural sciences)?
+\end{enumerate}
+
+These questions arise from at least two important considerations. First,
+like other forms of work, academic labor is beset by inequalities. A
+large body of research describes the factors that contribute to
+inequality in academia \citep[see][ for
+reviews]{fox_gender_2017, long_scientific_1995}. From well-known
+pipeline effects to publication differences to varying effects of
+parenthood, scholars have shown the multifaceted ways some scholars are
+obstructed from paths to success at work \citep[e.g.][ among
+others]{fox_gender_2005, grant_revisiting_2000, morgan_unequal_2021}. At
+the same time, differences exist in the distribution of resources to
+disciplines as can be seen in variation in federal funding and the way
+resources are distributed to departments, the proxies for disciplines on
+university campuses \citep{katz_metrics_2020}. Second, numerous scholars
+have drawn attention to the increasing push to quantify aspects of
+social life \citep{mennicken_what_2019}. Research on the risks of
+quantification points to the crude ways that quantification reduces
+complex social phenomena, often with implications for inequality and
+nearly always with implications for valuation, or what is considered
+good or bad. In the case of scholarly metrics, critics have raised
+concerns about how these metrics transform scholarship into a
+capitalist-like market (e.g., neoliberalization), build unproductive
+individual constraints into academic labor - such as the anxiety
+connected to hyper-competitiveness - and ultimately result in less
+productive and innovative scholarship
+\citep{edwards_academic_2017, muller_tyranny_2019} and efforts to ``game
+metrics'' at either the journal or individual-level
+\citep{siler_who_2022}. Turning to within and between
+discipline variation in the \emph{h}-index offers insight into how
+metrics relate to inequalities and contributes to research on the
+limitations of simplifying summaries of academic labor through
+quantification.
+
+While prior work examines the \emph{h}-index by field, discipline, or
+gender, less is known about how within and between discipline
+differences affect \emph{h}-index scores in relationship to one another
+\citep{bihari_review_2023}. To understand factors that contribute to
+differences in scholar's \emph{h}-index, or Hirsch index, we use data on
+over 50,000 high-performing scientists across 174 disciplines in the
+United States. This analysis draws from Ioannidis et al.'s dataset
+identifying the top scientists in the Scopus database
+\citep{ioannidis_standardized_2019}. To understand within and between
+discipline differences, we use random effects within-between (REWB)
+models predicting the \emph{h}-index with a range of factors including
+disciplinary age, the number of sole publications, a female name index,
+and a measure of university productivity. The REWB model accounts for
+distinct within and between disciplinary effects on \emph{h}-index
+scores, consistent with calls to develop multilevel analyses of gender
+disparities in science \citep{fox_gender_2020}. Results indicate that
+substantial within discipline differences exist, including both female
+and sole authorship penalties. Results further show substantial between
+discipline differences related to sole authorship. Moreover, roughly a
+third of the variation in \emph{h}-index is between rather than within
+disciplines, suggesting an important apples-to-oranges problem when
+comparing the \emph{h}-index across disciplines. This apples-to-oranges
+problem results in significant differences across fields as well,
+especially in terms of sole authorship. Conclusions highlight how the
+continued use of the \emph{h}-index or similar metrics for valuation
+perpetuates inequality in science both within and between disciplines.
+
+\hypertarget{inequality-in-science}{%
+\section{Inequality in science}\label{inequality-in-science}}
+
+Inequality in science, and in academia generally, persists within and
+between disciplines and along well-known axes. Gender is one of the most
+studied axes of inequality in science. Research on the scientific
+pipeline, for example, shows how obstacles, like cultural stereotypes
+about skills differences in math and science and related social
+psychological factors such as a sense of belonging, limit pathways to
+particular scientific fields for girls
+\citep{cech_professional_2011, ma_math_2021, penner_men_2019}. These
+pipeline factors continue throughout the research life course as men and
+women become segregated in doctoral programs by field and prestige
+\citep{weeden_degrees_2017a}. When these significant obstacles are
+overcome, women continue to experience inequality in academic work,
+including in publication. Publication is both the outcome of academic
+labor and the currency of academic careers. How many and the type of
+publications produced by a scientist translates into tangible resources,
+like salary raises and the job security of tenure, and less tangible
+resources, like prestige. While significant gains have been made by
+women in academic work - numerous fields that were male dominated in the
+mid- to late-twentieth century are now majority female - publication
+remains a site of persistent inequality \citep{xie_sex_1998}. Early
+signs indicate that these forms of gender inequality may have increased
+due to the COVID-19 pandemic or a ``pandemic penalty''
+\citep{king_pandemic_2021}.
+
+Sociologists of science have spent decades trying to disentangle the
+factors associated with gender differences in publication, especially
+related to differences in the number of publications and citations.
+Nearly 40 years ago, Cole and Zuckerman referred to the ongoing male
+advantage in publication and citation counts as the ``productivity
+puzzle'' because the causes of this advantage remained difficult to
+pinpoint \citep{cole_productivity_1984}. They conclude, ``{[}S{]}ince
+gender differences in published productivity persist, the productivity
+puzzle has yet to be solved'' (pg. 250). While women have made
+significant gains in many academic fields, research suggests that the
+productivity puzzle remains. For example, Erin Leahey's research shows
+how the level of research specialization interacts with gender to affect
+productivity, with consequences for earnings
+\citep{leahey_gender_2006, leahey_not_2007}. More recent work provides
+evidence that the productivity puzzle in STEM fields results from
+variation between men and women in career length and exit rates as
+productivity appears to be more equal across shorter time horizons
+\citep{huang_historical_2020}. Scholars have also turned to more complex
+mechanisms that may help perpetuate gender and racial hierarchies in
+academic work. For example, using data on US doctoral recipients,
+Hofstra and coauthors find that gender and racial minorities are more
+likely to generate innovative scientific work, but that this work is
+less likely to be adopted by future researchers with consequences for
+academic hiring \citep{hofstra_diversity_2020}.
+
+A prestige puzzle may also coincide with the productivity puzzle as
+women may be less likely to publish in the top or most prestigious
+journals in their fields \citep{light_gender_2013}. As top journals have
+higher impact factors, the prestige puzzle could have a significant
+impact on differences in publication metrics and career outcomes. This
+form of inequality may occur for a variety of reasons including a lack
+of mentorship, different family and work-based responsibilities between
+men and women, and differences in specialization similar to Leahey's
+work on specialization and productivity
+\citep{leahey_gender_2006, leahey_not_2007, light_gender_2009}. Drawing
+on literature on occupational segregation and identity, this work on
+elite publication shows how the prestige puzzle has changed over time
+within sociology \citep{light_gender_2009}. Earlier cohorts of women
+sociologists were significantly less likely to publish in top sociology
+journals compared to men regardless of specialty areas. However, as more
+women entered sociology, occupational segregation occurred with
+subfields becoming sharply gender imbalanced. While baseline models of
+the prestige puzzle for more recent cohorts reveal the persistence of
+this form of inequality, more complete models that control for
+specialization, or occupational identity, show that the contemporary
+effect likely operates through these segregation processes. More recent
+work on sociology, economics, and political science shows a null effect
+of gender on citation when social scientists are situated in similar
+disciplinary and sub-field spaces, suggesting that teasing apart the
+contexts when a gender penalty persists and when it does not remains an
+important concern for those interested in inequality
+\citep{lynn_rare_2019}.
+
+Collaboration also likely plays a role with significant historical
+differences in coauthorship networks based on gender
+\citep{moody_structure_2004}. Recent research on computer scientists by
+Jadidi and coauthors finds significant differences in collaboration
+between men and women. Men are more likely to have larger coauthorship
+networks and to play brokerage roles within them, while women's networks
+exhibit increasing gender homophily \citep{jadidi_gender_2018}. These
+differences relate to publication outcomes as the network factors
+positively affect measures of productivity, including the
+\emph{h}-index. Jadidi and coauthors conclude that women ``on average
+are less likely to adapt to the collaboration patterns that are related
+with success. However, those women who become successful computer
+scientists exhibit the same collaborative behavior as their successful
+male colleagues'' (pg. 19). Research in both political science and
+sociology also identifies how team science affects gender and
+publication in these disciplines pointing to how the structure of
+scientific work can negatively impact women social scientists
+\citep{akbaritabar_gender_2021, teele_gender_2017}.
+
+Collaboration may impact individual-level inequalities beyond gender.
+Collaboration is broadly understood as a key aspect of epistemic
+culture. Epistemic culture consists of ``those amalgams of arrangements
+and mechanisms\ldots which, in a given field, make up how we know what
+we know'' (\citep{cetina_epistemic_1999}, pg. 1). The questions that
+scholars ask and the strategies that they use to answer them differ by
+field with consequences for individuals embedded in specific cultures.
+Plainly, the structure of team science matters for publication outcomes.
+This suggests that within discipline differences may affect publication
+metrics, like the \emph{h}-index, but also points to how inequality may
+occur between disciplines as pronounced differences exist between
+disciplines in terms of factors like gender composition and team versus
+sole authorship.
+
+\hypertarget{inequality-between-disciplines-and-fields}{%
+\subsection{Inequality between disciplines and
+fields}\label{inequality-between-disciplines-and-fields}}
+
+Disciplinary differences affect inequality along several dimensions. For
+example, differences in gender composition may have direct and indirect
+effects on how resources are distributed in universities. Disciplinary
+cultures also differ and these differences may affect inequality. For
+example, disciplines differ in terms of how work is evaluated
+\citep{lamont_how_2009} or even how emotions are expressed at work
+\citep{koppman_joy_2015}. Moreover, disciplines differ in terms of how
+academic work is conducted \citep{huang_historical_2020}. Do scholars
+collaborate in teams or are they more likely to work alone? Less is
+known about how these between discipline-based inequalities differ from
+within discipline inequality. Research on collaboration and citation
+impact using the \emph{h}-index shows disciplinary differences in the
+effect that collaboration has on impact with more collaboration having a
+stronger positive effect in physics and medicine, while having a smaller
+effect in the brain sciences or computer science
+\citep{parish_dynamics_2018}. Disciplinary differences occur regarding
+more tangible resources, like federal funding. Research describes the
+substantial differences between fields in terms of federal funding with
+implications - a ``domino effect'' - for future non-federal funding and
+a potential site of cumulative advantage stratifying disciplines
+\citep{lanahan_domino_2016, lynn_15_2021}.
+
+One of the ways that disciplines differ and also one of the ways that
+disciplines may be valued differently is how they perform on commonly
+used metrics. Time-worn debates in the philosophy of science have tried
+to identify the implications of and/or reconcile the so-called ``two
+cultures'' or the division between the arts and the sciences
+\citep{snow_two_2012}. While this debated formulation may exaggerate
+differences, the two cultures perspective draws attention to the
+variation that occurs across fields both at a philosophical-level, but
+also as a more practical concern. In terms of the latter, prior work has
+suggested field normalizing the \emph{h}-index to account for between
+field variation \citep{bi_four_2023}. Questions remain about the extent
+of variation within and between fields in addition to the variation
+occurring within and between disciplines situated in fields. Do
+field-level variations in gender composition and team science result in
+apple-to-oranges comparisons when using common scholarly metrics, like
+the \emph{h}-index?
+
+\hypertarget{the-risks-of-quantification}{%
+\section{The risks of
+quantification}\label{the-risks-of-quantification}}
+
+Quantification has become a central feature of contemporary life as
+``{[}a{]}dministration, management, and even mundane daily activities
+are increasingly structured around performance measures, cost-benefit
+analysis, risk calculations, ratings, and rankings''
+\citep[p.~224]{mennicken_what_2019}. Critiques often focus on the risks
+of quantification as a central factor in determining worth, which occurs
+in a variety of fields from the law to business to education
+\citep[p.~4]{muller_tyranny_2019}. This ``metrics fixation'' is part of
+the broader process of neoliberalization of education. Neoliberalization
+succinctly captures an effort to ``economize everything''
+\citep[p.~171]{berg_producing_2016}, such that neoliberal reason becomes
+common sense or simply the default rationale people use to make
+decisions. Metrics reinforce the notion that individual performance at
+work can be easily calculated and compared; therefore, material rewards
+like promotions and raises can be fairly and transparently applied. Of
+course, metrics often hide as much as they reveal as they simplify a
+process by carving away essential components. In universities, the
+metrics that help reinforce and are reinforced by neoliberal reason
+summarize entire careers for administrators who likely have little to no
+understanding of the research that the metrics summarize. This
+disempowers colleagues within and outside of a scholar's university,
+while centralizing power in the hands of bureaucrats with little
+incentive to actually understand academic work with which they are
+inexpert.
+
+University administrators' use of metrics to evaluate faculty output is
+a fairly recent phenomenon. Prior to the development of bibliometric
+indicators, evaluation of scholarly research was performed primarily by
+disciplinary specialists who offered qualitative assessment of a
+research record. While peer assessment is still a central part of
+evaluation processes, metrics such as citation counts, journal impact
+factors, and the \emph{h}-index are now commonly incorporated into
+hiring and promotion decisions \citep{mckiernan_metaresearch_2019} and
+are seen as more important to more vulnerable untenured scholars than
+tenured ones \citep{niles_why_2020}. Qualitative expert assessment that
+involves hours of engagement with the work summarized by metrics may be
+devalued by administrators motivated by a logic that privileges
+competition, central decision-making, and market valuation
+\citep{berg_producing_2016}.
+
+Critics have raised concerns about how metrics transform scholarship
+into a capitalist-like market at the core of neoliberalization resulting
+in ``perverse incentives'' for researchers to publish shoddy or
+fraudulent work \citep{edwards_academic_2017}, while simultaneously
+resulting in mental health trauma for academic workers experiencing
+hypercompetitive markets and suspicious management
+\citep{forrester_mental_2021}. Administrators' continued reliance upon
+metrics serves as a modern form of Taylorism, a production principle
+used in the early twentieth century that pursued technological solutions
+to the ``problem'' of worker-related inefficiencies on the shop floor
+with little regard to employee satisfaction or wellness
+\citep{braverman_labor_1998}. By using technology to set the nature and
+pace of production, owners and managers gain greater control over the
+labor process itself. Prioritizing metrics creates a demand for quantity
+over quality, and by following these demands academic laborers risk
+surrendering some degree of control over their own labor processes.
+
+\hypertarget{the-case-of-the-h-index}{%
+\subsection{The case of the h-index}\label{the-case-of-the-h-index}}
+
+One key metric used for evaluation purposes is the \emph{h}-index or
+Hirsch Index. Physicist Jorge Hirsch proposed the \emph{h}-index as a
+``useful index to characterize the scientific output of a researcher''
+in a 2005 article in the Proceedings of the National Academy of Sciences
+\citep{hirsch_index_2005}. While acknowledging the ``potentially
+distasteful'' use of metrics for evaluation, he presents quantification
+as an economical means of evaluating impact. In this highly cited
+article, Hirsch defines the \emph{h}-index as follows: ``A scientist has
+index \(h\) if \(h\) of his or her \(N_p\) papers have at least \(h\)
+citations each and the other \((N_p-h)\) papers have \(\le h\) citations
+each'' (p.~16569). In other words, a scholar with 10 of their 100
+publications with a citation count of 10 or higher will have an
+\emph{h}-index of 10. He goes on to specify - again with some
+acknowledgement that metrics offer a ``rough approximation'' of a
+research portfolio - how and when the index could be put to use: ``Based
+on typical h and m values found, I suggest (with large error bars) that
+for faculty at major research universities, h 12 might be a typical
+value for advancement to tenure (associate professor) and that
+\(h \approx 18\) might be a typical value for advancement to full
+professor'' (p.~16571). In sum, this publication announced a simple
+means of evaluating research impact and permission to use the metric for
+evaluation purposes.
+
+The immediate response to the \emph{h}-index was largely positive with
+features in top scientific journals; however, some criticism of the
+index also quickly appeared \citep{barnes_hindex_2017}. Critics
+identified a range of issues from the relationship between the
+\emph{h}-index and career length as well as the effect of self-citation
+\citep[see][ among others]{kelly_index_2006, purvis_index_2006}.
+However, the \emph{h}-index and variants have proven enormously popular
+both in the bibliometrics and science of science communities and among
+university administrators seeking quick and cheap ways to evaluate
+scholars, including universities and science funding agencies
+\citep{barnes_hindex_2017}. The \emph{h}-index is included as a key
+quantitative metric for annual review and/or tenure and promotion in
+faculty handbooks in a range of departments and schools in the United
+States (c.f., handbooks from the Boston University School of Public
+Health \citep{bostonuniversity_boston_2018}, the Ohio State University
+Department of Surgery \citep{ohiostateuniversity_department_2014} or
+Oregon State University's College of Business
+\citep{oregonstateuniversity_oregon_2020}. Survey research in Germany on
+whether and how scholars understand the importance of the \emph{h}-index
+indicate that natural scientists widely understand the importance of the
+\emph{h}-index to their careers, but scholars in the humanities and
+social sciences do not \citep{kamrani_researchers_2021}. This variation
+is unfortunate as quantitative metrics are widely applied in German
+universities as elsewhere. In sum, despite some criticism, the
+\emph{h}-index has been widely adopted although perhaps not widely
+understood. This analysis contributes to the broader literature on
+metrics and science by examining the factors contributing to within and
+between discipline variation in the \emph{h}-index.
+
+\hypertarget{hypotheses}{%
+\section{Hypotheses}\label{hypotheses}}
+
+We develop the following hypotheses to better understand within and
+between discipline differences in the \emph{h}-index, or Hirsch Index,
+based on the prior literature. Consistent with work on gender inequality
+and science and particularly work on the productivity and prestige
+puzzles, we examine the following:
+
+\hypertarget{within-discipline-hypotheses}{%
+\subsection{Within discipline
+hypotheses}\label{within-discipline-hypotheses}}
+
+In light of research on team science and its impact on academic careers,
+we examine the following:
+
+\begin{quote}
+\emph{Female Penalty Hypothesis (H1):} Authors with names more common
+among women will have lower \emph{h}-index scores, on average.
+\end{quote}
+
+\begin{quote}
+\emph{Sole Author Hypothesis (H2):} Authors with more sole-authored
+publications will have lower \emph{h}-index scores, on average.
+\end{quote}
+
+\hypertarget{between-disciplines-hypotheses}{%
+\subsection{Between disciplines
+ypotheses}\label{between-disciplines-hypotheses}}
+
+Although less well understood, based on the research describing
+disciplinary differences in culture, such as propensity to collaborate,
+and material differences in resources, we examine three related
+hypotheses:
+
+\begin{quote}
+\emph{Disciplinary Differences Hypothesis (H3a):} A substantial amount
+of the variation in the \emph{h}-index likely occurs between
+disciplines.
+\end{quote}
+
+\begin{quote}
+\emph{Feminized Discipline Hypothesis (H3b):} Disciplines with a higher
+share of women will have lower \emph{h}-index scores, on average.
+\end{quote}
+
+\begin{quote}
+\emph{Teamwork Variation Hypothesis (H3c):} Disciplines with a higher
+share of sole authorship will have lower \emph{h}-index scores, on
+average.
+\end{quote}
+
+\hypertarget{field-level-hypothesis}{%
+\subsection{Field-level Hypothesis}\label{field-level-hypothesis}}
+
+Finally, a field-level view may help disentangle cultural and
+compositional effects and shed light on the question of
+``apples-to-oranges'' comparison within and between fields. We,
+therefore, evaluate the following hypothesis:
+
+\begin{quote}
+\emph{Field Variation Hypothesis (H4):} Significant field differences
+will exist in terms of within and between disciplinary differences in
+the \emph{h}-index.
+\end{quote}
+
+\hypertarget{materials-and-methods}{%
+\section{Materials and methods}\label{materials-and-methods}}
+
+To evaluate these hypotheses, we analyze data on high performing
+scholars according to well-known metrics. Ioannidis and coauthors
+\citep{ioannidis_standardized_2019} collected author-level bibliometrics
+on 100,000 high performing scholars from the Scopus database. They
+updated this data through 2019 and expanded to include the top 2\% of
+authors overall across a wide range of disciplines
+\citep{ioannidis_updated_2020}. We use the most up-to-date data for our
+analyses. These data suffer from several limitations, including coverage
+differences between disciplines within the Scopus database
+\citep{mongeon_journal_2016, singh_journal_2021}. Nonetheless, these
+well-curated data represent a unique opportunity to evaluate within and
+between disciplinary differences in \emph{h}-index scores. We also see
+these data as offering a conservative test of such differences as
+variation is likely to widen when moving beyond scholars who are in the
+top 2\% on these metrics.
+
+We reduce the data along several dimensions to address some of the
+limitations of the Scopus database and for analytic purposes. First, we
+limit the analysis only to the 68,016 scholars in the United States to
+account for geographic variation in the Scopus database and geographic
+variation in how universities are structured. We then further restrict
+the analytical data to those who first published in 1960 or after and
+those who last published in 2017 or later to identify active scholars
+and reduce the impact of historical, rather than contemporary, patterns.
+These reductions, along with a small number of missing values on the
+variables below, leave us a final analytical sample size of 54,825
+scholars nested in 174 disciplines.
+
+The dependent variable for the analysis is the \emph{h}-index. The key
+independent variables are the probability of female name and the
+percentage of sole authored publications. We also include additional
+control variables of the count of scholars from the same university in
+the same dataset to measure highly productive university environments, a
+specialization score measured as the proportion of total articles
+appearing in the main discipline for each author, and career length,
+measured by the years between first and last publication.
+
+Estimating gender is problematic for numerous reasons including the
+typical reliance on government-provided data that often assumes and
+contributes to the gender binary \citep{mihaljevic_reflections_2019},
+and these methods should be used with caution and only when necessary.
+In this case, names are our only means of estimating gender. Here, we
+draw on first names data from the 1940-1990 US Social Security
+Administration to assign a probability of female name using the gender
+package in R \citep{blevins_jane_2015}. We use this probability directly
+in our models, rather than assigning an arbitrary cutoff for a binary
+gender assignment. A substantial number of cases (18\%) are missing on
+this variable, usually because they were identified by initials rather
+than a full first name. Rather than lose this many cases, we use
+multiple imputation to assign values to the probability of female name
+based on the respondent's other variables, including discipline. We
+impute five complete datasets and pool analyses across these datasets
+for all of the models presented here.
+
+We also consider how the patterns we observe may differ within large
+fields among disciplines. To explore this issue, we divide the total 174
+disciplines into five large fields of the humanities, medical (including
+public health), professional, social sciences (including policy), and
+STEM. These fields differ from the fields provided in the original data
+but more closely correspond to the division of disciplines within the
+American academy. The supplementary materials show a full list of
+disciplines, which disciplines were assigned to each field, and summary
+statistics for each discipline.
+
+Table~\ref{tbl-desc} presents the descriptive statistics for the
+variables used in the analyses for the total sample and across the five
+different fields. Differences across fields in both the \emph{h}-index
+and independent variables are notable. For example, scholars in the
+humanities have the highest average probability of a female name at
+31.1\%, while scholars in the STEM field have the lowest average
+probability at 13.5\%. Scholars in the humanities also have the highest
+percentage of sole authored work at 57.8\% while scholars in the medical
+fields have the lowest with only 8.1\%. The much lower mean
+\emph{h}-index among scholars in the humanities (19.1) relative to other
+disciplines is consistent with the expectation of gender differences and
+a penalty for sole-authored work. However, to more accurately gauge
+these relationships we turn to a modeling strategy that can estimate
+associations both within and between disciplines.
+
+\hypertarget{tbl-desc}{}
+\setlength{\LTpost}{0mm}
+\begin{table}
+\begin{adjustwidth}{-1.5in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
+\caption{\label{tbl-desc}Mean and standard deviation on key variables for the whole sample and by
+field, based on first complete dataset }\tabularnewline
+\begin{tabular}{lrrrrrr}
+%\toprule
+\hline
+ &  & \multicolumn{5}{c}{Fields} \\ 
+%\cmidrule(lr){3-7}
+Variable & All & Humanities & Medical & Prof. & Soc. Sci. & STEM \\ 
+\hline
+%\midrule
+H-index & 44.1 (20.9) & 19.8 (10.4) & 52.2 (21.7) & 29.4 (10.7) & 33.1 (15.0) & 38.8 (17.6) \\ 
+Percent female & 19.1 (37.7) & 30.8 (45.1) & 22.1 (40.1) & 20.7 (39.1) & 28.3 (43.8) & 13.7 (32.3) \\ 
+Percent sole author & 10.7 (14.4) & 56.0 (31.4) & 8.1~~(9.4) & 18.2 (16.8) & 24.6 (22.9) & 9.1 (11.5) \\ 
+Career length & 35.3 (10.1) & 33.6 (11.2) & 36.2~~(9.3) & 32.2~~(9.9) & 34.7 (10.6) & 34.7 (10.6) \\ 
+Specialization & 0.73 (0.19) & 0.64 (0.21) & 0.76 (0.18) & 0.75 (0.21) & 0.72 (0.19) & 0.70 (0.20) \\ 
+University count & 198 (202) & 255 (204) & 185 (201) & 166 (203) & 246 (209) & 204 (200) \\ 
+N & 54,825 & 856 & 25,581 & 1,228 & 3,987 & 23,173 \\ 
+\hline
+\end{tabular}
+%\bottomrule
+\begin{minipage}{\linewidth}
+Note: standard deviations shown in parenthesis\\
+\end{minipage}
+\end{adjustwidth}
+\end{table}
+
+
+\hypertarget{analytic-strategy}{%
+\section{Analytic Strategy}\label{analytic-strategy}}
+
+We model variation in \emph{h}-score indices across scholars using
+random effects within-between (REWB) models \citep{bell_fixed_2019}.
+REWB models are a variant of multilevel models that allows researchers
+to estimate the effect of a given predictor variable both within (as per
+a standard ``fixed effects'' model) and between the higher level
+clusters (in this case disciplines). In general, the structure of the
+REWB model is:
+
+\[y_{ij}=\beta_{0j}+\beta_1(x_{ij}-\bar{x}_{.j})+\beta_2(\bar{x}_{.j})+\upsilon_{0j}+\epsilon_{ij}\]
+
+Where \(y_{ij}\) is the outcome for the \(i\)th unit in the \(j\)th
+cluster and \(x_{ij}\) is the predictor variable for the \(i\)th unit in
+the \(j\)th cluster. \(\upsilon_{0j}\) and \(\epsilon_{ij}\) are
+cluster-level and individual-level random errors, respectively. Because
+the mean of the \(x\) for cluster \(j\) (\(\bar{x}_{.j}\)) is included
+in the model and the \(x_{ij}\) values are mean centered by cluster, the
+\(\beta_1\) parameter is identical to that of a fixed-effects model in
+which all between variance is absorbed by cluster-level dummies.
+However, the REWB model also includes an estimate of the between cluster
+effect of \(x\) estimated in \(\beta_2\), which is impossible in a
+fixed-effects model. This \(\beta_2\) term is equivalent to the estimate
+obtained by aggregating data to the higher level and examining the
+relationship between the means of \(x\) and \(y\). Thus, this model
+combines the advantage of absorbing all cluster level differences when
+estimating individual level effects, while at the same time allowing for
+an analysis of the ``contextual'' effects of disciplines themselves.
+
+We use this feature to estimate both within and between effects of
+gender and sole authorship on a scholar's \emph{h}-index. We use 0-1
+coding of the probability of a female name at the individual level to
+mimic the interpretation typical of a dummy variable on gender. We use
+the mean probability of a female name in percentage terms (0-100) at the
+disciplinary level to provide an estimate of the feminization of a given
+discipline. For sole authorship, we use the percent of a scholar's
+articles that are sole-authored at the individual level. At the
+disciplinary level, we use a natural log transformation of the mean
+percent sole-authorship variable because exploratory analysis indicated
+a negative diminishing returns relationship between sole-authorship and
+the \emph{h}-index at this level. Both of the individual level variables
+are mean centered by discipline so that the interpretation of their
+effect is solely among scholars within the same discipline. The control
+variables of career length, specialization, and university publication
+count are only included as grand mean centered individual level
+variables. We also standardize university publication count to have a
+mean of zero and a standard deviation of one for ease of interpretation.
+
+In addition to the models for the full data, we also run these same
+models separately for each of these fields to explore differences in
+patterns across fields.
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+We begin by analyzing a partition of the variance in the \emph{h}-index
+within and between disciplines in a null multilevel model. The
+percentage of the total variation in the \emph{h}-index that occurs
+between disciplines is given by the intraclass correlation coefficient
+(ICC) of this model. Table~\ref{tbl-partition} shows the ICC for the
+model across all observations as well as separately by field. In total,
+roughly a third of the variation in the \emph{h}-index occurs between
+disciplines. This substantial heterogeneity across disciplines indicates
+that comparing the \emph{h}-index across disciplines is problematic
+because of overall differences in culture, productivity, and citation
+patterns across disciplines.
+
+\hypertarget{tbl-partition}{}
+\begin{longtable}{lrrrrrr}
+\caption{\label{tbl-partition}Parition of variance in \emph{h}-indexscores between and within
+disciplines }\tabularnewline
+
+\toprule
+ &  & \multicolumn{5}{c}{Field} \\ 
+\cmidrule(lr){3-7}
+Grouping & All & Humanities & Medical & Prof. & Soc. Sci & STEM \\ 
+\midrule
+Between discipline & $32.0\%$ & $53.6\%$ & $20.4\%$ & $16.2\%$ & $31.3\%$ & $20.1\%$ \\ 
+Within discipline & $68.0\%$ & $46.4\%$ & $79.6\%$ & $83.8\%$ & $68.7\%$ & $79.9\%$ \\ 
+\bottomrule
+\end{longtable}
+
+The ICC is substantial across all fields as well, but also varies
+substantially. Slightly more than half the variation in the
+\emph{h}-index among scholars in the humanities is between disciplines,
+while only one-fifth or less of the variation in the \emph{h}-index is
+between disciplines among scholars in the medical, STEM, and
+professional fields. Some fields, like the medical, STEM, and
+professional fields, seem to have more shared culture and practices in
+terms of publishing productivity, while in other fields, we observe
+substantial disciplinary heterogeneity. Scholars in fields with greater
+commonality may mispercieve the comparability of the \emph{h}-index
+across disciplines more broadly.
+
+Table~\ref{tbl-models-full} presents the multilevel models predicting
+the \emph{h}-index across all disciplines. Model 1 predicts
+\emph{h}-index scores by the individual and disciplinary variables for
+gender. Model 2 predicts \emph{h}-index scores by the individual and
+disciplinary variables for sole authorship. Model 3 includes both sets
+of predictor variables from Models 1 and 2 together. Finally, Model 4
+includes additional control variables for career length, specialization,
+and highly productive universities. The estimates for the key predictor
+variables of gender and sole-authorship are robust to these additional
+controls, although gender differences do decline in size somewhat. We
+use the results from Model 4 to describe overall patterns below, except
+where noted otherwise.
+
+\hypertarget{tbl-models-full}{}
+\begin{table}[!t]
+\caption{\label{tbl-models-full}Multilevel models predicting \emph{h}-index score across all disciplines
+with clustering at the disciplinary level. }
+\begin{center}
+\begin{tabular}{l c c c c}
+\hline
+ & Model 1 & Model 2 & Model 3 & Model 4 \\
+\hline
+Intercept                               & $39.32^{*}$ & $69.64^{*}$  & $68.89^{*}$  & $68.95^{*}$  \\
+                                        & $(1.77)$    & $(2.12)$     & $(2.13)$     & $(2.06)$     \\
+Prob. [0-1] of female name$\dagger$     & $-2.95^{*}$ &              & $-3.64^{*}$  & $-2.60^{*}$  \\
+                                        & $(0.23)$    &              & $(0.22)$     & $(0.23)$     \\
+Disc. mean percent female name          & $-0.15^{*}$ &              & $0.10^{*}$   & $0.11^{*}$   \\
+                                        & $(0.07)$    &              & $(0.05)$     & $(0.05)$     \\
+Percent sole authored pubs$\dagger$     &             & $-0.41^{*}$  & $-0.42^{*}$  & $-0.47^{*}$  \\
+                                        &             & $(0.01)$     & $(0.01)$     & $(0.01)$     \\
+Disc. mean percent sole authored (log)  &             & $-12.87^{*}$ & $-13.36^{*}$ & $-13.50^{*}$ \\
+                                        &             & $(0.79)$     & $(0.82)$     & $(0.80)$     \\
+Career length*                          &             &              &              & $0.35^{*}$   \\
+                                        &             &              &              & $(0.01)$     \\
+Specialization [0-1]*                   &             &              &              & $-2.66^{*}$  \\
+                                        &             &              &              & $(0.44)$     \\
+Highly productive uni. count (stdized)* &             &              &              & $1.72^{*}$   \\
+                                        &             &              &              & $(0.07)$     \\
+\hline
+Residual SD between discipline          & $11.86$     & $7.41$       & $7.34$       & $7.06$       \\
+Residual SD within discipline           & $17.41$     & $16.83$      & $16.78$      & $16.34$      \\
+N (discipline)                          & $174$       & $174$        & $174$        & $174$        \\
+N (individual)                          & $54825$     & $54825$      & $54825$      & $54825$      \\
+\hline
+\multicolumn{5}{l}{\scriptsize{$^{*}p<0.05$. Standard errors shown in parenthesis. $\dagger$=discipline mean centered; *=grand mean centered.}}
+\end{tabular}
+\label{table:coefficients}
+\end{center}
+\end{table}
+
+Consistent with the productivity puzzle, female scholars have an
+\emph{h}-index approximately 2.6 points lower than male scholars in the
+same discipline, on average. More frequent sole-authorship is also
+associated with a lower \emph{h}-index. Within the same discipline, a
+one percentage point increase in the percent of sole-authored
+publications for a given scholar is associated with a 0.47 lower
+\emph{h}-index score, on average.
+
+Additionally, we find substantial differences between disciplines in
+\emph{h}-index scores based on the feminization of the discipline and
+sole-authorship norms. Sole authorship behaves as expected. A one
+percent increase in the mean percent sole-authored publications in a
+discipline is associated with a 0.135 decline in the mean \emph{h}-index
+for that discipline. Thus, cultural norms of more sole-authorship within
+a discipline contribute to lower overall \emph{h}-index scores for that
+discipline.
+
+The feminization of a discipline as indicated by the mean percent female
+name within the discipline has a more complex relationship to
+\emph{h}-index scores. Model 1 shows a slightly negative relationship
+between percent female and mean \emph{h}-index scores across
+disciplines. However, once the sole-authored variables were added to the
+model, this relationship reverses direction and becomes slightly
+positive. In the final model, we estimate that a one percentage point
+increase in the percent female name within a discipline is associated
+with a 0.11 increase in the mean \emph{h}-index score for a discipline.
+The underlying issue is that highly feminized disciplines also tend to
+be more focused on sole-authorship (\(r=0.30\)). After accounting for
+this disadvantage, feminized disciplines actually have a slight
+advantage, although within disciplines, women are still disadvantaged
+relative to men.
+
+Table~\ref{tbl-models-field} presents models equivalent to Model 4 in
+Table~\ref{tbl-models-full}, but separated by field. The most notable
+change in these sets of models is that there is no observable effect of
+disciplinary feminization within these fields, whereas we observed a
+moderate positive effect of disciplinary feminization across all
+disciplines. This finding implies that the slight positive effect of
+disciplinary feminization was driven by compositional issues between
+fields and differences in overall field productivity. The remaining
+variables are consistent in direction, but vary substantially in
+magnitude across fields. The within-discipline differences by gender are
+smallest in the humanities and STEM fields and largest in the medical
+field. Similarly, the within-discipline differences by sole-authorship
+are smallest in the humanities and largest in the medical field. The
+between-discipline effect of sole-authorship is largest in the medical
+field and smallest in the professional field where it is only a third as
+large. Overall, the heterogeneity of these effects across fields
+indicates another problem of comparability when attempting to compare
+scholars across disciplines and fields.
+
+\hypertarget{tbl-models-field}{}
+\begin{table}[!t]
+\begin{adjustwidth}{-1.5in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
+\caption{\label{tbl-models-field}Multilevel models predicting \emph{h}-indexscore within each field.
+Clustering at the disciplinary level. }
+\begin{center}
+\begin{tabular}{l c c c c c}
+\hline
+ & Humanities & Medical & Prof. & Soc. Sci. & STEM \\
+\hline
+Intercept                               & $79.11^{*}$  & $93.03^{*}$  & $47.21^{*}$ & $77.62^{*}$  & $60.05^{*}$  \\
+                                        & $(12.61)$    & $(6.37)$     & $(8.33)$    & $(4.57)$     & $(5.04)$     \\
+Prob. [0-1] of female name$\dagger$     & $-1.35^{*}$  & $-3.67^{*}$  & $-1.68^{*}$ & $-2.00^{*}$  & $-1.33^{*}$  \\
+                                        & $(0.51)$     & $(0.33)$     & $(0.72)$    & $(0.44)$     & $(0.38)$     \\
+Disc. mean percent female name          & $-0.00$      & $0.06$       & $0.01$      & $-0.13^{*}$  & $0.06$       \\
+                                        & $(0.08)$     & $(0.08)$     & $(0.21)$    & $(0.05)$     & $(0.17)$     \\
+Percent sole authored pubs$\dagger$     & $-0.16^{*}$  & $-0.66^{*}$  & $-0.26^{*}$ & $-0.24^{*}$  & $-0.49^{*}$  \\
+                                        & $(0.01)$     & $(0.01)$     & $(0.02)$    & $(0.01)$     & $(0.01)$     \\
+Disc. mean percent sole authored (log)  & $-15.40^{*}$ & $-21.73^{*}$ & $-6.94^{*}$ & $-13.62^{*}$ & $-10.79^{*}$ \\
+                                        & $(3.09)$     & $(3.03)$     & $(3.46)$    & $(1.20)$     & $(1.81)$     \\
+Career length*                          & $0.13^{*}$   & $0.45^{*}$   & $0.29^{*}$  & $0.31^{*}$   & $0.30^{*}$   \\
+                                        & $(0.02)$     & $(0.01)$     & $(0.03)$    & $(0.02)$     & $(0.01)$     \\
+Specialization [0-1]*                   & $-3.16^{*}$  & $0.03$       & $-0.49$     & $-6.32^{*}$  & $-4.37^{*}$  \\
+                                        & $(1.10)$     & $(0.79)$     & $(1.55)$    & $(1.03)$     & $(0.57)$     \\
+Highly productive uni. count (stdized)* & $0.55^{*}$   & $1.51^{*}$   & $0.60^{*}$  & $0.37^{*}$   & $2.16^{*}$   \\
+                                        & $(0.21)$     & $(0.12)$     & $(0.29)$    & $(0.18)$     & $(0.10)$     \\
+\hline
+Residual SD between discipline          & $4.52$       & $6.71$       & $4.27$      & $3.14$       & $6.23$       \\
+Residual SD within discipline           & $5.98$       & $18.69$      & $9.48$      & $11.31$      & $14.41$      \\
+N (discipline)                          & $15$         & $52$         & $12$        & $28$         & $67$         \\
+N (individual)                          & $856$        & $25581$      & $1228$      & $3987$       & $23173$      \\
+\hline
+\multicolumn{6}{l}{\scriptsize{$^{*}p<0.05$. Standard errors shown in parenthesis. $\dagger$=discipline mean centered; *=grand mean centered.}}
+\end{tabular}
+\label{table:coefficients}
+\end{center}
+\end{adjustwidth}
+\end{table}
+
+\hypertarget{conclusion}{%
+\section{Conclusion}\label{conclusion}}
+
+The \emph{h}-index, or Hirsch Index, is a widely used metric used for
+performance evaluation or quality valuation in the sciences and across
+the academy. This research aimed to contribute to the literature on
+bibliometrics and inequality in science by examining both within and
+between discipline differences in the \emph{h}-index. We used REWB
+models to predict the \emph{h}-index for high-performing scholars in 174
+disciplines. Results indicate that gender and sole authorship affect the
+\emph{h}-index providing support for our female penalty (H1) and sole
+authorship hypotheses (H2). We find evidence of between discipline
+differences as well. Results provide support for the disciplinary
+differences hypothesis (H3a), although the extent of disciplinary
+differences varies by field. Significant differences also exist between
+disciplines in terms of sole authorship, supporting the teamwork
+variation hypothesis (H3c). Support for the feminized discipline
+hypothesis (H3b) is mixed. Results indicate that a small negative
+feminized discipline effect reverses when including sole authorship and
+that between discipline effects likely result from compositional
+differences across fields confirming the field variation hypothesis
+(H4). In sum, important differences exist within and between disciplines
+in the \emph{h}-index. Moreover, this analysis provides evidence that
+across field evaluation with the \emph{h}-index risks apples-to-oranges
+comparison.
+
+Data limitations suggest several avenues for future research. First, the
+data select on high-performing scholars, and, therefore do not
+generalize to the broader population of academics. While we believe that
+this limitation likely results in a conservative estimate of within and
+between discipline inequality, more data on academia writ large are
+required to verify this claim. Second, the estimation of gender suffers
+from well-known limitations. Data linking self-reported gender beyond
+the gender binary to citation data would be a welcome resource. Gender
+estimation also required reducing the dataset by country. Third, and
+along similar lines, most scholarship on publication and inequality
+focuses on gender as it is possible, despite these weaknesses to infer
+gender from names and other aspects of inequality, like race and class,
+remain under-studied. Future research would benefit from data linking
+self-reported race and class to large bibliometric data to better
+understand the broad effects of inequality in academic work.
+
+In conclusion, this analysis provides further evidence that metrics in
+performance evaluation in academia should be used with caution, if at
+all. Metrics are subject to within and between discipline biases that
+severely hinder their value in making both intradisciplinary and
+interdisciplinary comparisons. Of course, these comparisons are exactly
+what the quantification of scholarly work proposes to facilitate. Like
+other forms of quantification, academic metrics simplify complex
+processes at a cost. This cost can reinforce existing inequalities and
+even generate new ``automated inequalities''
+\citep{eubanks_automating_2018}. Those using metrics for evaluation, as
+Koopman and Galton \citep{koopman_galton_2023} writes about data usage
+generally, ``need to be fervently attentive to the ways in which
+inequalities may be designed into their data'' (pg. 16). In this vein,
+this analysis provided evidence of within and between discipline
+differences in the \emph{h}-index with a focus on gender, but there is
+reason to believe that the bias embedded in scholarly metrics extends to
+other dimensions of power, including race, class, and sexual
+orientation.
+
+\hypertarget{acknowledgements}{%
+\section{Acknowledgements}\label{acknowledgements}}
+
+the authors have no acknowledgements to provide.
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\renewcommand{\bibsection}{}
+\begin{thebibliography}{10}
+
+\bibitem{hofstra_diversity_2020}
+Hofstra B, Kulkarni VV, {Munoz-Najar Galvez} S, He B, Jurafsky D, McFarland DA.
+\newblock The Diversity\textendash Innovation Paradox in Science.
+\newblock Proceedings of the National Academy of Sciences. 2020;117(17):9284--9291.
+
+\bibitem{lariviere_bibliometrics_2013}
+Larivi{\`e}re V, Ni C, Gingras Y, Cronin B, Sugimoto CR.
+\newblock Bibliometrics: {{Global}} Gender Disparities in Science.
+\newblock Nature. 2013;504(7479):211--213.
+
+\bibitem{xie_sex_1998}
+Xie Y, Shauman KA.
+\newblock Sex {{Differences}} in {{Research Productivity}}: {{New Evidence}} about an {{Old Puzzle}}.
+\newblock American Sociological Review. 1998;63(6):847--870.
+\newblock doi:{10.2307/2657505}.
+
+\bibitem{fortunato_science_2018}
+Fortunato S, Bergstrom CT, B{\"o}rner K, Evans JA, Helbing D, Milojevi{\'c} S, et~al.
+\newblock Science of Science.
+\newblock Science. 2018;359(6379):eaao0185.
+\newblock doi:{10.1126/science.aao0185}.
+
+\bibitem{gardner_conceptualizing_2009}
+Gardner SK.
+\newblock Conceptualizing {{Success}} in {{Doctoral Education}}: {{Perspectives}} of {{Faculty}} in {{Seven Disciplines}}.
+\newblock The Review of Higher Education. 2009;32(3):383--406.
+\newblock doi:{10.1353/rhe.0.0075}.
+
+\bibitem{stephan_how_2012}
+Stephan P.
+\newblock How Economics Shapes Science.
+\newblock {Harvard University Press}; 2012.
+
+\bibitem{hicks_bibliometrics_2015}
+Hicks D, Wouters P, Waltman L, {de Rijcke} S, Rafols I.
+\newblock Bibliometrics: {{The Leiden Manifesto}} for Research Metrics.
+\newblock Nature. 2015;520(7548):429--431.
+\newblock doi:{10.1038/520429a}.
+
+\bibitem{ioannidis_standardized_2019}
+Ioannidis JPA, Baas J, Klavans R, Boyack KW.
+\newblock A Standardized Citation Metrics Author Database Annotated for Scientific Field.
+\newblock PLOS Biology. 2019;17(8):e3000384.
+\newblock doi:{10.1371/journal.pbio.3000384}.
+
+\bibitem{fox_gender_2017}
+Fox MF, Whittington K, Linkova M.
+\newblock Gender,(in) Equity, and the Scientific Workforce.
+\newblock Handbook of science and technology studies. 2017; p. 701--731.
+
+\bibitem{long_scientific_1995}
+Long JS, Fox MF.
+\newblock Scientific Careers: {{Universalism}} and Particularism.
+\newblock Annual review of sociology. 1995;21(1):45--71.
+
+\bibitem{fox_gender_2005}
+Fox MF.
+\newblock Gender, Family Characteristics, and Publication Productivity among Scientists.
+\newblock Social Studies of Science. 2005;35(1):131--150.
+
+\bibitem{grant_revisiting_2000}
+Grant L, Kennelly I, Ward KB.
+\newblock Revisiting the Gender, Marriage, and Parenthood Puzzle in Scientific Careers.
+\newblock Women's Studies Quarterly. 2000;28(1/2):62--85.
+
+\bibitem{morgan_unequal_2021}
+Morgan AC, Way SF, Hoefer MJD, Larremore DB, Galesic M, Clauset A.
+\newblock The Unequal Impact of Parenthood in Academia.
+\newblock Science Advances. 2021;7(9):eabd1996.
+\newblock doi:{10.1126/sciadv.abd1996}.
+
+\bibitem{katz_metrics_2020}
+Katz Y, Matter U.
+\newblock Metrics of {{Inequality}}: {{The Concentration}} of {{Resources}} in the {{U}}.{{S}}. {{Biomedical Elite}}.
+\newblock Science as Culture. 2020;29(4):475--502.
+\newblock doi:{10.1080/09505431.2019.1694882}.
+
+\bibitem{mennicken_what_2019}
+Mennicken A, Espeland WN.
+\newblock What's New with Numbers? {{Sociological}} Approaches to the Study of Quantification.
+\newblock Annual Review of Sociology. 2019;45:223--245.
+
+\bibitem{edwards_academic_2017}
+Edwards MA, Roy S.
+\newblock Academic {{Research}} in the 21st {{Century}}: {{Maintaining Scientific Integrity}} in a {{Climate}} of {{Perverse Incentives}} and {{Hypercompetition}}.
+\newblock Environmental Engineering Science. 2017;34(1):51--61.
+\newblock doi:{10.1089/ees.2016.0223}.
+
+\bibitem{muller_tyranny_2019}
+Muller JZ.
+\newblock The Tyranny of Metrics.
+\newblock {Princeton University Press}; 2019.
+
+\bibitem{siler_who_2022}
+Siler K, Larivi{\`e}re V.
+\newblock Who Games Metrics and Rankings? {{Institutional}} Niches and Journal Impact Factor Inflation.
+\newblock Research Policy. 2022;51(10):104608.
+
+\bibitem{bihari_review_2023}
+Bihari A, Tripathi S, Deepak A.
+\newblock A Review on H-Index and Its Alternative Indices.
+\newblock Journal of Information Science. 2023;49(3):624--665.
+\newblock doi:{10.1177/01655515211014478}.
+
+\bibitem{fox_gender_2020}
+Fox MF.
+\newblock Gender, Science, and Academic Rank: {{Key}} Issues and Approaches.
+\newblock Quantitative Science Studies. 2020;1(3):1001--1006.
+
+\bibitem{cech_professional_2011}
+Cech E, Rubineau B, Silbey S, Seron C.
+\newblock Professional {{Role Confidence}} and {{Gendered Persistence}} in {{Engineering}}.
+\newblock American Sociological Review. 2011;76(5):641--666.
+\newblock doi:{10.1177/0003122411420815}.
+
+\bibitem{ma_math_2021}
+Ma Y, Xiao S.
+\newblock Math and {{Science Identity Change}} and {{Paths}} into and out of {{STEM}}: {{Gender}} and {{Racial Disparities}}.
+\newblock Socius. 2021;7:23780231211001978.
+\newblock doi:{10.1177/23780231211001978}.
+
+\bibitem{penner_men_2019}
+Penner AM, Willer R.
+\newblock Men's {{Overpersistence}} and the {{Gender Gap}} in {{Science}} and {{Mathematics}}.
+\newblock Socius. 2019;5:2378023118821836.
+\newblock doi:{10.1177/2378023118821836}.
+
+\bibitem{weeden_degrees_2017a}
+Weeden KA, Th{\'e}baud S, Gelbgiser D.
+\newblock Degrees of Difference: {{Gender}} Segregation of {{US}} Doctorates by Field and Program Prestige.
+\newblock Sociological Science. 2017;4:123--150.
+
+\bibitem{king_pandemic_2021}
+King MM, Frederickson ME.
+\newblock The {{Pandemic Penalty}}: {{The Gendered Effects}} of {{COVID-19}} on {{Scientific Productivity}}.
+\newblock Socius. 2021;7:23780231211006977.
+\newblock doi:{10.1177/23780231211006977}.
+
+\bibitem{cole_productivity_1984}
+Cole J, Zuckerman H.
+\newblock The {{Productivity Puzzle}}.
+\newblock Advances in Motivation and Achievement. 1984; p. 217--258.
+
+\bibitem{leahey_gender_2006}
+Leahey E.
+\newblock Gender {{Differences}} in {{Productivity}}: {{Research Specialization}} as a {{Missing Link}}.
+\newblock Gender \& Society. 2006;20(6):754--780.
+\newblock doi:{10.1177/0891243206293030}.
+
+\bibitem{leahey_not_2007}
+Leahey E.
+\newblock Not by {{Productivity Alone}}: {{How Visibility}} and {{Specialization Contribute}} to {{Academic Earnings}}.
+\newblock American Sociological Review. 2007;72(4):533--561.
+\newblock doi:{10.1177/000312240707200403}.
+
+\bibitem{huang_historical_2020}
+Huang J, Gates AJ, Sinatra R, Barab{\'a}si AL.
+\newblock Historical Comparison of Gender Inequality in Scientific Careers across Countries and Disciplines.
+\newblock Proceedings of the National Academy of Sciences. 2020;117(9):4609--4616.
+\newblock doi:{10.1073/pnas.1914221117}.
+
+\bibitem{light_gender_2013}
+Light R.
+\newblock Gender Inequality and the Structure of Occupational Identity: {{The}} Case of Elite Sociological Publication.
+\newblock In: Networks, Work and Inequality. vol.~24. {Emerald Group Publishing Limited}; 2013. p. 239--268.
+
+\bibitem{light_gender_2009}
+Light R.
+\newblock Gender Stratification and Publication in {{American}} Science: {{Turning}} the Tools of Science Inward.
+\newblock Sociology Compass. 2009;3(4):721--733.
+
+\bibitem{lynn_rare_2019}
+Lynn FB, Noonan MC, Sauder M, Andersson MA.
+\newblock A Rare Case of Gender Parity in Academia.
+\newblock Social forces. 2019;98(2):518--547.
+
+\bibitem{moody_structure_2004}
+Moody J.
+\newblock The Structure of a Social Science Collaboration Network: {{Disciplinary}} Cohesion from 1963 to 1999.
+\newblock American sociological review. 2004;69(2):213--238.
+
+\bibitem{jadidi_gender_2018}
+Jadidi M, Karimi F, Lietz H, Wagner C.
+\newblock Gender Disparities in Science? {{Dropout}}, Productivity, Collaborations and Success of Male and Female Computer Scientists.
+\newblock Advances in Complex Systems. 2018;21(03n04):1750011.
+
+\bibitem{akbaritabar_gender_2021}
+Akbaritabar A, Squazzoni F.
+\newblock Gender {{Patterns}} of {{Publication}} in {{Top Sociological Journals}}.
+\newblock Science, Technology, \& Human Values. 2021;46(3):555--576.
+\newblock doi:{10.1177/0162243920941588}.
+
+\bibitem{teele_gender_2017}
+Teele DL, Thelen K.
+\newblock Gender in the Journals: {{Publication}} Patterns in Political Science.
+\newblock PS: Political Science \& Politics. 2017;50(2):433--447.
+
+\bibitem{cetina_epistemic_1999}
+Cetina KK.
+\newblock Epistemic {{Cultures}}: {{How}} the {{Sciences Make Knowledge}}.
+\newblock {Harvard University Press}; 1999.
+
+\bibitem{lamont_how_2009}
+Lamont M.
+\newblock How {{Professors Think}}: {{Inside}} the {{Curious World}} of {{Academic Judgment}}.
+\newblock {Harvard University Press}; 2009.
+
+\bibitem{koppman_joy_2015}
+Koppman S, Cain CL, Leahey E.
+\newblock The Joy of Science: {{Disciplinary}} Diversity in Emotional Accounts.
+\newblock Science, Technology, \& Human Values. 2015;40(1):30--70.
+
+\bibitem{parish_dynamics_2018}
+Parish AJ, Boyack KW, Ioannidis JPA.
+\newblock Dynamics of Co-Authorship and Productivity across Different Fields of Scientific Research.
+\newblock PLOS ONE. 2018;13(1):e0189742.
+\newblock doi:{10.1371/journal.pone.0189742}.
+
+\bibitem{lanahan_domino_2016}
+Lanahan L, {Graddy-Reed} A, Feldman MP.
+\newblock The {{Domino Effects}} of {{Federal Research Funding}}.
+\newblock PLOS ONE. 2016;11(6):e0157325.
+\newblock doi:{10.1371/journal.pone.0157325}.
+
+\bibitem{lynn_15_2021}
+Lynn FB, Espy HW.
+\newblock 15. {{Cumulative}} Advantage.
+\newblock Research Handbook on Analytical Sociology. 2021; p. 286.
+
+\bibitem{snow_two_2012}
+Snow CP.
+\newblock The Two Cultures.
+\newblock {Cambridge University Press}; 2012.
+
+\bibitem{bi_four_2023}
+Bi HH.
+\newblock Four Problems of the H-Index for Assessing the Research Productivity and Impact of Individual Authors.
+\newblock Scientometrics. 2023;128(5):2677--2691.
+\newblock doi:{10.1007/s11192-022-04323-8}.
+
+\bibitem{berg_producing_2016}
+Berg LD, Huijbens EH, Larsen HG.
+\newblock Producing Anxiety in the Neoliberal University.
+\newblock The Canadian Geographer/le g\'eographe canadien. 2016;60(2):168--180.
+
+\bibitem{mckiernan_metaresearch_2019}
+McKiernan EC, Schimanski LA, Nieves CM, Matthias L, Niles MT, Alperin JP.
+\newblock Meta-Research: {{Use}} of the Journal Impact Factor in Academic Review, Promotion, and Tenure Evaluations.
+\newblock Elife. 2019;8:e47338.
+
+\bibitem{niles_why_2020}
+Niles MT, Schimanski LA, McKiernan EC, Alperin JP.
+\newblock Why We Publish Where We Do: {{Faculty}} Publishing Values and Their Relationship to Review, Promotion and Tenure Expectations.
+\newblock PLOS ONE. 2020;15(3):e0228914.
+\newblock doi:{10.1371/journal.pone.0228914}.
+
+\bibitem{forrester_mental_2021}
+Forrester N.
+\newblock Mental Health of Graduate Students Sorely Overlooked.
+\newblock Nature. 2021;595(7865):135--137.
+\newblock doi:{10.1038/d41586-021-01751-z}.
+
+\bibitem{braverman_labor_1998}
+Braverman H.
+\newblock Labor and Monopoly Capital: {{The}} Degradation of Work in the Twentieth Century.
+\newblock {nyu Press}; 1998.
+
+\bibitem{hirsch_index_2005}
+Hirsch JE.
+\newblock An Index to Quantify an Individual's Scientific Research Output.
+\newblock Proceedings of the National Academy of Sciences. 2005;102(46):16569--16572.
+\newblock doi:{10.1073/pnas.0507655102}.
+
+\bibitem{barnes_hindex_2017}
+Barnes C.
+\newblock The H-Index {{Debate}}: {{An Introduction}} for {{Librarians}}.
+\newblock The Journal of Academic Librarianship. 2017;43(6):487--494.
+\newblock doi:{10.1016/j.acalib.2017.08.013}.
+
+\bibitem{kelly_index_2006}
+Kelly CD, Jennions MD.
+\newblock The h Index and Career Assessment by Numbers.
+\newblock Trends in Ecology \& Evolution. 2006;21(4):167--170.
+\newblock doi:{10.1016/j.tree.2006.01.005}.
+
+\bibitem{purvis_index_2006}
+Purvis A.
+\newblock The h Index: Playing the Numbers Game.
+\newblock Trends in Ecology \& Evolution. 2006;21(8):422.
+\newblock doi:{10.1016/j.tree.2006.05.014}.
+
+\bibitem{bostonuniversity_boston_2018}
+University B.
+\newblock Boston {{University School}} of {{Public Health Faculty Handbook}}; 2018.
+
+\bibitem{ohiostateuniversity_department_2014}
+University OS.
+\newblock Department of {{Surgergy}}, {{Appointments}}, {{Promotion}}, and {{Tenure}}; 2014.
+
+\bibitem{oregonstateuniversity_oregon_2020}
+University OS.
+\newblock Oregon {{State University College}} of {{Business Faculty Handbook}}; 2020.
+
+\bibitem{kamrani_researchers_2021}
+Kamrani P, Dorsch I, Stock WG.
+\newblock Do Researchers Know What the H-Index Is? {{And}} How Do They Estimate Its Importance?
+\newblock Scientometrics. 2021;126(7):5489--5508.
+\newblock doi:{10.1007/s11192-021-03968-1}.
+
+\bibitem{ioannidis_updated_2020}
+Ioannidis JPA, Boyack KW, Baas J.
+\newblock Updated Science-Wide Author Databases of Standardized Citation Indicators.
+\newblock PLOS Biology. 2020;18(10):e3000918.
+\newblock doi:{10.1371/journal.pbio.3000918}.
+
+\bibitem{mongeon_journal_2016}
+Mongeon P, {Paul-Hus} A.
+\newblock The Journal Coverage of {{Web}} of {{Science}} and {{Scopus}}: A Comparative Analysis.
+\newblock Scientometrics. 2016;106(1):213--228.
+\newblock doi:{10.1007/s11192-015-1765-5}.
+
+\bibitem{singh_journal_2021}
+Singh VK, Singh P, Karmakar M, Leta J, Mayr P.
+\newblock The Journal Coverage of {{Web}} of {{Science}}, {{Scopus}} and {{Dimensions}}: {{A}} Comparative Analysis.
+\newblock Scientometrics. 2021;126(6):5113--5142.
+
+\bibitem{mihaljevic_reflections_2019}
+Mihaljevi{\'c} H, Tullney M, Santamar{\'i}a L, Steinfeldt C.
+\newblock Reflections on Gender Analyses of Bibliographic Corpora.
+\newblock Frontiers in big Data. 2019;2:29.
+
+\bibitem{blevins_jane_2015}
+Blevins C, Mullen L.
+\newblock Jane, {{John}}... {{Leslie}}? {{A Historical Method}} for {{Algorithmic Gender Prediction}}.
+\newblock DHQ: Digital Humanities Quarterly. 2015;9(3).
+
+\bibitem{bell_fixed_2019}
+Bell A, Fairbrother M, Jones K.
+\newblock Fixed and Random Effects Models: Making an Informed Choice.
+\newblock Quality \& quantity. 2019;53:1051--1074.
+
+\bibitem{eubanks_automating_2018}
+Eubanks V.
+\newblock Automating Inequality: {{How}} High-Tech Tools Profile, Police, and Punish the Poor.
+\newblock {St. Martin's Press}; 2018.
+
+\bibitem{koopman_galton_2023}
+Koopman C.
+\newblock From {{Galton}}'s {{Pride}} to {{Du Bois}}'s {{Pursuit}}: {{The Formats}} of {{Data-Driven Inequality}}.
+\newblock Theory, Culture \& Society. 2023; p. 02632764231162251.
+
+\end{thebibliography}
+
+
+\hypertarget{supporting-information}{%
+\section{Supporting information}\label{supporting-information}}
+
+\paragraph*{S1 Table}
+\label{id}
+{\textbf{Descriptive statistics by discipline.}}
+
+
+\nolinenumbers
+
+\end{document}
