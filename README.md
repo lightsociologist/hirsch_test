@@ -2,7 +2,7 @@
 
 This is the replication package for the manuscript "Inequality in measuring scholarly success: Variation in the h-index within and between disciplines by [Ryan Light](https://ryanlight.netlify.app/), [Aaron Gullickson](https://aarongullickson.netlify.app), and [Jill Ann Harrison](https://cas.uoregon.edu/directory/sociology/all/jah). From the abstract of the paper:
 
-Scholars and university administrators have a vested interest in building equitable valuation systems of academic work for both practical (e.g., resource distribution) and
+> Scholars and university administrators have a vested interest in building equitable valuation systems of academic work for both practical (e.g., resource distribution) and
 more lofty purposes (e.g., what constitutes “good” research). Well-established inequalities in science pose a difficult challenge to those interested in constructing a
 parsimonious and fair method for valuation as stratification occurs within academic disciplines, but also between them. The h-index, a popular research metric, has been formally used as one such method of valuation. In this article, we use the case of the h-index to examine how the distribution of research metrics reveal within and between
 discipline inequalities. Using bibliometric data from 1960-2019 on over 50,000 high performing scientists - the top 2% most frequently cited authors - across 174 disciplines,
