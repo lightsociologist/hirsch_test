@@ -9,4 +9,13 @@ discipline inequalities. Using bibliometric data from 1960-2019 on over 50,000 h
 we construct random effects within-between models predicting the h-index. Results suggest significant within-discipline variation in several forms, specifically sole-authorship and female penalties. Results also show that a sole authorship penalty plays a significant role in well-known between-discipline variation. Field-specific models emphasize the “apples-to-oranges,” or incommensurable, property of cross-discipline comparison with significant heterogeneity in sole-authorship and female penalties within fields. Conclusions include continued
 caution when using the h-index or similar metrics for valuation purposes.
 
-The analysis is done exclusively in R. All code and data to reproduce the analysis is available in the `analysis` subdirectory as well as a README that describes the analysis in more detail. The `data` directory where the data are stored. 
+The analysis is done exclusively in R. All code and data to reproduce the analysis 
+is available in the `analysis` subdirectory as well as a README that describes the 
+analysis in more detail. The `data` directory where the data are stored. 
+
+The easiest way to run the entire project is to do the following:
+
+1. Source the `check_packages.R` script in the `utils` directory to install all package dependencies.
+2. Render the entire project as a quarto project. This will require the installation of [Quarto](https://quarto.org). This is easiest to do from the Build tab in RStudio, but you can also just run `quarto render` from the project home directory. 
+
+All output from rendering the project will be placed in a local `_products` directory.
