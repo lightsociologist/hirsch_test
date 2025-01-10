@@ -20,8 +20,7 @@ author:
     attributes:
       corresponding: true
     affiliations:
-      - id: uo
-        name: University of Oregon
+      - name: University of Oregon
         department: Sociology
         address: 632 PLC
         city: Eugene
@@ -35,8 +34,7 @@ author:
     attributes:
       corresponding: false
     affiliations:
-      - id: uo
-        name: University of Oregon
+      - name: University of Oregon
         department: Sociology
         address: 727 PLC
         city: Eugene
@@ -46,12 +44,10 @@ author:
   - name: Jill Ann Harrison
     orcid: 0000-0002-1425-0102
     email: jah@uoregon.edu
-    #url: 
     attributes:
       corresponding: false
     affiliations:
-      - id: uo
-        name: University of Oregon
+      - name: University of Oregon
         department: Sociology
         address: 604 PLC
         city: Eugene
