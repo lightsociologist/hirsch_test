@@ -6,7 +6,7 @@
 
 #add new packages to the chain here
 packages = c("here","readr","haven","tidyverse","ggplot2","lubridate","broom",
-             "knitr","texreg","kableExtra","gt", "gtsummary","janitor","lme4",
+             "knitr","texreg","kableExtra", "gt", "gtsummary","janitor","lme4",
              "specr","ggrepel","fastDummies","jtools",
              "data.table","GGally","gender","readxl", "remotes",
              "mice","broom.mixed","glue")
@@ -19,4 +19,6 @@ package.check <- lapply(packages, FUN = function(x) {
 })
 
 # install the genderdata package
-remotes::install_github("lmullen/genderdata")
+if(!require(genderdata)) {
+  remotes::install_github("lmullen/genderdata")
+}
